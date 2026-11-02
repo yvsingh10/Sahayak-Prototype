@@ -47,35 +47,35 @@ export default function Navbar({
   } = useAuth();
 
   return (
-    <header className="sticky top-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 shadow-sm transition-colors text-xs">
+    <header className="sticky top-0 z-40 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md border-b border-slate-200/60 dark:border-zinc-800/60 shadow-[0_1px_3px_rgba(0,0,0,0.02)] transition-colors text-xs">
       
       {/* 48-Hour SLA Guarantee Top Banner */}
-      <div className="bg-gradient-to-r from-blue-900 via-indigo-950 to-slate-900 text-white text-[11px] py-1.5 px-4">
+      <div className="bg-slate-900 dark:bg-zinc-950 text-white text-[11px] py-1.5 px-4 border-b border-slate-800/80 dark:border-zinc-800/60">
         <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
           
           <div className="flex items-center gap-2">
-            <span className="px-2 py-0.5 rounded bg-amber-400/20 text-amber-300 font-bold border border-amber-400/30 text-[10px] uppercase font-mono">
-              Phase-3 Enterprise GovTech
+            <span className="px-2 py-0.5 rounded-full bg-amber-400/10 text-amber-300 font-medium border border-amber-400/20 text-[10px] tracking-wide font-mono">
+              Enterprise GovTech
             </span>
-            <span className="text-slate-300 hidden md:inline">
-              Features 101–200 Active: Open Jan Khata, YOLOv8 Vision, IoT Telemetry &amp; 48H SLA Hard-Lock.
+            <span className="text-slate-400 dark:text-zinc-400 hidden md:inline">
+              Features 101–200 Active: Open C-UID, YOLOv8 Vision, IoT Telemetry &amp; 48H SLA Hard-Lock.
             </span>
           </div>
 
           <div className="flex items-center gap-3 font-mono text-[11px] text-slate-300">
             {/* Multilingual Switcher */}
-            <div className="flex items-center gap-1 bg-slate-800/80 px-2 py-0.5 rounded-md border border-slate-700">
-              <Globe className="w-3 h-3 text-blue-400" />
+            <div className="flex items-center gap-1 bg-slate-800/60 dark:bg-zinc-800/60 px-2 py-0.5 rounded-md border border-slate-700/60 dark:border-zinc-700/60">
+              <Globe className="w-3 h-3 text-blue-400" strokeWidth={1.75} />
               <button 
                 onClick={() => changeLanguage('en')}
-                className={`px-1 py-0.2 rounded font-semibold text-[10px] ${language === 'en' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white'}`}
+                className={`px-1.5 py-0.5 rounded font-medium text-[10px] transition-colors ${language === 'en' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white'}`}
               >
                 EN
               </button>
               <span className="text-slate-600">|</span>
               <button 
                 onClick={() => changeLanguage('hi')}
-                className={`px-1 py-0.2 rounded font-semibold text-[10px] ${language === 'hi' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white'}`}
+                className={`px-1.5 py-0.5 rounded font-medium text-[10px] transition-colors ${language === 'hi' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white'}`}
               >
                 हिन्दी
               </button>
@@ -84,19 +84,19 @@ export default function Navbar({
             {/* Dark Mode Toggle */}
             <button 
               onClick={toggleDarkMode}
-              className="p-1 rounded hover:bg-slate-800 text-slate-300 hover:text-amber-300 transition-colors"
-              title="Toggle Dark / WCAG High-Contrast Mode"
+              className="p-1 rounded-md hover:bg-slate-800 text-slate-400 hover:text-amber-300 transition-colors"
+              title="Toggle Dark Mode"
             >
-              {darkMode ? <Sun className="w-3.5 h-3.5 text-amber-400" /> : <Moon className="w-3.5 h-3.5" />}
+              {darkMode ? <Sun className="w-3.5 h-3.5 text-amber-400" strokeWidth={1.75} /> : <Moon className="w-3.5 h-3.5" strokeWidth={1.75} />}
             </button>
 
-            <span className="text-slate-600 hidden sm:inline">|</span>
+            <span className="text-slate-700 hidden sm:inline">|</span>
 
             <button 
               onClick={onResetPrompt} 
-              className="text-slate-400 hover:text-amber-300 underline transition-colors hidden sm:inline"
+              className="text-slate-400 hover:text-amber-300 transition-colors hidden sm:inline text-[11px]"
             >
-              Reset Seed Data
+              Reset Seed
             </button>
           </div>
 
@@ -112,41 +112,41 @@ export default function Navbar({
             onClick={() => setActiveTab('feed')}
             className="flex items-center gap-2.5 cursor-pointer group flex-shrink-0"
           >
-            <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-blue-600 via-indigo-600 to-emerald-600 flex items-center justify-center text-white font-black text-lg shadow-md shadow-blue-500/20 group-hover:scale-105 transition-transform">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white font-bold text-base shadow-xs shadow-blue-500/20 group-hover:scale-102 transition-transform">
               S
             </div>
             <div>
               <div className="flex items-center gap-1.5">
-                <span className="text-lg font-black tracking-tight text-slate-900 dark:text-white font-mono">
+                <span className="text-[17px] font-bold tracking-tight text-slate-900 dark:text-zinc-100">
                   {t('appName')}
                 </span>
-                <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-blue-100 dark:bg-blue-900/60 text-blue-800 dark:text-blue-200 uppercase font-mono">
-                  Phase-3 (200 F)
+                <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-700 dark:text-blue-300 border border-blue-500/20 font-mono">
+                  Phase-3
                 </span>
               </div>
-              <p className="text-[10px] text-slate-500 dark:text-slate-400 font-medium hidden sm:block">
-                Enterprise Civic Redressal &amp; Geospatial Infrastructure
+              <p className="text-[11px] text-slate-400 dark:text-zinc-500 font-normal hidden sm:block">
+                Civic Grievance &amp; Geospatial Infrastructure
               </p>
             </div>
           </div>
 
           {/* City Jurisdiction Selector & Instant Search */}
-          <div className="hidden md:flex items-center gap-2 flex-1 max-w-lg mx-2">
+          <div className="hidden md:flex items-center gap-2.5 flex-1 max-w-lg mx-3">
             
             {/* City Dropdown */}
             <div className="relative w-40 flex-shrink-0">
               <select 
                 value={activeCity}
                 onChange={(e) => setActiveCity(e.target.value)}
-                className="w-full pl-7 pr-6 py-1.5 text-xs font-semibold bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer appearance-none"
+                className="w-full pl-7 pr-6 py-1.5 text-xs font-medium bg-slate-100/70 dark:bg-zinc-800/60 border border-slate-200/60 dark:border-zinc-700/60 rounded-xl text-slate-800 dark:text-zinc-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 cursor-pointer appearance-none transition-colors"
               >
-                <option value="All">All Cities (National)</option>
+                <option value="All">All Cities</option>
                 <option value="Greater Noida">Greater Noida</option>
                 <option value="Delhi">Delhi NCT</option>
                 <option value="Mumbai">Mumbai</option>
                 <option value="Lucknow">Lucknow</option>
               </select>
-              <MapPin className="w-3.5 h-3.5 text-slate-400 absolute left-2 top-1/2 -translate-y-1/2 pointer-events-none" />
+              <MapPin className="w-3.5 h-3.5 text-slate-400 dark:text-zinc-500 absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" strokeWidth={1.75} />
             </div>
 
             {/* Instant Search Input */}
@@ -156,32 +156,32 @@ export default function Navbar({
                 value={searchKeyword}
                 onChange={(e) => setSearchKeyword(e.target.value)}
                 placeholder="Search complaint ID, street, or ward..."
-                className="w-full pl-8 pr-4 py-1.5 text-xs bg-slate-100 dark:bg-slate-800 focus:bg-white dark:focus:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-800 dark:text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+                className="w-full pl-8 pr-4 py-1.5 text-xs bg-slate-100/70 dark:bg-zinc-800/60 focus:bg-white dark:focus:bg-zinc-900 border border-slate-200/60 dark:border-zinc-700/60 rounded-xl text-slate-800 dark:text-zinc-200 placeholder-slate-400 dark:placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
               />
-              <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+              <Search className="w-3.5 h-3.5 text-slate-400 dark:text-zinc-500 absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" strokeWidth={1.75} />
             </div>
 
           </div>
 
-          {/* Action Buttons: Jan Khata, Report & Auth Persona */}
+          {/* Action Buttons: Create Account, Report & Auth Persona */}
           <div className="flex items-center gap-2">
             
-            {/* Create Account Button (Feature 101–110) */}
+            {/* Create Account Button */}
             <button
               onClick={onOpenJanKhata}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold text-xs shadow-xs"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 active:scale-[0.98] text-white font-medium text-xs shadow-xs shadow-emerald-600/20 transition-all duration-150"
             >
-              <UserPlus className="w-3.5 h-3.5" />
+              <UserPlus className="w-3.5 h-3.5" strokeWidth={1.75} />
               <span className="hidden sm:inline">Create Account</span>
-              <span className="sm:hidden">Create Account</span>
+              <span className="sm:hidden">Account</span>
             </button>
 
             {/* Report Problem Button */}
             <button 
               onClick={onReportClick}
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs shadow-xs transition-all hover:shadow-md"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 active:scale-[0.98] text-white font-medium text-xs shadow-xs shadow-blue-600/20 transition-all duration-150"
             >
-              <Plus className="w-4 h-4" />
+              <Plus className="w-4 h-4" strokeWidth={2} />
               <span>Report Issue</span>
             </button>
 
@@ -189,45 +189,45 @@ export default function Navbar({
             {!user ? (
               <button 
                 onClick={() => setAuthModalOpen(true)}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 text-slate-700 dark:text-slate-200 font-semibold text-xs shadow-2xs"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200/80 dark:border-zinc-700/80 bg-white/70 dark:bg-zinc-800/70 hover:bg-slate-50 dark:hover:bg-zinc-700/60 text-slate-700 dark:text-zinc-200 font-medium text-xs shadow-2xs transition-all active:scale-[0.98]"
               >
-                <User className="w-3.5 h-3.5 text-slate-500" />
+                <User className="w-3.5 h-3.5 text-slate-400 dark:text-zinc-400" strokeWidth={1.75} />
                 <span>Select Role</span>
               </button>
             ) : user.role === 'citizen' ? (
               <div className="flex items-center gap-1.5">
                 <button 
                   onClick={onOpenJanKhata}
-                  className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-900 dark:text-emerald-200 text-xs font-semibold"
+                  className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-800 dark:text-emerald-300 text-xs font-medium"
                 >
                   <span className="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] font-bold">
                     {user.name.split(' ').map(n => n[0]).join('')}
                   </span>
                   <span className="hidden sm:inline">{user.name}</span>
-                  <span className="text-[10px] bg-emerald-200 dark:bg-emerald-900 text-emerald-800 dark:text-emerald-200 px-1.5 py-0.2 rounded font-mono">
+                  <span className="text-[10px] bg-emerald-500/20 text-emerald-800 dark:text-emerald-300 px-1.5 py-0.5 rounded font-mono">
                     Citizen
                   </span>
                 </button>
-                <button onClick={logout} title="Sign Out" className="text-slate-400 hover:text-rose-600 p-1">
-                  <LogOut className="w-4 h-4" />
+                <button onClick={logout} title="Sign Out" className="text-slate-400 hover:text-rose-500 p-1 transition-colors">
+                  <LogOut className="w-4 h-4" strokeWidth={1.75} />
                 </button>
               </div>
             ) : (
               <div className="flex items-center gap-1.5">
                 <button 
                   onClick={() => setAuthModalOpen(true)}
-                  className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-200 dark:border-indigo-800 text-indigo-950 dark:text-indigo-200 text-xs font-semibold"
+                  className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-800 dark:text-indigo-300 text-xs font-medium"
                 >
                   <span className="w-5 h-5 rounded-full bg-indigo-600 text-white flex items-center justify-center text-[10px] font-bold">
                     GOV
                   </span>
                   <span className="hidden sm:inline truncate max-w-[130px]">{user.title}</span>
-                  <span className="text-[10px] bg-indigo-200 dark:bg-indigo-900 text-indigo-900 dark:text-indigo-200 px-1.5 py-0.2 rounded font-mono">
+                  <span className="text-[10px] bg-indigo-500/20 text-indigo-800 dark:text-indigo-300 px-1.5 py-0.5 rounded font-mono">
                     {user.role}
                   </span>
                 </button>
-                <button onClick={logout} title="Sign Out" className="text-slate-400 hover:text-rose-600 p-1">
-                  <LogOut className="w-4 h-4" />
+                <button onClick={logout} title="Sign Out" className="text-slate-400 hover:text-rose-500 p-1 transition-colors">
+                  <LogOut className="w-4 h-4" strokeWidth={1.75} />
                 </button>
               </div>
             )}
@@ -237,121 +237,40 @@ export default function Navbar({
         </div>
 
         {/* Tab Navigation Ribbon */}
-        <nav className="flex space-x-1 sm:space-x-2 overflow-x-auto py-2 mt-1 border-t border-slate-100 dark:border-slate-800 font-medium">
+        <nav className="flex space-x-1 sm:space-x-1.5 overflow-x-auto py-2 mt-1 border-t border-slate-100/80 dark:border-zinc-800/60 font-medium no-scrollbar">
           
-          <button 
-            onClick={() => setActiveTab('feed')}
-            className={`px-3 py-1.5 rounded-xl whitespace-nowrap transition-colors flex items-center gap-1.5 ${
-              activeTab === 'feed' 
-                ? 'text-blue-700 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/50 font-bold' 
-                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
-            }`}
-          >
-            <Layers className="w-4 h-4" />
-            <span>Public Board</span>
-          </button>
-
-          <button 
-            onClick={() => setActiveTab('mapHub')}
-            className={`px-3 py-1.5 rounded-xl whitespace-nowrap transition-colors flex items-center gap-1.5 ${
-              activeTab === 'mapHub' 
-                ? 'text-blue-700 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/50 font-bold' 
-                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
-            }`}
-          >
-            <Map className="w-4 h-4" />
-            <span>Geospatial Hub</span>
-          </button>
-
-          {/* Feature 181–190: Smart City IoT Tab */}
-          <button 
-            onClick={() => setActiveTab('iotHub')}
-            className={`px-3 py-1.5 rounded-xl whitespace-nowrap transition-colors flex items-center gap-1.5 ${
-              activeTab === 'iotHub' 
-                ? 'text-blue-700 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/50 font-bold' 
-                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
-            }`}
-          >
-            <Cpu className="w-4 h-4 text-emerald-500 animate-pulse" />
-            <span>IoT Sensor Grid (F-181–190)</span>
-          </button>
-
-          {/* Feature 121–130: AI Scanner Tab */}
-          <button 
-            onClick={() => setActiveTab('aiScanner')}
-            className={`px-3 py-1.5 rounded-xl whitespace-nowrap transition-colors flex items-center gap-1.5 ${
-              activeTab === 'aiScanner' 
-                ? 'text-blue-700 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/50 font-bold' 
-                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
-            }`}
-          >
-            <Sparkles className="w-4 h-4 text-purple-500" />
-            <span>AI Damage Scanner (F-121–130)</span>
-          </button>
-
-          <button 
-            onClick={() => setActiveTab('leaderboard')}
-            className={`px-3 py-1.5 rounded-xl whitespace-nowrap transition-colors flex items-center gap-1.5 ${
-              activeTab === 'leaderboard' 
-                ? 'text-blue-700 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/50 font-bold' 
-                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
-            }`}
-          >
-            <TrendingUp className="w-4 h-4" />
-            <span>Urgency Index</span>
-          </button>
-
-          <button 
-            onClick={() => setActiveTab('citizenPortal')}
-            className={`px-3 py-1.5 rounded-xl whitespace-nowrap transition-colors flex items-center gap-1.5 ${
-              activeTab === 'citizenPortal' 
-                ? 'text-blue-700 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/50 font-bold' 
-                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
-            }`}
-          >
-            <User className="w-4 h-4" />
-            <span>Citizen Desk</span>
-          </button>
-
-          <button 
-            onClick={() => setActiveTab('authorityDashboard')}
-            className={`px-3 py-1.5 rounded-xl whitespace-nowrap transition-colors flex items-center gap-1.5 ${
-              activeTab === 'authorityDashboard' 
-                ? 'text-blue-700 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/50 font-bold' 
-                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
-            }`}
-          >
-            <Building2 className="w-4 h-4" />
-            <span>Authority Deck</span>
-          </button>
-
-          <button 
-            onClick={() => setActiveTab('penalties')}
-            className={`px-3 py-1.5 rounded-xl whitespace-nowrap transition-colors flex items-center gap-1.5 ${
-              activeTab === 'penalties' 
-                ? 'text-blue-700 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/50 font-bold' 
-                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
-            }`}
-          >
-            <AlertOctagon className="w-4 h-4" />
-            <span>Penalty Ledger</span>
-          </button>
-
-          <button 
-            onClick={() => setActiveTab('analytics')}
-            className={`px-3 py-1.5 rounded-xl whitespace-nowrap transition-colors flex items-center gap-1.5 ${
-              activeTab === 'analytics' 
-                ? 'text-blue-700 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/50 font-bold' 
-                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
-            }`}
-          >
-            <Activity className="w-4 h-4" />
-            <span>Telemetry</span>
-          </button>
+          {[
+            { id: 'feed', label: 'Public Board', icon: <Layers className="w-3.5 h-3.5" strokeWidth={1.75} /> },
+            { id: 'mapHub', label: 'Geospatial Hub', icon: <Map className="w-3.5 h-3.5" strokeWidth={1.75} /> },
+            { id: 'iotHub', label: 'IoT Sensor Grid', icon: <Cpu className="w-3.5 h-3.5 text-emerald-500" strokeWidth={1.75} /> },
+            { id: 'aiScanner', label: 'AI Damage Scanner', icon: <Sparkles className="w-3.5 h-3.5 text-purple-500" strokeWidth={1.75} /> },
+            { id: 'leaderboard', label: 'Urgency Index', icon: <TrendingUp className="w-3.5 h-3.5" strokeWidth={1.75} /> },
+            { id: 'citizenPortal', label: 'Citizen Desk', icon: <User className="w-3.5 h-3.5" strokeWidth={1.75} /> },
+            { id: 'authorityDashboard', label: 'Authority Deck', icon: <Building2 className="w-3.5 h-3.5" strokeWidth={1.75} /> },
+            { id: 'penalties', label: 'Penalty Ledger', icon: <AlertOctagon className="w-3.5 h-3.5" strokeWidth={1.75} /> },
+            { id: 'analytics', label: 'Telemetry', icon: <Activity className="w-3.5 h-3.5" strokeWidth={1.75} /> }
+          ].map(tab => {
+            const isActive = activeTab === tab.id;
+            return (
+              <button 
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`px-3 py-1.5 rounded-lg whitespace-nowrap transition-all duration-150 flex items-center gap-1.5 text-xs font-medium ${
+                  isActive 
+                    ? 'bg-slate-900 text-white dark:bg-zinc-100 dark:text-zinc-900 shadow-2xs' 
+                    : 'text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-zinc-100 hover:bg-slate-100/60 dark:hover:bg-zinc-800/50'
+                }`}
+              >
+                {tab.icon}
+                <span>{tab.label}</span>
+              </button>
+            );
+          })}
 
         </nav>
 
       </div>
+
     </header>
   );
 }
