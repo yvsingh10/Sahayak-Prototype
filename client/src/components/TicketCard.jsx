@@ -141,7 +141,7 @@ export default function TicketCard({ ticket, onSelect, onUpvote }) {
                 <div className="absolute w-2 h-2 rounded-full bg-rose-500"></div>
               </div>
               <div className="text-[10px] text-zinc-400 font-mono">
-                {ticket.lat?.toFixed(4)}° N, {ticket.lng?.toFixed(4)}° E
+                {(typeof ticket.lat === 'number' ? ticket.lat.toFixed(4) : '28.4744')}° N, {(typeof ticket.lng === 'number' ? ticket.lng.toFixed(4) : '77.5040')}° E
               </div>
             </div>
           )}

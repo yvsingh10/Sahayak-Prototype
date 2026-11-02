@@ -23,7 +23,8 @@
       "C-UID-IOT-AUTO-NODE"
     ],
     "photoUrl": "https://images.unsplash.com/photo-1584438784894-089d6a62b8fa?auto=format&fit=crop&w=700&q=80",
-    "iotSensorOrigin": "IOT-LIGHT-112"
+    "iotSensorOrigin": "IOT-LIGHT-112",
+    "gpsAccuracyMeters": 6.2
   },
   {
     "id": "SAH-GNO-3701",
@@ -213,7 +214,12 @@
         "time": 1793428365994,
         "note": "SLA expired without triage. Automatically escalated to Nodal Commissioner."
       }
-    ]
+    ],
+    "lat": 28.474412,
+    "lng": 77.504018,
+    "gpsAccuracyMeters": 6.2,
+    "stage": 1,
+    "stageKey": "PENDING_TRIAGE"
   },
   {
     "id": "SAH-DEL-7419",
@@ -300,7 +306,12 @@
         "note": "Automated Priority Escalation: Verified community weight drove P(t)=118 >= 100."
       }
     ],
-    "escalationReason": "P(t) >= 100 Dynamic Urgency Breach (118)"
+    "escalationReason": "P(t) >= 100 Dynamic Urgency Breach (118)",
+    "lat": 28.568214,
+    "lng": 77.221529,
+    "gpsAccuracyMeters": 6.2,
+    "stage": 1,
+    "stageKey": "PENDING_TRIAGE"
   },
   {
     "id": "SAH-GNO-8834",
@@ -336,7 +347,12 @@
         "time": 1793392365994,
         "note": "Ingested into 48h SLA gate. Awaiting sanitation officer review."
       }
-    ]
+    ],
+    "lat": 28.487521,
+    "lng": 77.511842,
+    "gpsAccuracyMeters": 6.2,
+    "stage": 1,
+    "stageKey": "PENDING_TRIAGE"
   },
   {
     "id": "SAH-MUM-6088",
@@ -389,7 +405,12 @@
         "time": 1793435565994,
         "note": "Contractor uploaded repair photographic proof. Awaiting citizen confirmation."
       }
-    ]
+    ],
+    "lat": 19.056021,
+    "lng": 72.834015,
+    "gpsAccuracyMeters": 6.2,
+    "stage": 1,
+    "stageKey": "PENDING_TRIAGE"
   },
   {
     "id": "SAH-GNO-8805",
@@ -451,7 +472,12 @@
         "time": 1793399565994,
         "note": "Citizen verified work satisfaction (5 stars). Ticket closed."
       }
-    ]
+    ],
+    "lat": 28.468812,
+    "lng": 77.508514,
+    "gpsAccuracyMeters": 6.2,
+    "stage": 1,
+    "stageKey": "RESOLVED_CLOSED"
   },
   {
     "id": "SAH-LKO-5120",
@@ -520,7 +546,12 @@
         "note": "Automated Priority Escalation: Verified community weight drove P(t)=108.1 >= 100."
       }
     ],
-    "escalationReason": "P(t) >= 100 Dynamic Urgency Breach (108.1)"
+    "escalationReason": "P(t) >= 100 Dynamic Urgency Breach (108.1)",
+    "lat": 26.848812,
+    "lng": 80.942115,
+    "gpsAccuracyMeters": 6.2,
+    "stage": 1,
+    "stageKey": "PENDING_TRIAGE"
   },
   {
     "id": "SAH-DEL-7380",
@@ -568,7 +599,12 @@
         "time": 1793435565994,
         "note": "48-hour gate expired with no dispatch. Auto-escalated to Commissioner."
       }
-    ]
+    ],
+    "lat": 28.579412,
+    "lng": 77.062145,
+    "gpsAccuracyMeters": 6.2,
+    "stage": 1,
+    "stageKey": "PENDING_TRIAGE"
   },
   {
     "id": "SAH-MUM-6102",
@@ -629,7 +665,12 @@
         "note": "Automated Priority Escalation: Verified community weight drove P(t)=105.5 >= 100."
       }
     ],
-    "escalationReason": "P(t) >= 100 Dynamic Urgency Breach (105.5)"
+    "escalationReason": "P(t) >= 100 Dynamic Urgency Breach (105.5)",
+    "lat": 19.135412,
+    "lng": 72.831245,
+    "gpsAccuracyMeters": 6.2,
+    "stage": 1,
+    "stageKey": "PENDING_TRIAGE"
   },
   {
     "id": "SAH-LKO-5095",
@@ -681,7 +722,12 @@
         "time": 1793406765994,
         "note": "Closed following citizen satisfaction rating."
       }
-    ]
+    ],
+    "lat": 26.831245,
+    "lng": 80.921458,
+    "gpsAccuracyMeters": 6.2,
+    "stage": 1,
+    "stageKey": "RESOLVED_CLOSED"
   },
   {
     "id": "SAH-GNO-8840",
@@ -712,6 +758,11 @@
         "time": 1793424765994,
         "note": "Submitted. SLA countdown active."
       }
-    ]
+    ],
+    "lat": 28.489215,
+    "lng": 77.514032,
+    "gpsAccuracyMeters": 6.2,
+    "stage": 1,
+    "stageKey": "PENDING_TRIAGE"
   }
 ]

@@ -37,6 +37,10 @@ const DEPT_COLORS = {
   "Public Health & Safety": "#e11d48"     // rose-600
 };
 
+function isValidCoord(num) {
+  return typeof num === 'number' && !isNaN(num) && isFinite(num);
+}
+
 export default function InteractiveMapHub({ 
   tickets, 
   activeCity, 
@@ -194,7 +198,12 @@ export default function InteractiveMapHub({
         iconAnchor: isSelected ? [16, 16] : [12, 12]
       });
 
-      const marker = L.marker([ticket.lat, ticket.lng], { icon: customIcon }).addTo(markersLayerRef.current);
+      const tLat = isValidCoord(ticket.lat) ? ticket.lat : center.lat;
+      const tLng = isValidCoord(ticket.lng) ? ticket.lng : center.lng;
+
+      if (!isValidCoord(tLat) || !isValidCoord(tLng)) return;
+
+      const marker = L.marker([tLat, tLng], { icon: customIcon }).addTo(markersLayerRef.current);
 
       marker.bindTooltip(`
         <div style="font-family: sans-serif; font-size: 11px; padding: 2px;">
@@ -211,8 +220,10 @@ export default function InteractiveMapHub({
     // 3. Draw Route & Facilities for Selected Ticket
     if (selectedTicket) {
       const office = selectedTicket.nearestOffice;
+      const selLat = isValidCoord(selectedTicket.lat) ? selectedTicket.lat : center.lat;
+      const selLng = isValidCoord(selectedTicket.lng) ? selectedTicket.lng : center.lng;
 
-      if (office && office.lat && office.lng) {
+      if (office && isValidCoord(office.lat) && isValidCoord(office.lng) && isValidCoord(selLat) && isValidCoord(selLng)) {
         const officeIcon = L.divIcon({
           className: 'custom-gov-pin',
           html: `
@@ -241,52 +252,56 @@ export default function InteractiveMapHub({
           .bindTooltip(`<strong>${office.name}</strong><br/>${office.officer}`, { permanent: false });
 
         // Route Polyline
-        const midLat = (office.lat + selectedTicket.lat) / 2 + 0.001;
-        const midLng = (office.lng + selectedTicket.lng) / 2;
-        const routeCoords = [
-          [office.lat, office.lng],
-          [midLat, midLng],
-          [selectedTicket.lat, selectedTicket.lng]
-        ];
+        const midLat = (office.lat + selLat) / 2 + 0.001;
+        const midLng = (office.lng + selLng) / 2;
 
-        L.polyline(routeCoords, {
-          color: '#2563eb',
-          weight: 4,
-          opacity: 0.85
-        }).addTo(routesLayerRef.current);
+        if (isValidCoord(midLat) && isValidCoord(midLng)) {
+          const routeCoords = [
+            [office.lat, office.lng],
+            [midLat, midLng],
+            [selLat, selLng]
+          ];
 
-        // Feature 112: Live Maintenance Van Tracker (Moving Vehicle Icon)
-        const vanIcon = L.divIcon({
-          className: 'custom-van-marker',
-          html: `
-            <div style="
-              background-color: #f59e0b;
-              width: 30px;
-              height: 30px;
-              border-radius: 50%;
-              border: 2px solid white;
-              box-shadow: 0 4px 12px rgba(245, 158, 11, 0.6);
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              font-size: 14px;
-              animation: bounce 1s infinite;
-            ">
-              🚚
-            </div>
-          `,
-          iconSize: [30, 30],
-          iconAnchor: [15, 15]
-        });
+          L.polyline(routeCoords, {
+            color: '#2563eb',
+            weight: 4,
+            opacity: 0.85
+          }).addTo(routesLayerRef.current);
 
-        // Van positioned midway along the response corridor
-        L.marker([midLat, midLng], { icon: vanIcon })
-          .addTo(routesLayerRef.current)
-          .bindTooltip(`<strong>Van GN-04-J-8812 En Route</strong><br/>ETA: ${vanEtaMins} mins (1.1 km away)`, { direction: 'top', permanent: true });
+          // Feature 112: Live Maintenance Van Tracker (Moving Vehicle Icon)
+          const vanIcon = L.divIcon({
+            className: 'custom-van-marker',
+            html: `
+              <div style="
+                background-color: #f59e0b;
+                width: 30px;
+                height: 30px;
+                border-radius: 50%;
+                border: 2px solid white;
+                box-shadow: 0 4px 12px rgba(245, 158, 11, 0.6);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 14px;
+                animation: bounce 1s infinite;
+              ">
+                🚚
+              </div>
+            `,
+            iconSize: [30, 30],
+            iconAnchor: [15, 15]
+          });
+
+          // Van positioned midway along the response corridor
+          L.marker([midLat, midLng], { icon: vanIcon })
+            .addTo(routesLayerRef.current)
+            .bindTooltip(`<strong>Van GN-04-J-8812 En Route</strong><br/>ETA: ${vanEtaMins} mins (1.1 km away)`, { direction: 'top', permanent: true });
+        }
 
         // Facilities
-        if (showFacilities && office.nearbyFacilities) {
+        if (showFacilities && office.nearbyFacilities && Array.isArray(office.nearbyFacilities)) {
           office.nearbyFacilities.forEach(fac => {
+            if (!isValidCoord(fac.lat) || !isValidCoord(fac.lng)) return;
             const facIcon = L.divIcon({
               className: 'custom-facility-pin',
               html: `
@@ -320,8 +335,10 @@ export default function InteractiveMapHub({
   }, [tickets, selectedTicket, showTraffic, showBoundaries, showFacilities, showUtilitiesGrid, activeFilterDept, city, vanEtaMins]);
 
   const currentOffice = selectedTicket?.nearestOffice;
-  const mapsUrl = selectedTicket && currentOffice 
-    ? `https://www.google.com/maps/dir/?api=1&origin=${currentOffice.lat},${currentOffice.lng}&destination=${selectedTicket.lat},${selectedTicket.lng}`
+  const selLat = isValidCoord(selectedTicket?.lat) ? selectedTicket.lat : center.lat;
+  const selLng = isValidCoord(selectedTicket?.lng) ? selectedTicket.lng : center.lng;
+  const mapsUrl = selectedTicket && currentOffice && isValidCoord(currentOffice.lat) && isValidCoord(currentOffice.lng) 
+    ? `https://www.google.com/maps/dir/?api=1&origin=${currentOffice.lat},${currentOffice.lng}&destination=${selLat},${selLng}`
     : '#';
 
   return (
@@ -462,7 +479,7 @@ export default function InteractiveMapHub({
                   📍 {selectedTicket.location} ({selectedTicket.ward})
                 </p>
                 <div className="flex items-center gap-2 text-[10px] font-mono text-slate-400 mt-1">
-                  <span>GPS: {selectedTicket.lat}, {selectedTicket.lng}</span>
+                  <span>GPS: {selLat}, {selLng}</span>
                   <span>·</span>
                   <span>Alt: {selectedTicket.elevationMeters || 198}m</span>
                   <span>·</span>

@@ -94,8 +94,12 @@ function StageStepper({ currentStage, isDelayed }) {
 // ── Nearest Government Office Card ───────────────────────────────────────────
 function GovOfficeCard({ office, ticketLat, ticketLng }) {
   if (!office) return null;
-  const mapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${office.lat},${office.lng}&destination=${ticketLat},${ticketLng}`;
-  const streetViewUrl = `https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${ticketLat},${ticketLng}`;
+  const officeLat = office.lat || 28.4820;
+  const officeLng = office.lng || 77.5090;
+  const tLat = ticketLat || 28.4744;
+  const tLng = ticketLng || 77.5040;
+  const mapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${officeLat},${officeLng}&destination=${tLat},${tLng}`;
+  const streetViewUrl = `https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${tLat},${tLng}`;
 
   return (
     <div className="bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-900/50 rounded-xl p-4 space-y-3">

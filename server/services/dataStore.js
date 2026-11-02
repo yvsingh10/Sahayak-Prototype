@@ -971,13 +971,35 @@ export function getEnrichedTickets(filter = {}) {
   const tickets = readTickets();
   const { city, category, status, stage, search, sort } = filter;
 
+  const cityCenters = {
+    "Greater Noida": { lat: 28.474412, lng: 77.504018 },
+    "Delhi": { lat: 28.568214, lng: 77.221529 },
+    "Mumbai": { lat: 19.056021, lng: 72.834015 },
+    "Lucknow": { lat: 26.851214, lng: 80.946521 }
+  };
+
   let filtered = tickets.map(ticket => {
     const priority = calculatePriority(ticket);
     const sla = calculateSla(ticket);
     const nearestOffice = getNearestGovOffice(ticket.city, ticket.category);
 
+    // Guarantee valid, non-null numeric latitude and longitude down to 6 decimals
+    const defaultCenter = cityCenters[ticket.city] || cityCenters["Greater Noida"];
+    const idHash = (ticket.id || "").split("").reduce((acc, c) => acc + c.charCodeAt(0), 0);
+    const latOffset = ((idHash % 20) - 10) * 0.0012;
+    const lngOffset = (((idHash * 3) % 20) - 10) * 0.0012;
+
+    const lat = (typeof ticket.lat === 'number' && !isNaN(ticket.lat)) 
+      ? Number(ticket.lat.toFixed(6)) 
+      : Number((defaultCenter.lat + latOffset).toFixed(6));
+    const lng = (typeof ticket.lng === 'number' && !isNaN(ticket.lng)) 
+      ? Number(ticket.lng.toFixed(6)) 
+      : Number((defaultCenter.lng + lngOffset).toFixed(6));
+
     return {
       ...ticket,
+      lat,
+      lng,
       priority,
       sla,
       nearestOffice,
