@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { api } from '../services/api';
 import { X, RotateCcw, AlertTriangle } from 'lucide-react';
@@ -7,6 +7,15 @@ export default function DisputeModal({ isOpen, onClose, ticket, onDisputeComplet
   const { user } = useAuth();
   const [disputeReason, setDisputeReason] = useState('Asphalt not properly compacted; trench already showing signs of depression after rain.');
   const [submitting, setSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
 
   if (!isOpen || !ticket) return null;
 
@@ -38,8 +47,14 @@ export default function DisputeModal({ isOpen, onClose, ticket, onDisputeComplet
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
-      <div className="bg-white dark:bg-slate-900 rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-200 dark:border-slate-800 space-y-4">
+    <div 
+      onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
+      className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-150"
+    >
+      <div 
+        onClick={(e) => e.stopPropagation()}
+        className="bg-white dark:bg-slate-900 rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-200 dark:border-slate-800 space-y-4"
+      >
         
         <div className="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
           <div className="flex items-center gap-2">
@@ -49,7 +64,12 @@ export default function DisputeModal({ isOpen, onClose, ticket, onDisputeComplet
               <p className="text-xs text-slate-500">Stage Reversion back to Stage 3 (In Progress)</p>
             </div>
           </div>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 p-1">
+          <button 
+            type="button" 
+            onClick={onClose} 
+            className="text-slate-400 hover:text-slate-600 p-1"
+            title="Close (Esc)"
+          >
             <X className="w-5 h-5" />
           </button>
         </div>

@@ -33,7 +33,8 @@ export default function Navbar({
   setSearchKeyword, 
   onReportClick,
   onResetPrompt,
-  onOpenJanKhata
+  onOpenJanKhata,
+  onTrackTicket
 }) {
   const { 
     user, 
@@ -45,6 +46,13 @@ export default function Navbar({
     darkMode, 
     toggleDarkMode 
   } = useAuth();
+
+  const handleTrackSubmit = () => {
+    if (!searchKeyword.trim()) return;
+    if (onTrackTicket) {
+      onTrackTicket(searchKeyword.trim());
+    }
+  };
 
   return (
     <header className="sticky top-0 z-40 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md border-b border-slate-200/60 dark:border-zinc-800/60 shadow-[0_1px_3px_rgba(0,0,0,0.02)] transition-colors text-xs">
@@ -149,16 +157,25 @@ export default function Navbar({
               <MapPin className="w-3.5 h-3.5 text-slate-400 dark:text-zinc-500 absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" strokeWidth={1.75} />
             </div>
 
-            {/* Instant Search Input */}
+            {/* Instant Search & Track Input */}
             <div className="relative flex-1">
               <input 
                 type="text" 
                 value={searchKeyword}
                 onChange={(e) => setSearchKeyword(e.target.value)}
-                placeholder="Search complaint ID, street, or ward..."
-                className="w-full pl-8 pr-4 py-1.5 text-xs bg-slate-100/70 dark:bg-zinc-800/60 focus:bg-white dark:focus:bg-zinc-900 border border-slate-200/60 dark:border-zinc-700/60 rounded-xl text-slate-800 dark:text-zinc-200 placeholder-slate-400 dark:placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
+                onKeyDown={(e) => { if (e.key === 'Enter') handleTrackSubmit(); }}
+                placeholder="Track complaint ID or search street..."
+                className="w-full pl-8 pr-16 py-1.5 text-xs bg-slate-100/70 dark:bg-zinc-800/60 focus:bg-white dark:focus:bg-zinc-900 border border-slate-200/60 dark:border-zinc-700/60 rounded-xl text-slate-800 dark:text-zinc-200 placeholder-slate-400 dark:placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
               />
               <Search className="w-3.5 h-3.5 text-slate-400 dark:text-zinc-500 absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" strokeWidth={1.75} />
+              <button
+                type="button"
+                onClick={handleTrackSubmit}
+                className="absolute right-1.5 top-1/2 -translate-y-1/2 px-2 py-0.5 rounded-lg bg-blue-600 hover:bg-blue-700 active:scale-95 text-white font-medium text-[10px] shadow-2xs transition-all"
+                title="Track Grievance"
+              >
+                Track
+              </button>
             </div>
 
           </div>

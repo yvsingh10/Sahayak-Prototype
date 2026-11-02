@@ -154,6 +154,20 @@ export default function App() {
     setIsSubmitOpen(true);
   };
 
+  const handleTrackTicket = (idOrKeyword) => {
+    const clean = idOrKeyword.trim().toLowerCase();
+    const exactMatch = tickets.find(t => 
+      t.id.toLowerCase() === clean || 
+      t.id.toLowerCase().includes(clean)
+    );
+    if (exactMatch) {
+      setSelectedTicket(exactMatch);
+      showToast(`Tracking record loaded for ${exactMatch.id} (Stage ${exactMatch.stage})`);
+    } else {
+      showToast(`No exact match for "${idOrKeyword}". Filtered public search active.`);
+    }
+  };
+
   // Proximity alerts check: Active escalated hazards in this city
   const escalatedHazards = tickets.filter(t => t.city === activeCity && (t.status === 'ESCALATED' || t.isEmergencySos));
 
@@ -171,6 +185,7 @@ export default function App() {
         onReportClick={handleReportClick}
         onResetPrompt={handleResetPrompt}
         onOpenJanKhata={() => setIsJanKhataOpen(true)}
+        onTrackTicket={handleTrackTicket}
       />
 
       {/* Main App Content Area */}

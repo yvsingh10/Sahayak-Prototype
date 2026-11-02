@@ -1,5 +1,17 @@
 [
   {
+    "id": "AUD-50435",
+    "ticketId": "SAH-TEST-9999",
+    "action": "TEST_INTEGRATION_VERIFY",
+    "previousStage": "STAGE_1",
+    "newStage": "STAGE_2",
+    "actorId": "C-UID-2026-IND-08241",
+    "actorRole": "Citizen",
+    "reason": "Automated regression verification.",
+    "details": {},
+    "timestamp": 1793649851903
+  },
+  {
     "id": "AUD-29867",
     "ticketId": "SAH-TEST-9999",
     "action": "TEST_INTEGRATION_VERIFY",

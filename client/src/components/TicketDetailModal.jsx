@@ -263,6 +263,15 @@ export default function TicketDetailModal({
   const [corroborateNote, setCorroborateNote] = useState('');
   const [celebrationCardOpen, setCelebrationCardOpen] = useState(false);
 
+  // Escape Key Listener for Accessible Modal Dismiss
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onClose]);
+
   if (!ticket) return null;
 
   const isVoted = user && ticket.upvotedBy && ticket.upvotedBy.includes(user.cuid || user.id);
@@ -340,8 +349,14 @@ export default function TicketDetailModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
-      <div className="bg-white dark:bg-slate-900 rounded-2xl max-w-3xl w-full p-6 shadow-2xl border border-slate-200 dark:border-slate-800 space-y-4 max-h-[92vh] overflow-y-auto animate-in fade-in zoom-in-95 duration-150 text-xs">
+    <div 
+      onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
+      className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-150"
+    >
+      <div 
+        onClick={(e) => e.stopPropagation()}
+        className="bg-white dark:bg-slate-900 rounded-2xl max-w-3xl w-full p-6 shadow-2xl border border-slate-200 dark:border-slate-800 space-y-4 max-h-[92vh] overflow-y-auto animate-in fade-in zoom-in-95 duration-150 text-xs"
+      >
 
         {/* Modal Header */}
         <div className="flex items-start justify-between gap-4 pb-3 border-b border-slate-200 dark:border-slate-800">

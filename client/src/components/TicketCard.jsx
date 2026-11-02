@@ -15,7 +15,8 @@ import {
   Thermometer,
   BadgeCheck,
   Compass,
-  Sparkles
+  Sparkles,
+  Share2
 } from 'lucide-react';
 
 const CATEGORY_STYLES = {
@@ -37,6 +38,7 @@ const STAGE_STYLES = {
 export default function TicketCard({ ticket, onSelect, onUpvote }) {
   const { user } = useAuth();
   const [showMiniMap, setShowMiniMap] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   const isVoted = user && ticket.upvotedBy && ticket.upvotedBy.includes(user.cuid || user.id);
   const prio = ticket.priority || { score: 40, priorityBadge: "Normal Maintenance", urgencyPercent: 35 };
@@ -49,6 +51,20 @@ export default function TicketCard({ ticket, onSelect, onUpvote }) {
     if (ticket.stage >= 4) return "Work Done ✓";
     if (sla.isBreached) return "Overdue · Escalated";
     return sla.formattedCountdown;
+  };
+
+  const handleShare = (e) => {
+    e.stopPropagation();
+    const shareUrl = `${window.location.origin}/#ticket-${ticket.id}`;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(shareUrl).then(() => {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      });
+    } else {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
   };
 
   return (
@@ -198,27 +214,56 @@ export default function TicketCard({ ticket, onSelect, onUpvote }) {
 
       </div>
 
-      {/* Card Footer: Upvote & Quick Info */}
-      <div className="p-3 sm:px-4 bg-slate-50/60 dark:bg-zinc-800/30 border-t border-slate-100 dark:border-zinc-800/80 flex items-center justify-between text-xs">
+      {/* Card Footer: Upvote, Share & Details Actions */}
+      <div className="p-2.5 sm:px-4 bg-slate-50/60 dark:bg-zinc-800/30 border-t border-slate-100 dark:border-zinc-800/80 flex items-center justify-between text-xs gap-2">
+        <div className="flex items-center gap-1.5">
+          {/* Upvote Button with Explicit Type & Event Isolation */}
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              onUpvote(ticket.id);
+            }}
+            className={`inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border font-medium text-xs transition-all duration-150 active:scale-[0.98] ${
+              isVoted 
+                ? 'bg-blue-600 text-white border-blue-600 shadow-xs shadow-blue-500/20' 
+                : 'bg-white dark:bg-zinc-800 border-slate-200/80 dark:border-zinc-700/80 text-slate-700 dark:text-zinc-200 hover:bg-slate-50 dark:hover:bg-zinc-700/60 shadow-2xs'
+            }`}
+            title="Endorse this civic issue"
+          >
+            <ArrowUp className={`w-3.5 h-3.5 ${isVoted ? 'text-white' : 'text-slate-500 dark:text-zinc-400'}`} strokeWidth={2} />
+            <span>{isVoted ? 'Endorsed' : 'Upvote'}</span>
+            <span className="text-[11px] font-mono opacity-80">({prio.uCount})</span>
+          </button>
+
+          {/* Share Button with Clipboard Feedback */}
+          <button
+            type="button"
+            onClick={handleShare}
+            className="p-1.5 rounded-lg border border-slate-200/80 dark:border-zinc-700/80 bg-white dark:bg-zinc-800 text-slate-600 dark:text-zinc-300 hover:bg-slate-50 dark:hover:bg-zinc-700/60 transition-all active:scale-[0.98] relative"
+            title="Share grievance link"
+          >
+            <Share2 className="w-3.5 h-3.5" strokeWidth={1.75} />
+            {copied && (
+              <span className="absolute -top-7 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded bg-slate-900 text-white text-[10px] font-medium shadow-md whitespace-nowrap animate-in fade-in">
+                Link Copied!
+              </span>
+            )}
+          </button>
+        </div>
+
+        {/* View Details Button */}
         <button
+          type="button"
           onClick={(e) => {
             e.stopPropagation();
-            onUpvote(ticket.id);
+            onSelect(ticket);
           }}
-          className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border font-medium text-xs transition-all duration-150 active:scale-[0.98] ${
-            isVoted 
-              ? 'bg-blue-600 text-white border-blue-600 shadow-xs shadow-blue-500/20' 
-              : 'bg-white dark:bg-zinc-800 border-slate-200/80 dark:border-zinc-700/80 text-slate-700 dark:text-zinc-200 hover:bg-slate-50 dark:hover:bg-zinc-700/60 shadow-2xs'
-          }`}
+          className="text-blue-600 dark:text-blue-400 hover:underline font-medium text-xs flex items-center gap-1 px-1.5 py-1"
         >
-          <ArrowUp className={`w-3.5 h-3.5 ${isVoted ? 'text-white' : 'text-slate-500 dark:text-zinc-400'}`} strokeWidth={2} />
-          <span>{isVoted ? 'Endorsed' : 'Upvote'}</span>
-          <span className="text-[11px] font-mono opacity-80">({prio.uCount})</span>
+          <span>View Details</span>
+          <ExternalLink className="w-3 h-3" />
         </button>
-
-        <span className="text-[11px] text-slate-400 dark:text-zinc-500 font-mono truncate max-w-[130px]">
-          {ticket.complainantId || ticket.complainant}
-        </span>
       </div>
     </div>
   );
