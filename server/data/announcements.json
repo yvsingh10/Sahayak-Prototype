@@ -1,0 +1,20 @@
+[
+  {
+    "id": "ANN-001",
+    "city": "Greater Noida",
+    "department": "Water Supply & Sewage",
+    "title": "Planned Pipeline Pressure Maintenance in Knowledge Park II & Delta 1",
+    "details": "Water supply will experience low pressure between 10:00 PM to 04:00 AM on Wednesday for valve servicing.",
+    "severity": "Advisory",
+    "createdAt": 1793515504266
+  },
+  {
+    "id": "ANN-002",
+    "city": "Delhi",
+    "department": "Roads & Infrastructure",
+    "title": "Asphalt Resurfacing Along South Extension Ring Road",
+    "details": "One lane restricted for heavy roller operations. Commuters advised to take alternate flyover bypass.",
+    "severity": "Urgent",
+    "createdAt": 1793493904266
+  }
+]

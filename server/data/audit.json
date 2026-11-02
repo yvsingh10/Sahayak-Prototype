@@ -1,0 +1,272 @@
+[
+  {
+    "id": "AUD-29867",
+    "ticketId": "SAH-TEST-9999",
+    "action": "TEST_INTEGRATION_VERIFY",
+    "previousStage": "STAGE_1",
+    "newStage": "STAGE_2",
+    "actorId": "C-UID-2026-IND-08241",
+    "actorRole": "Citizen",
+    "reason": "Automated regression verification.",
+    "details": {},
+    "timestamp": 1793648061709
+  },
+  {
+    "id": "AUD-11646",
+    "ticketId": "USER_AUTH",
+    "action": "JAN_KHATA_ONBOARDING",
+    "previousStage": "PUBLIC_GUEST",
+    "newStage": "REGISTERED_JAN_KHATA",
+    "actorId": "C-UID-2026-DL-88433",
+    "actorRole": "Citizen",
+    "reason": "Open self-registration completed via Jan Khata. C-UID: C-UID-2026-DL-88433",
+    "details": {},
+    "timestamp": 1793558862273
+  },
+  {
+    "id": "AUD-82615",
+    "ticketId": "SAH-IOT-2194",
+    "action": "IOT_TELEMETRY_ALARM",
+    "previousStage": "GRID_NORMAL",
+    "newStage": "PENDING_TRIAGE",
+    "actorId": "IOT-LIGHT-112",
+    "actorRole": "Smart City IoT Daemon",
+    "reason": "Automated anomaly trigger: Feeder 33kV Phase Loss: 18 Consecutive Streetlights Dark",
+    "details": {},
+    "timestamp": 1793558292282
+  },
+  {
+    "id": "AUD-51368",
+    "ticketId": "SAH-TEST-9999",
+    "action": "TEST_INTEGRATION_VERIFY",
+    "previousStage": "STAGE_1",
+    "newStage": "STAGE_2",
+    "actorId": "C-UID-2026-IND-08241",
+    "actorRole": "Citizen",
+    "reason": "Automated regression verification.",
+    "details": {},
+    "timestamp": 1793544245481
+  },
+  {
+    "id": "AUD-42803",
+    "ticketId": "SAH-TEST-9999",
+    "action": "TEST_INTEGRATION_VERIFY",
+    "previousStage": "STAGE_1",
+    "newStage": "STAGE_2",
+    "actorId": "C-UID-2026-IND-08241",
+    "actorRole": "Citizen",
+    "reason": "Automated regression verification.",
+    "details": {},
+    "timestamp": 1793543238467
+  },
+  {
+    "id": "AUD-47736",
+    "ticketId": "SAH-TEST-9999",
+    "action": "TEST_INTEGRATION_VERIFY",
+    "previousStage": "STAGE_1",
+    "newStage": "STAGE_2",
+    "actorId": "C-UID-2026-IND-08241",
+    "actorRole": "Citizen",
+    "reason": "Automated regression verification.",
+    "details": {},
+    "timestamp": 1793543202224
+  },
+  {
+    "id": "AUD-81478",
+    "ticketId": "SAH-TEST-9999",
+    "action": "TEST_INTEGRATION_VERIFY",
+    "previousStage": "STAGE_1",
+    "newStage": "STAGE_2",
+    "actorId": "C-UID-2026-IND-08241",
+    "actorRole": "Citizen",
+    "reason": "Automated regression verification.",
+    "details": {},
+    "timestamp": 1793543132420
+  },
+  {
+    "id": "AUD-17387",
+    "ticketId": "SAH-GNO-3701",
+    "action": "COMMUNITY_UPVOTE",
+    "previousStage": "Stage 5",
+    "newStage": "Stage 5",
+    "actorId": "C-UID-2026-IND-08241",
+    "actorRole": "Citizen",
+    "reason": "Citizen added 1-vote community endorsement.",
+    "details": {},
+    "timestamp": 1793538262269
+  },
+  {
+    "id": "AUD-31335",
+    "ticketId": "SAH-GNO-3701",
+    "action": "COMMUNITY_UNVOTE",
+    "previousStage": "Stage 5",
+    "newStage": "Stage 5",
+    "actorId": "C-UID-2026-IND-08241",
+    "actorRole": "Citizen",
+    "reason": "Citizen retracted vote.",
+    "details": {},
+    "timestamp": 1793538260449
+  },
+  {
+    "id": "AUD-86932",
+    "ticketId": "SAH-GNO-3701",
+    "action": "COMMUNITY_UPVOTE",
+    "previousStage": "Stage 5",
+    "newStage": "Stage 5",
+    "actorId": "C-UID-2026-IND-08241",
+    "actorRole": "Citizen",
+    "reason": "Citizen added 1-vote community endorsement.",
+    "details": {},
+    "timestamp": 1793538257534
+  },
+  {
+    "id": "AUD-37319",
+    "ticketId": "SAH-GNO-3701",
+    "action": "COMMUNITY_UNVOTE",
+    "previousStage": "Stage 5",
+    "newStage": "Stage 5",
+    "actorId": "C-UID-2026-IND-08241",
+    "actorRole": "Citizen",
+    "reason": "Citizen retracted vote.",
+    "details": {},
+    "timestamp": 1793538255980
+  },
+  {
+    "id": "AUD-56157",
+    "ticketId": "SAH-GNO-3701",
+    "action": "CITIZEN_CLOSURE_SIGNOFF",
+    "previousStage": "Stage 4: WORK_COMPLETED",
+    "newStage": "Stage 5: RESOLVED_CLOSED",
+    "actorId": "C-UID-2026-IND-08241",
+    "actorRole": "Citizen",
+    "reason": "Final biometric/OTP sign-off completed. Rating: 5/5 stars.",
+    "details": {},
+    "timestamp": 1793538187571
+  },
+  {
+    "id": "AUD-29031",
+    "ticketId": "SAH-GNO-3701",
+    "action": "RESOLUTION_PROOF_UPLOADED",
+    "previousStage": "Stage 3: IN_PROGRESS",
+    "newStage": "Stage 4: WORK_COMPLETED",
+    "actorId": "Er. Arvind Narula",
+    "actorRole": "Field Verification Crew",
+    "reason": "Uploaded after-repair photo. Geofence check: 121m from site.",
+    "details": {
+      "contractorId": "MUNICIPAL-FIELD-UNIT-402",
+      "costExpense": "₹42,500",
+      "materialsUsed": "1.2 tons Asphalt Mix, 45 Paver Blocks",
+      "geofenceVerified": false
+    },
+    "timestamp": 1793538154339
+  },
+  {
+    "id": "AUD-30253",
+    "ticketId": "SAH-GNO-3701",
+    "action": "STAGE_SHIFT_TO_2",
+    "previousStage": "Stage 1 (Pending Triage)",
+    "newStage": "Stage 2 (In Review)",
+    "actorId": "Er. Arvind Narula",
+    "actorRole": "desk_officer",
+    "reason": "Jurisdiction confirmed. Work order issued to zonal maintenance unit.",
+    "details": {},
+    "timestamp": 1793538146649
+  },
+  {
+    "id": "AUD-38521",
+    "ticketId": "SAH-GNO-3701",
+    "action": "TICKET_CREATED",
+    "previousStage": "NONE",
+    "newStage": "Stage 1: PENDING_TRIAGE",
+    "actorId": "C-UID-2026-IND-08241",
+    "actorRole": "Citizen",
+    "reason": "New grievance submitted with GPS verification (lat: 28.473741, lng: 77.503158, accuracy: 5.4m).",
+    "details": {
+      "category": "Roads & Infrastructure",
+      "city": "Greater Noida",
+      "ward": "Ward 12 (Knowledge Park)",
+      "sha256Hash": "beac5089360c37f763fbdb0a9622fdb272238fc617c21bc05bf62b229a43c360"
+    },
+    "timestamp": 1793538059406
+  },
+  {
+    "id": "AUD-46081",
+    "ticketId": "SAH-TEST-9999",
+    "action": "TEST_INTEGRATION_VERIFY",
+    "previousStage": "STAGE_1",
+    "newStage": "STAGE_2",
+    "actorId": "C-UID-2026-IND-08241",
+    "actorRole": "Citizen",
+    "reason": "Automated regression verification.",
+    "details": {},
+    "timestamp": 1793537311952
+  },
+  {
+    "id": "AUD-19691",
+    "ticketId": "SAH-TEST-9999",
+    "action": "TEST_INTEGRATION_VERIFY",
+    "previousStage": "STAGE_1",
+    "newStage": "STAGE_2",
+    "actorId": "C-UID-2026-IND-08241",
+    "actorRole": "Citizen",
+    "reason": "Automated regression verification.",
+    "details": {},
+    "timestamp": 1793537194099
+  },
+  {
+    "id": "AUDIT-1793442775332-668",
+    "ticketId": "SAH-MUM-6102",
+    "event": "AUTO_ESCALATION_PRIORITY",
+    "actor": "PRIORITY_DAEMON",
+    "details": "P(t) = 105.5",
+    "timestamp": 1793442775332
+  },
+  {
+    "id": "AUDIT-1793442775326-79",
+    "ticketId": "SAH-LKO-5120",
+    "event": "AUTO_ESCALATION_PRIORITY",
+    "actor": "PRIORITY_DAEMON",
+    "details": "P(t) = 108.1",
+    "timestamp": 1793442775326
+  },
+  {
+    "id": "AUDIT-1793442775321-37",
+    "ticketId": "SAH-DEL-7419",
+    "event": "AUTO_ESCALATION_PRIORITY",
+    "actor": "PRIORITY_DAEMON",
+    "details": "P(t) = 118",
+    "timestamp": 1793442775321
+  },
+  {
+    "id": "AUDIT-1793442766058-638",
+    "ticketId": "SYSTEM",
+    "event": "DATABASE_RESET",
+    "actor": "SYSTEM_DAEMON",
+    "details": "Reset to 10 sample civic complaints",
+    "timestamp": 1793442766058
+  },
+  {
+    "id": "AUDIT-1793442425043-897",
+    "ticketId": "SAH-MUM-6102",
+    "event": "AUTO_ESCALATION_PRIORITY",
+    "actor": "PRIORITY_DAEMON",
+    "details": "P(t) = 105.5",
+    "timestamp": 1793442425043
+  },
+  {
+    "id": "AUDIT-1793442425036-691",
+    "ticketId": "SAH-LKO-5120",
+    "event": "AUTO_ESCALATION_PRIORITY",
+    "actor": "PRIORITY_DAEMON",
+    "details": "P(t) = 108.1",
+    "timestamp": 1793442425036
+  },
+  {
+    "id": "AUDIT-1793442425029-617",
+    "ticketId": "SAH-DEL-7419",
+    "event": "AUTO_ESCALATION_PRIORITY",
+    "actor": "PRIORITY_DAEMON",
+    "details": "P(t) = 118",
+    "timestamp": 1793442425029
+  }
+]

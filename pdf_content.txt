@@ -1,0 +1,321 @@
+﻿--- PAGE 1 ---
+PROJECT BASED LEARNING PROJECT REPORT
+SAHAYAK
+A Prototype for Public Problem Reporting and Resolution System
+Submitted By
+Team Members:
+1. ________________________________
+2. ________________________________
+3. ________________________________
+4. ________________________________
+Course: Project Based Learning (PBL)
+Department: ________________________________
+College: ________________________________
+Academic Year: 2026ΓÇô27
+
+--- PAGE 2 ---
+1
+TABLE OF CONTENTS
+3
+1. CLARITY OF PROBLEM DEFINITION (PO1)
+ .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  . 3
+1.1 Background
+ .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  . 3
+1.2 Problem Definition
+ .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  . 3
+1.3 Key Issues Identified
+ .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  . 3
+1.4 Need for a Centralized Platform
+4
+2. DESCRIPTION OF PROJECT CONCEPT (PO4)
+ .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  . 4
+2.1 Project Definition
+ .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  . 4
+2.2 Project Concept
+ .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  . 4
+2.3 Major Features
+ .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  . 5
+2.4 Working / Basic Workflow
+6
+3. STUDY OF THE LITERATURE SURVEY (PO5)
+ .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  . 6
+3.1 Comparable Platforms Studied
+ .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  . 6
+3.2 Relevance to SAHAYAK
+7
+4. PROJECT FEASIBILITY (PO2)
+ .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  . 7
+4.1 Technical Feasibility
+ .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  . 7
+4.2 Operational Feasibility
+ .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  . 7
+4.3 Future Feasibility
+8
+5. ROADMAP OF PROJECT & DISTRIBUTION OF WORK AMONG TEAM (PO11)
+ .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  . 8
+5.1 Project Roadmap
+ .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  . 8
+5.2 Development Phases
+ .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  . 8
+5.3 Distribution of Work Among Team
+10
+CONCLUSION
+
+--- PAGE 3 ---
+2
+1. CLARITY OF PROBLEM DEFINITION (PO1)
+1.1 Background
+In many areas, public problems such as damaged roads, garbage, or open drains stay unresolved
+for a long time. One reason for this is poor communication between citizens and the department
+responsible for fixing the issue. Citizens do not have one common platform where they can raise
+such problems, so they often depend on informal or unofficial ways of complaining, such as calling
+an office directly or asking a local representative.
+Because there is no proper system to track a complaint after it is raised, many complaints are
+simply forgotten. There is no fixed person responsible and no deadline for action, so problems can
+remain pending for a long time without any update.
+1.2 Problem Definition
+ΓÇó
+Public issues such as road damage, pollution, poor sanitation, and local crime are often left
+unattended.
+ΓÇó
+Complaints get delayed because of middlemen and unclear responsibility between
+departments.
+ΓÇó
+There is no fixed time limit for reviewing, approving, or prioritizing a reported problem.
+1.3 Key Issues Identified
+ΓÇó
+There is no transparency in how a reported problem is handled after it is submitted.
+ΓÇó
+There is no system to separate urgent problems from minor ones.
+ΓÇó
+Approval of complaints gets delayed due to unclear ownership among authorities.
+ΓÇó
+Citizens have no way of checking the current status of their complaint.
+1.4 Need for a Centralized Platform
+Based on the problems listed above, there is a clear need for a single digital platform where
+citizens can report public issues and also track what happens to them afterwards. Such a platform
+should:
+ΓÇó
+Give citizens one trusted place to report a problem, instead of relying on multiple informal
+channels.
+ΓÇó
+Make sure every complaint is looked at within a fixed time period, such as 48 hours.
+ΓÇó
+Allow problems with more public support to be treated with higher priority.
+ΓÇó
+Help build trust between citizens and the government by showing that action is actually
+being taken.
+
+--- PAGE 4 ---
+3
+2. DESCRIPTION OF PROJECT CONCEPT (PO4)
+2.1 Project Definition
+SAHAYAK is a prototype of a digital platform that allows citizens to report public and civic
+problems and track their status until they are resolved. It is meant to work as a direct channel
+between citizens and the concerned government authority, instead of relying on informal
+complaints or word of mouth.
+The main users of the platform are citizens, who report problems, and government authorities
+such as municipal offices, police, or local representatives, who review and act on these reports.
+2.2 Project Concept
+The idea behind SAHAYAK is to make the complete life cycle of a complaint visible, from the
+moment it is reported to the moment it is resolved. Every problem submitted on the platform goes
+through a simple flow:
+Report
+ΓåÆ
+Pending
+Approval
+ΓåÆ
+Prioritize
+ΓåÆ
+Track
+ΓåÆ
+Resolve
+If a problem is not acted upon within the expected time, it is automatically escalated so that it does
+not get ignored. The main objectives of the project are to:
+ΓÇó
+Give citizens a direct platform to report public problems.
+ΓÇó
+Ensure that every problem is reviewed and approved within 48 hours.
+ΓÇó
+Prioritize problems based on their severity and the level of public support they receive.
+ΓÇó
+Increase transparency and accountability in the way local problems are handled.
+ΓÇó
+Allow the community to take part in deciding which problems should be resolved first.
+2.3 Major Features
+Feature
+Description
+Public Issue Reporting
+Citizens can report problems related to roads, pollution, sanitation, and
+local crime directly on the platform.
+Community Visibility
+Other citizens can reshare or upvote a reported problem, which helps
+highlight issues that affect more people.
+Priority Management
+Problems are tagged as high, medium, or low priority depending on their
+severity and support.
+Time-Bound Approval
+Every submitted problem must be reviewed and approved within 48 hours.
+Escalation System
+If a problem is not handled within the expected time, it is automatically
+escalated.
+
+--- PAGE 5 ---
+4
+Direct Authority
+Assignment
+Problems are sent directly to the concerned authority, such as the
+municipal body, police, or a local representative.
+2.4 Working / Basic Workflow
+1
+The citizen submits a problem along with a short description, an image, and the location.
+2
+The problem stays in a ΓÇÿPending ApprovalΓÇÖ state for a maximum of 48 hours.
+3
+The concerned authority reviews the problem, approves it, and assigns a priority based on
+its severity and the support it has received from the community.
+4
+Once approved, the problem shows status updates that remain visible to the public.
+5
+Problems marked as high priority are handled first. If there is a delay, the problem is
+escalated automatically.
+6
+Other citizens can reshare or upvote the problem, which can increase its priority.
+
+--- PAGE 6 ---
+5
+3. STUDY OF THE LITERATURE SURVEY (PO5)
+3.1 Comparable Platforms Studied
+Before designing SAHAYAK, a few existing complaint and grievance reporting systems were
+studied to understand how they work and what could be learned from them.
+CPGRAMS (Centralized Public Grievance Redress and Monitoring System): This is a
+Government of India platform that allows citizens to file grievances against government
+departments and track their status online. Studying it gave an idea of how a government-run
+complaint tracking system is generally structured.
+FixMyStreet: This is a UK-based platform that lets citizens report local issues such as potholes,
+broken street lights, or littering by marking the location on a map. This platform was useful in
+understanding how location and image-based reporting can be used for civic issues.
+MyGov / Swachhata App: These are examples of Indian government platforms that allow
+citizens to report civic issues such as garbage or sanitation problems in their area, which are then
+forwarded to the concerned department.
+3.2 Relevance to SAHAYAK
+From studying these platforms, a few useful concepts were identified and adapted for SAHAYAK:
+ΓÇó
+Reporting a problem along with an image and location, similar to FixMyStreet.
+ΓÇó
+Routing a complaint to the correct authority or department, similar to CPGRAMS.
+ΓÇó
+Allowing the public to see the status of a complaint, instead of it being handled only
+internally.
+However, most of the platforms studied did not have a strict time-bound approval system or a
+community-based priority mechanism. This is why these two features were specifically added to
+SAHAYAK.
+
+--- PAGE 7 ---
+6
+4. PROJECT FEASIBILITY (PO2)
+4.1 Technical Feasibility
+SAHAYAK can be developed as a web-based platform with a database to store problem reports,
+their status, and priority. Since the core functionality mainly involves form submission (description,
+image, location), status updates, and basic approval or escalation logic, it does not require any
+complex or resource-heavy technology. This makes the prototype realistic to build within the
+scope of a college project.
+4.2 Operational Feasibility
+The platform is designed to fit into how citizens and local authorities already handle complaints,
+just in a more structured way. Citizens only need to fill a simple form to report a problem, and
+authorities only need to review, approve, and update its status. Since the roles of both citizens
+and authorities are kept simple, the platform is operationally practical to use without needing
+major training.
+4.3 Future Feasibility
+Beyond the current prototype, the following enhancements can realistically be added in the future:
+ΓÇó
+AI-based automatic categorization of complaints.
+ΓÇó
+Regional language support and voice-based reporting.
+ΓÇó
+Integration with existing official government portals.
+ΓÇó
+Performance dashboards for authorities to track resolution rates.
+ΓÇó
+A penalty system for departments that repeatedly cause delays.
+These additions are not part of the current prototype but are realistic directions for extending the
+project in the future.
+
+--- PAGE 8 ---
+7
+5. ROADMAP OF PROJECT & DISTRIBUTION OF WORK AMONG
+TEAM (PO11)
+5.1 Project Roadmap
+The project was planned and carried out in six phases, moving from understanding the problem to
+identifying future improvements.
+Requirement Analysis
+ΓåÆ
+System Design
+ΓåÆ
+Development
+Γåô
+Testing
+ΓåÆ
+Deployment
+ΓåÆ
+Future Enhancements
+5.2 Development Phases
+Phase
+Description
+Phase 1: Requirement
+Analysis
+Understand citizen and authority requirements, identify the major
+problems, define the scope of the project, and study existing
+complaint-handling systems.
+Phase 2: System
+Design
+Design the system architecture, plan the database structure, design the
+user interface, and define the workflow for citizens and authorities.
+Phase 3: Development
+Develop the frontend and backend, implement login and authentication,
+and build the complaint submission, approval, priority, and escalation
+logic.
+Phase 4: Testing
+Test the major features, identify and fix bugs, and check that the citizen
+and authority workflows work correctly.
+Phase 5: Deployment
+Deploy the application, set up the database and server, carry out final
+testing, and prepare project documentation.
+Phase 6: Future
+Enhancements
+Plan for AI-based categorization, regional language and voice support,
+integration with government portals, and a dedicated mobile application.
+5.3 Distribution of Work Among Team
+
+--- PAGE 9 ---
+8
+Team Member
+Work / Responsibility
+Member 1
+__________________________________
+Member 2
+__________________________________
+Member 3
+__________________________________
+Member 4
+__________________________________
+
+--- PAGE 10 ---
+9
+CONCLUSION
+SAHAYAK is a prototype that tries to solve a simple but common problem: the lack of a proper
+system for reporting and tracking public issues. By introducing a fixed approval time, a priority
+system, and visible status tracking, it aims to make the process of reporting a civic problem more
+transparent and accountable.
+Some of the expected benefits of the system are:
+ΓÇó
+Faster acknowledgment of public problems.
+ΓÇó
+More transparency in how complaints are handled.
+ΓÇó
+Greater accountability from the authorities involved.
+ΓÇó
+Citizens getting a say in which problems are treated as urgent.
+Overall, SAHAYAK is meant to work as a small step toward a more organised and citizen-friendly
+way of handling public grievances.
+

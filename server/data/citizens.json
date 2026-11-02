@@ -1,0 +1,58 @@
+[
+  {
+    "id": "C-UID-2026-DL-88433",
+    "cuid": "C-UID-2026-DL-88433",
+    "name": "Manish Pandey",
+    "phone": "6306424104",
+    "phoneMasked": "+91-63064-XXXXX",
+    "email": "manish.pandey@jankhata.gov.in",
+    "city": "Delhi",
+    "ward": "Ward 12 (Knowledge Park)",
+    "role": "citizen",
+    "kycVerified": true,
+    "kycBadge": "DigiLocker & Aadhaar Verified",
+    "karmaPoints": 120,
+    "trustTier": "Tier-2 Civic Guardian",
+    "familyMembers": [
+      {
+        "name": "Manish's Elder Dependent",
+        "relation": "Parent",
+        "phoneLinked": false
+      }
+    ],
+    "activeSessions": [
+      {
+        "id": "sess_8be298631203",
+        "device": "Chrome 122 on Windows 11",
+        "ip": "192.168.1.104",
+        "city": "Delhi",
+        "lastActive": 1793558862231
+      },
+      {
+        "id": "sess_2996e9cb170b",
+        "device": "Mobile PWA on Android 14",
+        "ip": "10.0.0.45",
+        "city": "Delhi",
+        "lastActive": 1793555262231
+      }
+    ],
+    "joinedAt": 1793558862231
+  },
+  {
+    "id": "C-UID-2026-IND-08241",
+    "cuid": "C-UID-2026-IND-08241",
+    "name": "Yash Singh",
+    "phone": "+91-9876543210",
+    "phoneMasked": "+91-98765-XXXXX",
+    "email": "yash.singh@citizen.in",
+    "city": "Greater Noida",
+    "ward": "Ward 12 (Knowledge Park)",
+    "role": "citizen",
+    "kycVerified": true,
+    "kycBadge": "DigiLocker Verified Citizen",
+    "emergencyContact": "+91-9876500000",
+    "preferredLanguage": "en",
+    "biometricEnabled": true,
+    "joinedAt": 1777985104259
+  }
+]

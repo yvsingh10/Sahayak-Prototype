@@ -1,0 +1,192 @@
+﻿--- PAGE 1 ---
+SAHAYAK
+A PROTOTYPE FOR PUBLIC PROBLEM REPORTING AND RESOLUTION SYSTEM
+
+--- PAGE 2 ---
+UNDERSTANDING THE TOPIC
+ΓÇó SAHAYAK is a digital prototype designed to help citizens report public and social problems.
+ΓÇó It creates a direct communication channel between citizens and government authorities.
+ΓÇó The system focuses on transparency, accountability, and faster governance.
+
+--- PAGE 3 ---
+BACKGROUND
+ΓÇó In many areas, public problems remain unresolved due to poor communication.
+ΓÇó Citizens do not have a single trusted platform to report issues.
+ΓÇó Lack of monitoring and accountability causes delays.
+
+--- PAGE 4 ---
+PROBLEM DEFINITION
+ΓÇó Public issues such as road damage, pollution, sanitation, and local crime are often ignored.
+ΓÇó Complaints are delayed due to middlemen and unclear authority responsibility.
+ΓÇó There is no fixed time for approval or priority handling of problems.
+
+--- PAGE 5 ---
+KEY ISSUES IDENTIFIED
+NO TRANSPARENCY
+No transparency in how public problems are handled once 
+reported.
+NO PRIORITY SYSTEM
+No priority-based system to distinguish urgent issues from 
+minor ones.
+DELAYED APPROVAL
+Delayed approval of complaints due to unclear responsibility.
+STATUS UNAWARENESS
+Citizens remain unaware of the current status of their 
+problem.
+
+--- PAGE 6 ---
+NEED OF SAHAYAK
+ΓÇó To provide a single digital platform for public problem reporting.
+ΓÇó To ensure approval of problems within 48 hours.
+ΓÇó To prioritize problems based on public support.
+ΓÇó To improve trust between citizens and government.
+
+--- PAGE 7 ---
+OBJECTIVES OF SAHAYAK
+ΓÇó Provide a direct platform for citizens to report public problems.
+ΓÇó Ensure problem approval within 48 hours.
+ΓÇó Prioritize problems based on severity and public support.
+ΓÇó Increase transparency and accountability in governance.
+ΓÇó Enable community participation in problem resolution.
+
+--- PAGE 8 ---
+KEY FEATURES
+PUBLIC ISSUE REPORTING
+Report roads, pollution, local crime, 
+and sanitation issues.
+COMMUNITY VISIBILITY
+Reshare and upvote system to boost 
+community-backed problems.
+PRIORITY MANAGEMENT
+Problems classified as high, medium, 
+or low priority.
+TIME-BOUND APPROVAL
+Every problem is reviewed and 
+approved within 48 hours.
+ESCALATION SYSTEM
+Delayed issues are automatically 
+escalated for action.
+AUTHORITY ASSIGNMENT
+Direct assignment to municipal, 
+police, or local leaders.
+
+--- PAGE 9 ---
+WORKING OF SAHAYAK PROTOTYPE
+ΓÇó Citizen submits a problem with description, image, and location.
+ΓÇó Problem enters 'Pending Approval' state (max 48 hours).
+ΓÇó Authority approves and assigns priority based on severity and community support.
+ΓÇó Approved problem receives status updates visible to the public.
+ΓÇó High-priority issues are resolved first; delays are escalated.
+ΓÇó Community can reshare/upvote problems to increase priority.
+
+--- PAGE 10 ---
+BENEFITS OF SAHAYAK
+ΓÇó Faster acknowledgment and resolution of public problems.
+ΓÇó Transparency in problem reporting and handling.
+ΓÇó Accountability of government authorities.
+ΓÇó Community participation in prioritizing issues.
+ΓÇó Trust between citizens and government improves.
+
+--- PAGE 11 ---
+ROADMAP
+Requirement
+Analysis
+Γû╢
+Platform
+Development
+Γû╢
+Reporting &
+Categorization
+Γû╢
+Approval &
+Priority System
+Γû╢
+Escalation &
+Tracking
+Γû╢
+Mobile
+Application
+
+--- PAGE 12 ---
+DEVELOPMENT ROADMAP
+PHASE 1
+REQUIREMENT
+ANALYSIS
+Γû╝
+Identify citizen and 
+authority 
+requirements, 
+problem categories, 
+platform workflow, 
+and essential 
+features.
+PHASE 2
+CORE
+PLATFORM
+Γû╝
+Develop citizen 
+registration, 
+authority login, 
+problem submission 
+with image and 
+location, and status 
+dashboard.
+PHASE 3
+SMART
+CATEGORIZATION
+Γû╝
+Introduce category-
+based routing and 
+severity tagging to 
+direct problems to 
+the right authority.
+PHASE 4
+APPROVAL &
+ESCALATION
+Γû╝
+Introduce the 48-
+hour approval 
+workflow, community 
+upvote-based 
+prioritization, and 
+automatic escalation 
+of delays.
+PHASE 5
+TRANSPARENCY &
+TRACKING
+Γû╝
+Integrate public 
+status tracking, 
+notifications, and 
+performance 
+dashboards for 
+authorities.
+PHASE 6
+MOBILE
+APPLICATIONS
+Γû╝
+Develop dedicated 
+Android and iOS 
+applications for 
+convenient citizen 
+access and voice 
+reporting.
+
+--- PAGE 13 ---
+FUTURE SCOPE
+ΓÇó AI-based automatic complaint categorization.
+ΓÇó Regional language support and voice reporting.
+ΓÇó Integration with official government portals.
+ΓÇó Performance dashboards for authorities.
+ΓÇó Penalty system for repeated delays.
+
+--- PAGE 14 ---
+CONCLUSION
+ΓÇó SAHAYAK acts as a digital bridge between citizens and authorities.
+ΓÇó Ensures 48-hour problem approval and priority-based resolution.
+ΓÇó Promotes transparency, accountability, and community involvement.
+ΓÇó A scalable solution for faster and smarter governance.
+
+--- PAGE 15 ---
+THANK YOU
+

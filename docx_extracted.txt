@@ -1,0 +1,80 @@
+Slide 1: Title Slide — SAHAYAK
+On-Slide Highlights:
+SAHAYAK: A Prototype for Public Problem Reporting and Resolution System
+Project-Based Learning (PBL) Evaluation
+Presented by: 
+[Your Name / Team Members]
+Spoken Script (What to say):
+"Respected evaluators and peers, good morning/afternoon."
+"Today, we are presenting our Project-Based Learning initiative titled SAHAYAK — a digital prototype designed for public problem reporting and resolution."
+"Our goal is simple: to bridge the communication gap between citizens and municipal authorities using technology."
+Delivery Tip: 
+(~25 seconds)
+ Introduce team members confidently, state the core vision in one sentence.
+Slide 2: Understanding the Topic
+On-Slide Highlights:
+Direct digital bridge between citizens and authorities
+Real-time civic problem reporting
+Core pillars: Transparency, Accountability, and Speed
+Spoken Script (What to say):
+"To understand what SAHAYAK is: it is a centralized digital bridge connecting common citizens directly with local authorities."
+"Instead of relying on bureaucratic hurdles or informal contacts, it empowers citizens to report civic grievances directly from their devices."
+"The entire system is anchored on three core pillars: complete transparency, strict administrative accountability, and faster resolution times."
+Delivery Tip: 
+(~30 seconds)
+ Keep your tone engaging; highlight how this impacts daily community life.
+Slide 3: Background
+On-Slide Highlights:
+Unresolved everyday civic problems (roads, sanitation, drainage)
+Absence of a single trusted reporting channel
+Lack of status monitoring leading to forgotten complaints
+Spoken Script (What to say):
+"Looking at the background of our civic ecosystem, daily issues like potholes, sewage leaks, and garbage overflow often persist for weeks or months."
+"Citizens lack a single, reliable point of contact and are forced to jump between helplines, local offices, or social media posts."
+"Because there is no unified tracking mechanism, most complaints slip through the cracks and are eventually forgotten."
+Delivery Tip: 
+(~35 seconds)
+ Emphasize the shared frustration every citizen 
+experiences
+ with unresolved complaints.
+Slide 4: Problem Definition
+On-Slide Highlights:
+Critical public issues frequently neglected
+Unclear departmental ownership & intermediary delays
+No standard SLAs (Service Level Agreements) for reviews
+Spoken Script (What to say):
+"We have defined three core problem dimensions:"
+"First, crucial public safety and sanitation complaints are easily overlooked due to noise and lack of organization."
+"Second, citizens face heavy delays because departmental boundaries are blurred, passing responsibility from one desk to another."
+"Third, there is no fixed timeline or SLA holding any official accountable to acknowledge or prioritize these issues."
+Delivery Tip: 
+(~35 seconds)
+ Clearly identify the operational bottlenecks before presenting your solution.
+Slide 5: Key Issues Identified
+On-Slide Highlights:
+Zero Transparency: Citizens don't know who is handling the complaint.
+No Priority Logic: Urgent safety risks are treated the same as minor issues.
+Delayed Approvals: Unclear ownership stalls action.
+Status Blindness: No real-time updates for the complainant.
+Spoken Script (What to say):
+"Breaking down the current breakdown into four specific flaws:"
+"1. No Transparency: Once a citizen 
+complains
+, the case enters a black box."
+"2. No Priority Mechanism: A hazardous open manhole is queued alongside routine maintenance."
+"3. Delayed Approvals: Bureaucratic bottlenecks stall initial verification."
+"4. Status Unawareness: Citizens are left guessing whether any action has even begun."
+Delivery Tip: 
+(~40 seconds)
+ Use hand gestures or point directly to the 4 quadrants on your slide.
+Slide 6: Need for SAHAYAK
+On-Slide Highlights:
+Unified single-window reporting system
+Mandatory 48-Hour Approval Window
+Public-backed priority mechanism
+Rebuilding citizen-government trust
+Spoken Script (What to say):
+"This is precisely why SAHAYAK is needed."
+"It replaces scattered informal complaints with one structured, verified digital interface."
+"Critically, it enforces a strict 48-hour approval SLA, guaranteeing that every problem is acknowledged quickly."
+"It also introduces community-backed prioritization, ensuring the most pressing public issues get addressed first."

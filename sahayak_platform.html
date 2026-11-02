@@ -1,0 +1,2887 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SAHAYAK — Civic Resolution Gateway</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              500: '#2563eb',
+              600: '#1d4ed8',
+              700: '#1e40af',
+              800: '#1e3a8a',
+              900: '#1e3a5f',
+            },
+            civic: {
+              emerald: '#059669',
+              amber: '#d97706',
+              rose: '#e11d48',
+              slate: '#334155'
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap');
+    body { font-family: 'Inter', sans-serif; }
+    .font-mono { font-family: 'JetBrains Mono', monospace; }
+    
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #f1f5f9; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+    /* Pulse animation for escalation */
+    @keyframes pulse-red {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(225, 29, 72, 0.4); }
+      50% { box-shadow: 0 0 0 8px rgba(225, 29, 72, 0); }
+    }
+    .escalated-pulse {
+      animation: pulse-red 2s infinite;
+    }
+    
+    .glass-card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(226, 232, 240, 0.8);
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col antialiased selection:bg-blue-600 selection:text-white">
+
+  <!-- ========================================================================= -->
+  <!-- 1. TOP ANNOUNCEMENT & SLA COMPLIANCE BANNER -->
+  <!-- ========================================================================= -->
+  <div class="bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-900 text-white text-xs py-1.5 px-4">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
+      <div class="flex items-center gap-2">
+        <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-400/20 text-amber-300 border border-amber-400/30">
+          MANDATORY 48H SLA GATEWAY
+        </span>
+        <span class="text-slate-300 hidden sm:inline">Every ticket auto-escalates to Municipal Commissioner if unaddressed in 48 hours.</span>
+      </div>
+      <div class="flex items-center gap-3 font-mono text-[11px] text-slate-300">
+        <span class="flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+          Engine: <span class="text-emerald-400 font-semibold">Active & Audited</span>
+        </span>
+        <span class="text-slate-500">|</span>
+        <button onclick="SahayakApp.resetDatabasePrompt()" class="text-slate-300 hover:text-amber-300 underline transition-colors">
+          Reset Demo Data
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- 2. MAIN NAVIGATION HEADER -->
+  <!-- ========================================================================= -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 gap-4">
+        
+        <!-- Logo & Branding -->
+        <div class="flex items-center gap-3 cursor-pointer group" onclick="SahayakApp.switchTab('feed')">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 via-indigo-600 to-emerald-600 flex items-center justify-center text-white shadow-md shadow-blue-500/20 group-hover:scale-105 transition-transform">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+            </svg>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-lg font-black tracking-tight text-slate-900 font-mono">SAHAYAK</span>
+              <span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-blue-100 text-blue-800 uppercase tracking-wider">GovTech v2.4</span>
+            </div>
+            <p class="text-[11px] text-slate-500 font-medium hidden sm:block">Civic Problem Reporting & Resolution Gateway</p>
+          </div>
+        </div>
+
+        <!-- Global Search & City Selector -->
+        <div class="hidden md:flex items-center gap-2 flex-1 max-w-md mx-4">
+          <!-- City Dropdown Filter -->
+          <div class="relative w-44 flex-shrink-0">
+            <select id="headerCityFilter" onchange="SahayakApp.handleGlobalCityChange(this.value)" class="w-full pl-8 pr-7 py-1.5 text-xs font-semibold bg-slate-100 hover:bg-slate-200/80 border border-slate-200 rounded-lg text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer appearance-none transition-all">
+              <option value="All">All Cities (National)</option>
+              <option value="Greater Noida" selected>Greater Noida</option>
+              <option value="Delhi">Delhi NCT</option>
+              <option value="Mumbai">Mumbai</option>
+              <option value="Lucknow">Lucknow</option>
+            </select>
+            <div class="absolute inset-y-0 left-2.5 flex items-center pointer-events-none text-slate-500">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+            </div>
+            <div class="absolute inset-y-0 right-2 flex items-center pointer-events-none text-slate-400">
+              <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </div>
+          </div>
+
+          <!-- Instant Search Input -->
+          <div class="relative flex-1">
+            <input type="text" id="globalSearchInput" oninput="SahayakApp.handleSearch(this.value)" placeholder="Search tickets by ID, ward, road, keyword..." class="w-full pl-8 pr-4 py-1.5 text-xs bg-slate-100 hover:bg-slate-200/70 focus:bg-white border border-slate-200 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+            <div class="absolute inset-y-0 left-2.5 flex items-center pointer-events-none text-slate-400">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Role Switcher & Action Buttons -->
+        <div class="flex items-center gap-2 sm:gap-3">
+          <!-- Report Problem Button (Prompts Auth if Guest) -->
+          <button onclick="SahayakApp.handleReportButtonClick()" class="inline-flex items-center gap-1.5 px-3 sm:px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs sm:text-sm shadow-sm shadow-blue-500/30 transition-all hover:shadow-md">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M12 4v16m8-8H4"/></svg>
+            <span>Report Problem</span>
+          </button>
+
+          <!-- Current User Profile & Auth Trigger Badge -->
+          <div id="userProfileBadgeContainer">
+            <!-- Rendered Dynamically via JS -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Navigation Tabs (Primary Sub-Bar) -->
+      <nav class="flex space-x-1 sm:space-x-3 overflow-x-auto py-2 border-t border-slate-100 text-xs sm:text-sm font-medium scrollbar-none">
+        <button id="navTab-feed" onclick="SahayakApp.switchTab('feed')" class="nav-tab px-3 py-1.5 rounded-md text-blue-700 bg-blue-50 font-semibold whitespace-nowrap transition-colors flex items-center gap-1.5">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+          Public Board & Upvotes
+        </button>
+        <button id="navTab-leaderboard" onclick="SahayakApp.switchTab('leaderboard')" class="nav-tab px-3 py-1.5 rounded-md text-slate-600 hover:text-slate-900 hover:bg-slate-100 whitespace-nowrap transition-colors flex items-center gap-1.5">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+          Civic Urgency Leaderboard
+        </button>
+        <button id="navTab-heatmap" onclick="SahayakApp.switchTab('heatmap')" class="nav-tab px-3 py-1.5 rounded-md text-slate-600 hover:text-slate-900 hover:bg-slate-100 whitespace-nowrap transition-colors flex items-center gap-1.5">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
+          Ward Heatmap & Hotspots
+        </button>
+        <button id="navTab-citizenPortal" onclick="SahayakApp.switchTab('citizenPortal')" class="nav-tab px-3 py-1.5 rounded-md text-slate-600 hover:text-slate-900 hover:bg-slate-100 whitespace-nowrap transition-colors flex items-center gap-1.5">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+          Citizen Portal
+        </button>
+        <button id="navTab-authorityDashboard" onclick="SahayakApp.switchTab('authorityDashboard')" class="nav-tab px-3 py-1.5 rounded-md text-slate-600 hover:text-slate-900 hover:bg-slate-100 whitespace-nowrap transition-colors flex items-center gap-1.5 relative">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"/></svg>
+          Authority Dashboard
+          <span id="authorityQueueBadge" class="hidden ml-1 px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-rose-600 text-white">0</span>
+        </button>
+        <button id="navTab-penalties" onclick="SahayakApp.switchTab('penalties')" class="nav-tab px-3 py-1.5 rounded-md text-slate-600 hover:text-slate-900 hover:bg-slate-100 whitespace-nowrap transition-colors flex items-center gap-1.5">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          SLA Breach & Penalty Tracker
+        </button>
+        <button id="navTab-specs" onclick="SahayakApp.switchTab('specs')" class="nav-tab px-3 py-1.5 rounded-md text-slate-600 hover:text-slate-900 hover:bg-slate-100 whitespace-nowrap transition-colors flex items-center gap-1.5">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+          Architecture & Rubric Spec
+        </button>
+      </nav>
+
+    </div>
+  </header>
+
+  <!-- ========================================================================= -->
+  <!-- 3. MAIN CONTENT CONTAINER -->
+  <!-- ========================================================================= -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+    <!-- Active City & Role Banner Notification -->
+    <div id="systemStateBanner" class="mb-5 p-3 rounded-xl border flex flex-wrap items-center justify-between gap-3 text-xs bg-slate-100/80 border-slate-200">
+      <!-- Populated dynamically -->
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- VIEW A: PUBLIC FEED & KANBAN (DEFAULT) -->
+    <!-- ========================================================================= -->
+    <div id="view-feed" class="view-panel space-y-6">
+      
+      <!-- Top Metrics Ribbon -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3">
+        <div class="p-3.5 rounded-xl bg-white border border-slate-200 shadow-sm">
+          <div class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Total Tickets</div>
+          <div id="statTotalTickets" class="text-2xl font-black text-slate-900 mt-1 font-mono">0</div>
+          <div class="text-[10px] text-slate-400 mt-0.5">Across Selected City</div>
+        </div>
+        <div class="p-3.5 rounded-xl bg-white border border-slate-200 shadow-sm">
+          <div class="text-[11px] font-semibold text-amber-600 uppercase tracking-wider">Pending Triage</div>
+          <div id="statPendingTickets" class="text-2xl font-black text-amber-600 mt-1 font-mono">0</div>
+          <div class="text-[10px] text-amber-700/70 mt-0.5">Within 48h Gate</div>
+        </div>
+        <div class="p-3.5 rounded-xl bg-white border border-slate-200 shadow-sm">
+          <div class="text-[11px] font-semibold text-blue-600 uppercase tracking-wider">In Progress</div>
+          <div id="statProgressTickets" class="text-2xl font-black text-blue-600 mt-1 font-mono">0</div>
+          <div class="text-[10px] text-blue-700/70 mt-0.5">Field Crews Dispatched</div>
+        </div>
+        <div class="p-3.5 rounded-xl bg-white border border-slate-200 shadow-sm">
+          <div class="text-[11px] font-semibold text-purple-600 uppercase tracking-wider">Work Done</div>
+          <div id="statCompletedTickets" class="text-2xl font-black text-purple-600 mt-1 font-mono">0</div>
+          <div class="text-[10px] text-purple-700/70 mt-0.5">Citizen Review Stage</div>
+        </div>
+        <div class="p-3.5 rounded-xl bg-white border border-slate-200 shadow-sm">
+          <div class="text-[11px] font-semibold text-emerald-600 uppercase tracking-wider">Resolved</div>
+          <div id="statResolvedTickets" class="text-2xl font-black text-emerald-600 mt-1 font-mono">0</div>
+          <div class="text-[10px] text-emerald-700/70 mt-0.5">Verified & Closed</div>
+        </div>
+        <div class="p-3.5 rounded-xl bg-rose-50 border border-rose-200 shadow-sm">
+          <div class="text-[11px] font-semibold text-rose-700 uppercase tracking-wider flex items-center justify-between">
+            <span>Escalated / Overdue</span>
+            <span class="w-2 h-2 rounded-full bg-rose-600 animate-ping"></span>
+          </div>
+          <div id="statEscalatedTickets" class="text-2xl font-black text-rose-700 mt-1 font-mono">0</div>
+          <div class="text-[10px] text-rose-800/80 mt-0.5">Commissioner Alerted</div>
+        </div>
+      </div>
+
+      <!-- Controls & Filter Toolbar -->
+      <div class="p-4 rounded-xl bg-white border border-slate-200 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-3">
+        <!-- Category Filters -->
+        <div class="flex flex-wrap items-center gap-1.5" id="categoryFilterButtons">
+          <button onclick="SahayakApp.setCategoryFilter('All')" class="cat-pill active px-3 py-1 rounded-full text-xs font-semibold bg-slate-900 text-white transition-all">All Categories</button>
+          <button onclick="SahayakApp.setCategoryFilter('Roads & Infrastructure')" class="cat-pill px-3 py-1 rounded-full text-xs font-medium bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all">🚧 Roads</button>
+          <button onclick="SahayakApp.setCategoryFilter('Sanitation & Waste')" class="cat-pill px-3 py-1 rounded-full text-xs font-medium bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all">🗑 Sanitation</button>
+          <button onclick="SahayakApp.setCategoryFilter('Drainage & Water Supply')" class="cat-pill px-3 py-1 rounded-full text-xs font-medium bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all">🚰 Water & Drainage</button>
+          <button onclick="SahayakApp.setCategoryFilter('Street Lighting')" class="cat-pill px-3 py-1 rounded-full text-xs font-medium bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all">💡 Street Lighting</button>
+        </div>
+
+        <!-- Sort & Status Filter Dropdowns -->
+        <div class="flex items-center gap-2 flex-wrap">
+          <div class="flex items-center gap-1 text-xs text-slate-500">
+            <span>Status:</span>
+            <select id="feedStatusFilter" onchange="SahayakApp.handleStatusFilterChange(this.value)" class="py-1 px-2 text-xs bg-slate-50 border border-slate-200 rounded-md text-slate-800 font-medium focus:outline-none focus:ring-1 focus:ring-blue-500">
+              <option value="All">All Statuses</option>
+              <option value="Pending Approval">Pending Approval</option>
+              <option value="Approved">Approved</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Work Completed">Work Completed</option>
+              <option value="Resolved">Resolved</option>
+              <option value="ESCALATED">Escalated (Breach/High P)</option>
+            </select>
+          </div>
+
+          <div class="flex items-center gap-1 text-xs text-slate-500">
+            <span>Sort:</span>
+            <select id="feedSortOrder" onchange="SahayakApp.handleSortOrderChange(this.value)" class="py-1 px-2 text-xs bg-slate-50 border border-slate-200 rounded-md text-slate-800 font-medium focus:outline-none focus:ring-1 focus:ring-blue-500">
+              <option value="priority_desc">Highest Urgency Priority</option>
+              <option value="sla_urgency">SLA Countdown (Expiring Soon)</option>
+              <option value="upvotes_desc">Most Upvoted (U)</option>
+              <option value="latest">Newest First</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Live Ticket Cards Feed Container -->
+      <div id="ticketCardsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <!-- Rendered via JS -->
+      </div>
+      
+      <!-- Empty State -->
+      <div id="feedEmptyState" class="hidden text-center py-16 bg-white rounded-2xl border border-dashed border-slate-300">
+        <div class="w-12 h-12 rounded-full bg-slate-100 text-slate-400 mx-auto flex items-center justify-center text-xl">🔍</div>
+        <h3 class="text-base font-bold text-slate-800 mt-3">No matching tickets found</h3>
+        <p class="text-xs text-slate-500 max-w-sm mx-auto mt-1">Try switching your city filter to "All Cities" or clearing the category and search keywords.</p>
+      </div>
+
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- VIEW B: PRIORITY LEADERBOARD & MATHEMATICAL INSPECTOR -->
+    <!-- ========================================================================= -->
+    <div id="view-leaderboard" class="view-panel hidden space-y-6">
+      
+      <!-- Mathematical Engine Formula Card -->
+      <div class="p-6 rounded-2xl bg-gradient-to-br from-slate-900 via-indigo-950 to-blue-950 text-white shadow-lg border border-slate-800">
+        <div class="max-w-4xl space-y-2">
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-500/30 text-blue-300 border border-blue-400/30 uppercase tracking-widest font-mono">Civic Urgency Engine</span>
+            <span class="text-xs text-slate-400">Dynamic Prioritization &amp; Auto-Escalation</span>
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight mt-1 text-white">
+            Civic Urgency &amp; Resolution Leaderboard
+          </h2>
+          <p class="text-xs text-slate-300 max-w-2xl leading-relaxed">
+            Every complaint is prioritized in real-time by community endorsement volume, verified physical severity, and elapsed time since lodging. High-risk hazards bubble to the top to ensure prompt municipal response.
+          </p>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-4 pt-4 border-t border-slate-800 text-xs">
+            <div class="bg-slate-800/50 p-3 rounded-xl border border-slate-700/60">
+              <span class="font-bold text-emerald-400">Normal Maintenance:</span>
+              <p class="text-slate-300 mt-0.5">Routine municipal tasks scheduled within standard department maintenance cycles.</p>
+            </div>
+            <div class="bg-slate-800/50 p-3 rounded-xl border border-slate-700/60">
+              <span class="font-bold text-amber-300">Elevated Priority:</span>
+              <p class="text-slate-300 mt-0.5">Moderate neighborhood disruptions amplified by citizen upvotes and aging hours.</p>
+            </div>
+            <div class="bg-slate-800/50 p-3 rounded-xl border border-slate-700/60">
+              <span class="font-bold text-rose-300">Critical Hazard:</span>
+              <p class="text-slate-300 mt-0.5">Severe safety risk. Automatically triggers alerts to Zonal Engineers and Commissioners.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Leaderboard Ranked Table -->
+      <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="p-4 border-b border-slate-200 flex flex-wrap items-center justify-between gap-2">
+          <div>
+            <h3 class="text-base font-bold text-slate-900">Ranked Civic Urgency Index</h3>
+            <p class="text-xs text-slate-500">Live priority queue evaluated continuously</p>
+          </div>
+          <span class="text-xs px-2.5 py-1 rounded-full bg-rose-50 text-rose-700 font-semibold border border-rose-200">
+            Auto-Escalation Gateway: Active
+          </span>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse text-xs">
+            <thead>
+              <tr class="bg-slate-50 text-slate-600 font-semibold border-b border-slate-200 uppercase tracking-wider text-[11px]">
+                <th class="py-3 px-4">Rank</th>
+                <th class="py-3 px-4">Ticket Details</th>
+                <th class="py-3 px-4 text-center">Hazard Level</th>
+                <th class="py-3 px-4 text-center">Community Endorsements</th>
+                <th class="py-3 px-4 text-center">Elapsed</th>
+                <th class="py-3 px-4 text-center">Priority Status</th>
+                <th class="py-3 px-4 text-center">Action</th>
+              </tr>
+            </thead>
+            <tbody id="leaderboardTableBody" class="divide-y divide-slate-100">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- VIEW C: WARD HEATMAP & GEOSPATIAL DENSITY -->
+    <!-- ========================================================================= -->
+    <div id="view-heatmap" class="view-panel hidden space-y-6">
+      
+      <div class="p-4 rounded-xl bg-white border border-slate-200 shadow-sm flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h2 class="text-base font-bold text-slate-900">Civic Problem Density & Ward Clustering</h2>
+          <p class="text-xs text-slate-500">Spatial grievance concentration across municipal sectors</p>
+        </div>
+        <div class="flex items-center gap-2 text-xs">
+          <span class="flex items-center gap-1"><span class="w-3 h-3 rounded bg-emerald-500 inline-block"></span> Low (&lt;3)</span>
+          <span class="flex items-center gap-1"><span class="w-3 h-3 rounded bg-amber-400 inline-block"></span> Moderate (3-5)</span>
+          <span class="flex items-center gap-1"><span class="w-3 h-3 rounded bg-rose-600 inline-block"></span> Critical Hotspot (&gt;5)</span>
+        </div>
+      </div>
+
+      <!-- Ward Heat Grid Simulator -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4" id="wardHeatmapGrid">
+        <!-- Rendered via JS based on complaints in selected city -->
+      </div>
+
+      <!-- Geospatial Audit Log & Geo-coordinates -->
+      <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
+        <h3 class="text-sm font-bold text-slate-900 mb-3">Geographic Cluster Analysis</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
+          <div class="p-3 rounded-lg bg-slate-50 border border-slate-200">
+            <div class="font-bold text-slate-800">Greater Noida Hotspot:</div>
+            <div class="text-slate-600 mt-1">Knowledge Park II & Alpha 1 Commercial Belt (Ward 12, Ward 4). Major asphalt distress & solid waste backlogs.</div>
+          </div>
+          <div class="p-3 rounded-lg bg-slate-50 border border-slate-200">
+            <div class="font-bold text-slate-800">Delhi NCT Hotspot:</div>
+            <div class="text-slate-600 mt-1">Dwarka Sector 10 & Ring Road Intersection (Ward 7, Ward 18). High-pressure water line rupture & transformer failures.</div>
+          </div>
+          <div class="p-3 rounded-lg bg-slate-50 border border-slate-200">
+            <div class="font-bold text-slate-800">Lucknow Hotspot:</div>
+            <div class="text-slate-600 mt-1">Hazratganj Pedestrian Corridor & Charbagh Overbridge (Ward 3, Ward 9). High-voltage exposed streetlighting cables.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- VIEW D: CITIZEN PORTAL ("MY COMPLAINTS" & VERIFICATION) -->
+    <!-- ========================================================================= -->
+    <div id="view-citizenPortal" class="view-panel hidden space-y-6">
+      
+      <!-- Citizen Header Card -->
+      <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-lg">
+            YS
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h2 class="text-lg font-bold text-slate-900" id="citizenPortalName">Yash Singh</h2>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">Verified Citizen</span>
+            </div>
+            <p class="text-xs text-slate-500" id="citizenPortalMeta">Ward 12 · Greater Noida · yash.singh@citizen.in</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button onclick="SahayakApp.handleReportButtonClick()" class="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs shadow-sm transition-all flex items-center gap-1.5">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+            Submit New Grievance
+          </button>
+        </div>
+      </div>
+
+      <!-- Citizen Grievance Lifecycle Tracker -->
+      <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="p-4 border-b border-slate-200 flex items-center justify-between">
+          <div>
+            <h3 class="text-base font-bold text-slate-900">My Lodged Complaints & Upvoted Issues</h3>
+            <p class="text-xs text-slate-500">Track progress through the 6-stage lifecycle and confirm closure on completed repairs</p>
+          </div>
+          <span class="text-xs font-semibold text-blue-600" id="citizenTicketCount">0 Active Tickets</span>
+        </div>
+        
+        <div class="divide-y divide-slate-100" id="citizenTicketsList">
+          <!-- Rendered via JS -->
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- VIEW E: AUTHORITY DASHBOARD (DEPARTMENT QUEUE & TRIAGE) -->
+    <!-- ========================================================================= -->
+    <div id="view-authorityDashboard" class="view-panel hidden space-y-6">
+      
+      <!-- Authority Identity Ribbon -->
+      <div id="authorityBannerCard" class="p-5 rounded-2xl bg-gradient-to-r from-slate-900 via-slate-800 to-indigo-950 text-white shadow-md border border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <!-- Rendered via JS -->
+      </div>
+
+      <!-- Authority Triage & Dispatch Queue -->
+      <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="p-4 border-b border-slate-200 flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <div class="flex items-center gap-2">
+              <h3 class="text-base font-bold text-slate-900">Department Action Queue</h3>
+              <span id="authorityQueueCounter" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-800 font-mono">0 Tickets</span>
+            </div>
+            <p class="text-xs text-slate-500">Filtered automatically by logged-in official's department and jurisdiction</p>
+          </div>
+
+          <!-- Authority Quick Switch Dropdown for Evaluators -->
+          <div class="flex items-center gap-2 text-xs">
+            <span class="text-slate-500 font-medium">Switch Officer:</span>
+            <select id="authorityQuickSwitchSelect" onchange="SahayakApp.handleAuthoritySwitch(this.value)" class="py-1.5 px-2.5 text-xs font-semibold bg-slate-100 hover:bg-slate-200/70 border border-slate-300 rounded-lg text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <!-- Populated via JS -->
+            </select>
+          </div>
+        </div>
+
+        <!-- Authority Tickets Table/Cards -->
+        <div class="divide-y divide-slate-100" id="authorityTicketsQueue">
+          <!-- Rendered via JS -->
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- VIEW F: SLA BREACH & PENALTY TRACKER -->
+    <!-- ========================================================================= -->
+    <div id="view-penalties" class="view-panel hidden space-y-6">
+      
+      <!-- Warning Alert Banner -->
+      <div class="p-4 rounded-xl bg-amber-50 border border-amber-200 flex items-start gap-3 text-amber-900">
+        <svg class="w-6 h-6 text-amber-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+        <div>
+          <h3 class="text-sm font-bold">Enforceable Municipal Accountability Clause</h3>
+          <p class="text-xs mt-0.5 text-amber-800">Under the SAHAYAK Governance Charter, departments that fail to triage a reported ticket within the mandatory 48-hour SLA gate face administrative escalation to the District Magistrate / Nodal Commissioner, and automatic levy of administrative penalties ranging from ₹5,000 to ₹50,000 per violation.</p>
+        </div>
+      </div>
+
+      <!-- Financial Penalty Summary Cards -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <div class="p-4 rounded-xl bg-white border border-slate-200 shadow-sm text-center">
+          <div class="text-xs text-slate-500 font-semibold uppercase">Total Overdue Breaches</div>
+          <div id="penaltiesOverdueCount" class="text-2xl font-black text-rose-600 mt-1 font-mono">0</div>
+          <div class="text-[11px] text-slate-400 mt-1">&gt;48h Without Action</div>
+        </div>
+        <div class="p-4 rounded-xl bg-white border border-slate-200 shadow-sm text-center">
+          <div class="text-xs text-slate-500 font-semibold uppercase">Aggregate Penalties Levied</div>
+          <div id="penaltiesTotalAmount" class="text-2xl font-black text-indigo-600 mt-1 font-mono">₹0</div>
+          <div class="text-[11px] text-slate-400 mt-1">Escalated to Nodal Officer</div>
+        </div>
+        <div class="p-4 rounded-xl bg-white border border-slate-200 shadow-sm text-center">
+          <div class="text-xs text-slate-500 font-semibold uppercase">Average Triage Latency</div>
+          <div class="text-2xl font-black text-amber-600 mt-1 font-mono">18.4 hrs</div>
+          <div class="text-[11px] text-slate-400 mt-1">Within 48h Safe Boundary</div>
+        </div>
+        <div class="p-4 rounded-xl bg-white border border-slate-200 shadow-sm text-center">
+          <div class="text-xs text-slate-500 font-semibold uppercase">Compliance Rate</div>
+          <div id="penaltiesComplianceRate" class="text-2xl font-black text-emerald-600 mt-1 font-mono">82%</div>
+          <div class="text-[11px] text-slate-400 mt-1">Closed Within SLA Window</div>
+        </div>
+      </div>
+
+      <!-- Department Penalty Breakdown Table -->
+      <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="p-4 border-b border-slate-200">
+          <h3 class="text-base font-bold text-slate-900">Department Accountability Ledger</h3>
+          <p class="text-xs text-slate-500">Live breakdown of department SLA compliance across municipalities</p>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse text-xs">
+            <thead>
+              <tr class="bg-slate-50 text-slate-600 font-semibold border-b border-slate-200 uppercase tracking-wider text-[11px]">
+                <th class="py-3 px-4">Department / City</th>
+                <th class="py-3 px-4 text-center">Active Queue</th>
+                <th class="py-3 px-4 text-center">SLA Breaches</th>
+                <th class="py-3 px-4 text-center">Total Penalty Levied</th>
+                <th class="py-3 px-4 text-center">Avg Response Time</th>
+                <th class="py-3 px-4 text-center">Compliance Status</th>
+              </tr>
+            </thead>
+            <tbody id="penaltyTableBody" class="divide-y divide-slate-100">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- VIEW G: SYSTEM ARCHITECTURE & RUBRIC SPECIFICATION -->
+    <!-- ========================================================================= -->
+    <div id="view-specs" class="view-panel hidden space-y-6">
+      <div class="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-6">
+        <div>
+          <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-100 text-blue-800 uppercase font-mono">Evaluation 2 Architecture Mapping</span>
+          <h2 class="text-xl font-bold text-slate-900 mt-1">SAHAYAK System Architecture & Engineering Alignment</h2>
+          <p class="text-xs text-slate-500 mt-1">Deconstruction of prototype implementation according to PBL Course Rubric</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
+          <div class="space-y-4">
+            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+              <h4 class="font-bold text-slate-800 text-sm">1. Decoupled Data Access Layer (Repository Pattern)</h4>
+              <p class="text-slate-600 mt-1">All database mutations occur through an abstract <code class="bg-white px-1 py-0.5 rounded border border-slate-200 text-blue-600">SahayakRepository</code> class persisting to Chrome's <code class="bg-white px-1 py-0.5 rounded border border-slate-200 text-blue-600">window.localStorage</code>. The presentation layer never touches raw storage keys, allowing an effortless swap to REST/GraphQL APIs.</p>
+            </div>
+
+            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+              <h4 class="font-bold text-slate-800 text-sm">2. Strict 48-Hour SLA Gateway & Auto-Escalation</h4>
+              <p class="text-slate-600 mt-1">Every submitted ticket starts a non-pausable 48-hour countdown timer. If a desk officer does not triage the ticket within 48 hours, or if community upvotes propel <code class="bg-white px-1 py-0.5 rounded border border-slate-200 text-rose-600 font-bold">P(t) &ge; 100</code>, the ticket state machine transitions to <code class="bg-rose-100 text-rose-800 font-bold px-1 py-0.5 rounded">ESCALATED</code> and triggers alert dispatches to the Nodal Municipal Commissioner.</p>
+            </div>
+          </div>
+
+          <div class="space-y-4">
+            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+              <h4 class="font-bold text-slate-800 text-sm">3. Dynamic Mathematical Priority Algorithm</h4>
+              <p class="text-slate-600 mt-1">
+                Mathematical index: <br>
+                <code class="block my-2 p-2 rounded bg-slate-900 text-emerald-400 font-mono font-semibold">P(t) = W_base + 10 * log2(1 + U) + 5 * (hours_elapsed / 24)</code>
+                Where <code class="text-amber-700 font-semibold">W_base &isin; {20, 40, 60}</code>, <code class="text-blue-700 font-semibold">U</code> is unique verified citizen endorsements, and time elapsed incrementally escalates older neglected complaints.
+              </p>
+            </div>
+
+            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+              <h4 class="font-bold text-slate-800 text-sm">4. Two-Factor Photographic Verification & Closure</h4>
+              <p class="text-slate-600 mt-1">A ticket cannot be closed unilaterally by the department. The field team must upload an <strong>"After Repair" photo proof</strong> to transition to <code class="bg-purple-100 text-purple-800 font-semibold px-1 py-0.5 rounded">WORK_COMPLETED</code>. Final closure requires verification from the original complainant citizen.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- 4. GLOBAL FOOTER -->
+  <!-- ========================================================================= -->
+  <footer class="bg-white border-t border-slate-200 py-6 text-xs text-slate-500 mt-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-2">
+        <div class="w-6 h-6 rounded-md bg-blue-600 text-white flex items-center justify-center font-bold text-xs">S</div>
+        <span class="font-bold text-slate-700">SAHAYAK Ecosystem</span>
+        <span>· Transparent Civic Infrastructure Gateway</span>
+      </div>
+      <div class="flex items-center gap-4 text-slate-400">
+        <span>Chrome LocalStorage Edition</span>
+        <span>·</span>
+        <button onclick="SahayakApp.resetDatabasePrompt()" class="text-blue-600 hover:underline font-medium">Re-seed 10 Sample Tickets</button>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ========================================================================= -->
+  <!-- 5. INTERACTIVE MODALS -->
+  <!-- ========================================================================= -->
+
+  <!-- MODAL 1: AUTHENTICATION & ROLE SWITCHER MODAL (MANDATORY) -->
+  <div id="authModal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-slate-200 space-y-5 animate-in fade-in zoom-in-95 duration-150">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+          </div>
+          <div>
+            <h3 class="text-base font-bold text-slate-900" id="authModalTitle">Identity Verification & Access Control</h3>
+            <p class="text-xs text-slate-500" id="authModalSubtitle">Select your role to access restricted civic operations</p>
+          </div>
+        </div>
+        <button onclick="SahayakApp.closeAuthModal()" class="text-slate-400 hover:text-slate-600 p-1">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <!-- Action Prompt Banner (e.g. "You must log in to upvote") -->
+      <div id="authPromptMessage" class="hidden p-3 rounded-lg bg-blue-50 border border-blue-200 text-blue-900 text-xs font-medium"></div>
+
+      <!-- Option A: Quick Citizen Login -->
+      <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 hover:border-blue-400 transition-all">
+        <div class="flex items-center justify-between">
+          <div>
+            <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 uppercase">Public Flow</span>
+            <h4 class="text-sm font-bold text-slate-900 mt-1">Login as Citizen (Yash Singh)</h4>
+            <p class="text-xs text-slate-500">Resident of Ward 12 · Greater Noida · Can report & upvote</p>
+          </div>
+          <button onclick="SahayakApp.loginAsCitizen()" class="px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs shadow-sm transition-all">
+            Login as Citizen →
+          </button>
+        </div>
+      </div>
+
+      <!-- Option B: Government / Authority Login Selector -->
+      <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 hover:border-indigo-400 transition-all space-y-3">
+        <div>
+          <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-100 text-indigo-800 uppercase">Authority Flow</span>
+          <h4 class="text-sm font-bold text-slate-900 mt-1">Government Official Login</h4>
+          <p class="text-xs text-slate-500">Access triage queue, assign base severity W_base, & upload completion proof</p>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2 text-xs">
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Select City Jurisdiction:</label>
+            <select id="authCitySelect" onchange="SahayakApp.updateAuthorityRoleOptions()" class="w-full py-1.5 px-2 bg-white border border-slate-300 rounded-lg text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 font-medium">
+              <option value="Greater Noida">Greater Noida</option>
+              <option value="Delhi">Delhi NCT</option>
+              <option value="Mumbai">Mumbai</option>
+              <option value="Lucknow">Lucknow</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Select Department Officer:</label>
+            <select id="authRoleSelect" class="w-full py-1.5 px-2 bg-white border border-slate-300 rounded-lg text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 font-medium">
+              <!-- Populated dynamically via JS -->
+            </select>
+          </div>
+        </div>
+
+        <button onclick="SahayakApp.loginAsSelectedAuthority()" class="w-full py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs shadow-sm transition-all">
+          Authenticate as Government Officer →
+        </button>
+      </div>
+
+      <!-- Option C: Continue in Guest Mode -->
+      <div class="text-center pt-2 border-t border-slate-100">
+        <button onclick="SahayakApp.continueAsGuest()" class="text-xs text-slate-500 hover:text-slate-800 font-medium">
+          Continue as Guest (Read-Only Mode)
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MODAL 2: SUBMIT COMPLAINT MODAL (CITIZEN ONLY) -->
+  <div id="reportModal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-xl w-full p-6 shadow-2xl border border-slate-200 space-y-4 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+        <div>
+          <h3 class="text-base font-bold text-slate-900">Report a Civic Problem</h3>
+          <p class="text-xs text-slate-500">Initiates strict 48-Hour SLA Gateway upon submission</p>
+        </div>
+        <button onclick="SahayakApp.closeReportModal()" class="text-slate-400 hover:text-slate-600 p-1">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <form id="reportComplaintForm" onsubmit="SahayakApp.handleReportSubmit(event)" class="space-y-4 text-xs">
+        
+        <!-- Title -->
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Issue Title *</label>
+          <input type="text" id="reportTitle" required placeholder="e.g., Hazardous 4-Foot Asphalt Pothole on Sector 62 Main Road" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+
+        <!-- Category & Base Severity -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Department Category *</label>
+            <select id="reportCategory" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium">
+              <option value="Roads & Infrastructure">🚧 Roads & Infrastructure</option>
+              <option value="Sanitation & Waste">🗑 Sanitation & Waste</option>
+              <option value="Drainage & Water Supply">🚰 Drainage & Water Supply</option>
+              <option value="Street Lighting">💡 Street Lighting</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Initial Base Severity *</label>
+            <select id="reportSeverity" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium">
+              <option value="High">High / Critical (W_base = 60)</option>
+              <option value="Medium" selected>Medium (W_base = 40)</option>
+              <option value="Low">Low (W_base = 20)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Location: City & Ward -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">City *</label>
+            <select id="reportCity" onchange="SahayakApp.handleReportCityChange(this.value)" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium">
+              <option value="Greater Noida">Greater Noida</option>
+              <option value="Delhi">Delhi</option>
+              <option value="Mumbai">Mumbai</option>
+              <option value="Lucknow">Lucknow</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Ward / Sector *</label>
+            <select id="reportWard" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium">
+              <!-- Filled dynamically based on city -->
+            </select>
+          </div>
+        </div>
+
+        <!-- Landmark / Specific Address -->
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Specific Landmark / Location Details *</label>
+          <input type="text" id="reportLocation" required placeholder="e.g., Near Metro Pillar 142, opposite Knowledge Park Gate 3" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+
+        <!-- Description -->
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Detailed Description *</label>
+          <textarea id="reportDescription" rows="3" required placeholder="Provide clear observations: size of damage, safety impact, when it occurred..." class="w-full px-3 py-2 border border-slate-300 rounded-lg text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+        </div>
+
+        <!-- Photo Evidence Upload & Demo Preset Picker -->
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Photographic Evidence</label>
+          <div class="space-y-2">
+            <!-- File Input with instant Preview -->
+            <input type="file" id="reportImageInput" accept="image/*" onchange="SahayakApp.handleImageUploadPreview(event)" class="w-full text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer">
+            
+            <!-- Quick Demo Photo Selector -->
+            <div class="text-[11px] text-slate-500 flex items-center gap-2">
+              <span>Or pick a realistic demo photo:</span>
+              <button type="button" onclick="SahayakApp.selectPresetPhoto('pothole')" class="px-2 py-0.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium">Road Pothole</button>
+              <button type="button" onclick="SahayakApp.selectPresetPhoto('garbage')" class="px-2 py-0.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium">Waste Overflow</button>
+              <button type="button" onclick="SahayakApp.selectPresetPhoto('water')" class="px-2 py-0.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium">Water Pipe</button>
+              <button type="button" onclick="SahayakApp.selectPresetPhoto('light')" class="px-2 py-0.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium">Dark Streetlight</button>
+            </div>
+
+            <!-- Preview Box -->
+            <div id="reportImagePreviewContainer" class="hidden mt-2 p-2 border border-slate-200 rounded-lg bg-slate-50">
+              <img id="reportImagePreview" src="" alt="Proof Preview" class="h-32 w-full object-cover rounded-md">
+            </div>
+          </div>
+        </div>
+
+        <div class="p-3 rounded-lg bg-blue-50 text-blue-900 text-[11px] flex items-center justify-between">
+          <span>🕒 <strong>48-Hour SLA Commitment:</strong> Desk officer will review & assign field crews.</span>
+        </div>
+
+        <div class="flex items-center justify-end gap-2 pt-2">
+          <button type="button" onclick="SahayakApp.closeReportModal()" class="px-4 py-2 rounded-lg border border-slate-300 text-slate-700 font-semibold hover:bg-slate-50 transition-colors">
+            Cancel
+          </button>
+          <button type="submit" class="px-5 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-sm transition-all">
+            Submit Grievance →
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 3: TICKET DETAIL & AUDIT MODAL -->
+  <div id="ticketDetailModal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-2xl border border-slate-200 space-y-5 max-h-[90vh] overflow-y-auto">
+      <div id="ticketDetailModalContent">
+        <!-- Rendered via JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 4: AUTHORITY TRIAGE ACTION MODAL (APPROVE / REJECT / REASSIGN) -->
+  <div id="triageActionModal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+        <div>
+          <h3 class="text-base font-bold text-slate-900" id="triageModalTitle">Official Triage Action</h3>
+          <p class="text-xs text-slate-500" id="triageModalTicketId">Ticket: SAH-2026-XXXX</p>
+        </div>
+        <button onclick="SahayakApp.closeTriageModal()" class="text-slate-400 hover:text-slate-600 p-1">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <div class="space-y-4 text-xs">
+        
+        <!-- Action Type: Approve, Reject, Reassign -->
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Select Triage Decision *</label>
+          <select id="triageDecisionType" onchange="SahayakApp.handleTriageDecisionChange(this.value)" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-slate-900 font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option value="APPROVE">Approve & Dispatch Field Crew</option>
+            <option value="REJECT">Reject Grievance (Requires Rationale)</option>
+            <option value="REASSIGN">Reassign Ward / Department</option>
+          </select>
+        </div>
+
+        <!-- Base Severity Selection - Shown when approving -->
+        <div id="triageWBaseSection">
+          <label class="block font-semibold text-slate-700 mb-1">Confirm Severity Level *</label>
+          <select id="triageWBaseSelect" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-slate-900 font-medium">
+            <option value="60">Critical Hazard / Severe Disruption</option>
+            <option value="40" selected>Moderate / Standard Civic Issue</option>
+            <option value="20">Low / Routine Maintenance</option>
+          </select>
+          <p class="text-[10px] text-slate-500 mt-1">Directly calibrates community urgency and dispatch priority.</p>
+        </div>
+
+        <!-- Reassign Ward Selection - Shown when Reassigning -->
+        <div id="triageReassignSection" class="hidden">
+          <label class="block font-semibold text-slate-700 mb-1">Reassign To Ward *</label>
+          <select id="triageReassignWardSelect" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-slate-900 font-medium">
+            <!-- Populated via JS -->
+          </select>
+        </div>
+
+        <!-- Rationale / Field Notes -->
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1" id="triageRemarksLabel">Field Notes / Official Dispatch Orders *</label>
+          <textarea id="triageRemarksInput" rows="3" placeholder="Enter administrative notes, dispatched crew ID, or rejection justification..." class="w-full px-3 py-2 border border-slate-300 rounded-lg text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+        </div>
+
+        <div class="flex items-center justify-end gap-2 pt-2">
+          <button type="button" onclick="SahayakApp.closeTriageModal()" class="px-4 py-2 rounded-lg border border-slate-300 text-slate-700 font-semibold hover:bg-slate-50">
+            Cancel
+          </button>
+          <button type="button" onclick="SahayakApp.submitTriageDecision()" class="px-5 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-sm">
+            Confirm Decision →
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 5: RESOLUTION PROOF UPLOAD (TRANSITIONS TO WORK_COMPLETED) -->
+  <div id="resolutionProofModal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+        <div>
+          <h3 class="text-base font-bold text-slate-900">Upload "After Repair" Proof</h3>
+          <p class="text-xs text-slate-500" id="proofModalTicketId">Transition to WORK_COMPLETED</p>
+        </div>
+        <button onclick="SahayakApp.closeProofModal()" class="text-slate-400 hover:text-slate-600 p-1">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <div class="space-y-4 text-xs">
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Contractor / Field Team ID *</label>
+          <input type="text" id="proofContractorId" value="PWD-CREW-NORTH-4" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-slate-900">
+        </div>
+
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Upload Repaired Site Photograph *</label>
+          <input type="file" id="proofImageInput" accept="image/*" onchange="SahayakApp.handleProofImagePreview(event)" class="w-full text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100 cursor-pointer">
+          
+          <div class="text-[11px] text-slate-500 flex items-center gap-2 mt-2">
+            <span>Or use verified repaired photo:</span>
+            <button type="button" onclick="SahayakApp.selectRepairedPresetPhoto('repaired_road')" class="px-2 py-0.5 rounded bg-purple-50 text-purple-700 font-medium">Resurfaced Road</button>
+            <button type="button" onclick="SahayakApp.selectRepairedPresetPhoto('cleared_waste')" class="px-2 py-0.5 rounded bg-purple-50 text-purple-700 font-medium">Clean Waste Site</button>
+          </div>
+
+          <div id="proofImagePreviewContainer" class="hidden mt-2 p-2 border border-slate-200 rounded-lg bg-slate-50">
+            <img id="proofImagePreview" src="" alt="Repaired Site Proof" class="h-32 w-full object-cover rounded-md">
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Resolution Summary & Quality Notes *</label>
+          <textarea id="proofNotes" rows="2" placeholder="e.g., Cold-mix asphalt applied and steam-rolled. Water line pressure restored." class="w-full px-3 py-2 border border-slate-300 rounded-lg text-slate-900"></textarea>
+        </div>
+
+        <div class="flex items-center justify-end gap-2 pt-2">
+          <button type="button" onclick="SahayakApp.closeProofModal()" class="px-4 py-2 rounded-lg border border-slate-300 text-slate-700 font-semibold hover:bg-slate-50">
+            Cancel
+          </button>
+          <button type="button" onclick="SahayakApp.submitResolutionProof()" class="px-5 py-2 rounded-lg bg-purple-600 hover:bg-purple-700 text-white font-semibold shadow-sm">
+            Submit Proof of Work →
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 6: CITIZEN CONFIRM CLOSURE MODAL -->
+  <div id="confirmClosureModal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+        <div>
+          <h3 class="text-base font-bold text-slate-900">Citizen Verification & Closure</h3>
+          <p class="text-xs text-slate-500" id="closureModalTicketId">Confirm issue is resolved</p>
+        </div>
+        <button onclick="SahayakApp.closeClosureModal()" class="text-slate-400 hover:text-slate-600 p-1">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <div class="space-y-4 text-xs">
+        <p class="text-slate-600">The municipal field crew has marked this problem as <strong>WORK_COMPLETED</strong> and submitted repair photographic evidence. As the community complainant, please verify if the quality satisfies public safety.</p>
+
+        <!-- Satisfaction Rating -->
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Rate Resolution Quality:</label>
+          <div class="flex items-center gap-2 text-lg cursor-pointer" id="closureStarRating">
+            <span onclick="SahayakApp.setRating(1)" class="star text-amber-400">★</span>
+            <span onclick="SahayakApp.setRating(2)" class="star text-amber-400">★</span>
+            <span onclick="SahayakApp.setRating(3)" class="star text-amber-400">★</span>
+            <span onclick="SahayakApp.setRating(4)" class="star text-amber-400">★</span>
+            <span onclick="SahayakApp.setRating(5)" class="star text-amber-400">★</span>
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Citizen Feedback (Optional):</label>
+          <textarea id="closureFeedback" rows="2" placeholder="e.g., Road is smooth, thank you for quick resolution within 48 hours!" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-slate-900"></textarea>
+        </div>
+
+        <div class="flex items-center justify-between pt-2">
+          <button type="button" onclick="SahayakApp.disputeWorkQuality()" class="px-3 py-2 rounded-lg border border-rose-300 text-rose-700 font-semibold hover:bg-rose-50 text-xs">
+            Dispute / Re-open Issue
+          </button>
+          <button type="button" onclick="SahayakApp.finalizeClosureConfirmation()" class="px-5 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs shadow-sm">
+            Confirm & Close Ticket ✓
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATIONS CONTAINER -->
+  <div id="toastContainer" class="fixed bottom-5 right-5 z-50 space-y-2 pointer-events-none"></div>
+
+  <!-- ========================================================================= -->
+  <!-- 6. APPLICATION ARCHITECTURE JAVASCRIPT (ES6+ & REPOSITORY PATTERN) -->
+  <!-- ========================================================================= -->
+  <script>
+    /**
+     * SAHAYAK CIVIC RESOLUTION GATEWAY
+     * Architecture: Decoupled Data Access Layer (Local Repository Pattern)
+     * Mathematical Dynamic Priority Engine: P(t) = W_base + 10 * log2(1 + U) + 5 * (hours/24)
+     * Storage: 100% window.localStorage browser persistence
+     */
+
+    // --- PHOTO ASSETS (High Quality Realistic Civic Evidence URLs) ---
+    const CIVIC_PHOTOS = {
+      pothole: "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=700&q=80",
+      garbage: "https://images.unsplash.com/photo-1530587191325-3db32d826c18?auto=format&fit=crop&w=700&q=80",
+      water: "https://images.unsplash.com/photo-1584438784894-089d6a62b8fa?auto=format&fit=crop&w=700&q=80",
+      light: "https://images.unsplash.com/photo-1509114397022-ed747cca3f65?auto=format&fit=crop&w=700&q=80",
+      repaired_road: "https://images.unsplash.com/photo-1578873375969-d71a742d4a79?auto=format&fit=crop&w=700&q=80",
+      cleared_waste: "https://images.unsplash.com/photo-1563245372-f21724e3856d?auto=format&fit=crop&w=700&q=80"
+    };
+
+    // --- CITY WARDS DIRECTORY ---
+    const CITY_WARDS = {
+      "Greater Noida": ["Ward 1 (Alpha 1)", "Ward 4 (Beta 2)", "Ward 8 (Delta 1)", "Ward 12 (Knowledge Park)", "Ward 15 (Pari Chowk)"],
+      "Delhi": ["Ward 2 (Connaught Place)", "Ward 7 (Dwarka Sec 10)", "Ward 14 (Rohini)", "Ward 18 (Ring Road / AIIMS)", "Ward 25 (Lajpat Nagar)"],
+      "Mumbai": ["Ward 3 (Colaba)", "Ward 11 (Bandra West)", "Ward 17 (Dadar)", "Ward 22 (Andheri Link)", "Ward 28 (Borivali)"],
+      "Lucknow": ["Ward 1 (Gomti Nagar)", "Ward 3 (Hazratganj)", "Ward 6 (Alambagh)", "Ward 9 (Charbagh Station)", "Ward 14 (Indira Nagar)"]
+    };
+
+    // --- AUTHORITY DIRECTORY (4 Cities x 5 Pre-configured Roles = 20 Accounts) ---
+    const AUTHORITY_ACCOUNTS = [
+      // Greater Noida
+      { city: "Greater Noida", dept: "Roads & Infrastructure", title: "Roads & Infrastructure Officer", email: "roads.gnoida@gov.in", roleKey: "roads" },
+      { city: "Greater Noida", dept: "Sanitation & Waste", title: "Sanitation & Waste Officer", email: "sanitation.gnoida@gov.in", roleKey: "sanitation" },
+      { city: "Greater Noida", dept: "Drainage & Water Supply", title: "Drainage & Water Supply Officer", email: "water.gnoida@gov.in", roleKey: "water" },
+      { city: "Greater Noida", dept: "Street Lighting", title: "Street Lighting Officer", email: "lighting.gnoida@gov.in", roleKey: "lighting" },
+      { city: "Greater Noida", dept: "All Departments", title: "Nodal Municipal Commissioner / Admin", email: "commissioner.gnoida@gov.in", roleKey: "commissioner" },
+
+      // Delhi
+      { city: "Delhi", dept: "Roads & Infrastructure", title: "Roads & Infrastructure Officer", email: "roads.delhi@gov.in", roleKey: "roads" },
+      { city: "Delhi", dept: "Sanitation & Waste", title: "Sanitation & Waste Officer", email: "sanitation.delhi@gov.in", roleKey: "sanitation" },
+      { city: "Delhi", dept: "Drainage & Water Supply", title: "Drainage & Water Supply Officer", email: "water.delhi@gov.in", roleKey: "water" },
+      { city: "Delhi", dept: "Street Lighting", title: "Street Lighting Officer", email: "lighting.delhi@gov.in", roleKey: "lighting" },
+      { city: "Delhi", dept: "All Departments", title: "Nodal Municipal Commissioner / Admin", email: "commissioner.delhi@gov.in", roleKey: "commissioner" },
+
+      // Mumbai
+      { city: "Mumbai", dept: "Roads & Infrastructure", title: "Roads & Infrastructure Officer", email: "roads.mumbai@gov.in", roleKey: "roads" },
+      { city: "Mumbai", dept: "Sanitation & Waste", title: "Sanitation & Waste Officer", email: "sanitation.mumbai@gov.in", roleKey: "sanitation" },
+      { city: "Mumbai", dept: "Drainage & Water Supply", title: "Drainage & Water Supply Officer", email: "water.mumbai@gov.in", roleKey: "water" },
+      { city: "Mumbai", dept: "Street Lighting", title: "Street Lighting Officer", email: "lighting.mumbai@gov.in", roleKey: "lighting" },
+      { city: "Mumbai", dept: "All Departments", title: "Nodal Municipal Commissioner / Admin", email: "commissioner.mumbai@gov.in", roleKey: "commissioner" },
+
+      // Lucknow
+      { city: "Lucknow", dept: "Roads & Infrastructure", title: "Roads & Infrastructure Officer", email: "roads.lucknow@gov.in", roleKey: "roads" },
+      { city: "Lucknow", dept: "Sanitation & Waste", title: "Sanitation & Waste Officer", email: "sanitation.lucknow@gov.in", roleKey: "sanitation" },
+      { city: "Lucknow", dept: "Drainage & Water Supply", title: "Drainage & Water Supply Officer", email: "water.lucknow@gov.in", roleKey: "water" },
+      { city: "Lucknow", dept: "Street Lighting", title: "Street Lighting Officer", email: "lighting.lucknow@gov.in", roleKey: "lighting" },
+      { city: "Lucknow", dept: "All Departments", title: "Nodal Municipal Commissioner / Admin", email: "commissioner.lucknow@gov.in", roleKey: "commissioner" }
+    ];
+
+    // Citizen Demo Profile
+    const CITIZEN_YASH = {
+      id: "CITIZEN_YASH_SINGH",
+      name: "Yash Singh",
+      role: "citizen",
+      ward: "Ward 12 (Knowledge Park)",
+      city: "Greater Noida",
+      email: "yash.singh@citizen.in"
+    };
+
+    /**
+     * =========================================================================
+     * DATA ACCESS LAYER (LOCAL REPOSITORY PATTERN)
+     * =========================================================================
+     */
+    class SahayakRepository {
+      static STORAGE_KEY_TICKETS = "SAHAYAK_TICKETS_V2";
+      static STORAGE_KEY_USER = "SAHAYAK_ACTIVE_USER_V2";
+      static STORAGE_KEY_AUDIT = "SAHAYAK_AUDIT_LOGS_V2";
+
+      static getTickets() {
+        const data = localStorage.getItem(this.STORAGE_KEY_TICKETS);
+        return data ? JSON.parse(data) : [];
+      }
+
+      static saveTickets(tickets) {
+        localStorage.setItem(this.STORAGE_KEY_TICKETS, JSON.stringify(tickets));
+      }
+
+      static getTicketById(id) {
+        const tickets = this.getTickets();
+        return tickets.find(t => t.id === id) || null;
+      }
+
+      static updateTicket(id, updates) {
+        const tickets = this.getTickets();
+        const index = tickets.findIndex(t => t.id === id);
+        if (index !== -1) {
+          tickets[index] = { ...tickets[index], ...updates, updatedAt: Date.now() };
+          this.saveTickets(tickets);
+          return tickets[index];
+        }
+        return null;
+      }
+
+      static addTicket(ticket) {
+        const tickets = this.getTickets();
+        tickets.unshift(ticket);
+        this.saveTickets(tickets);
+        return ticket;
+      }
+
+      static getActiveUser() {
+        const data = localStorage.getItem(this.STORAGE_KEY_USER);
+        return data ? JSON.parse(data) : null; // null represents Guest Mode
+      }
+
+      static setActiveUser(user) {
+        if (user) {
+          localStorage.setItem(this.STORAGE_KEY_USER, JSON.stringify(user));
+        } else {
+          localStorage.removeItem(this.STORAGE_KEY_USER);
+        }
+      }
+
+      static logAudit(ticketId, event, actor, details) {
+        const logs = this.getAuditLogs();
+        logs.unshift({
+          id: "AUDIT-" + Date.now() + "-" + Math.floor(Math.random() * 1000),
+          ticketId,
+          event,
+          actor,
+          details,
+          timestamp: Date.now()
+        });
+        localStorage.setItem(this.STORAGE_KEY_AUDIT, JSON.stringify(logs.slice(0, 100)));
+      }
+
+      static getAuditLogs() {
+        const data = localStorage.getItem(this.STORAGE_KEY_AUDIT);
+        return data ? JSON.parse(data) : [];
+      }
+
+      /**
+       * Pre-populates 10 realistic sample complaints across cities and categories
+       * with varying timestamps, upvotes, SLA stages, and overdue escalations.
+       */
+      static seedInitialData(force = false) {
+        if (!force && localStorage.getItem(this.STORAGE_KEY_TICKETS)) {
+          return; // Already initialized
+        }
+
+        const now = Date.now();
+        const hour = 3600 * 1000;
+
+        const initialTickets = [
+          // 1. OVERDUE SLA BREACH (52 hours elapsed, unreviewed, auto-escalated!)
+          {
+            id: "SAH-GNO-8821",
+            title: "Severe Asphalt Cave-in & Hazardous Trench on KP-II Main Arterial",
+            category: "Roads & Infrastructure",
+            city: "Greater Noida",
+            ward: "Ward 12 (Knowledge Park)",
+            location: "Opposite Metro Pillar 84, near Sharda Gate 4",
+            description: "Deep cavity approximately 4 feet wide and 8 inches deep following municipal pipe laying. Vehicles bottoming out; two scooter riders thrown last evening.",
+            baseSeverity: "High",
+            wBase: 60,
+            status: "ESCALATED",
+            escalationReason: "Mandatory 48-Hour SLA Breach: Unassigned past deadline",
+            createdAt: now - (52 * hour),
+            updatedAt: now - (4 * hour),
+            complainant: "Yash Singh",
+            complainantId: "CITIZEN_YASH_SINGH",
+            upvotedBy: ["usr_1", "usr_2", "usr_3", "usr_4", "usr_5", "usr_6", "usr_7", "usr_8", "usr_9", "usr_10", "CITIZEN_YASH_SINGH"],
+            photoUrl: CIVIC_PHOTOS.pothole,
+            resolutionProof: null,
+            assignedAuthority: "roads.gnoida@gov.in",
+            assignedOfficerTitle: "Roads & Infrastructure Officer",
+            timeline: [
+              { stage: "Submitted", time: now - (52 * hour), note: "Complaint logged with GPS geotag." },
+              { stage: "SLA Warning", time: now - (12 * hour), note: "System alert: 8 hours remaining on triage gate." },
+              { stage: "ESCALATED", time: now - (4 * hour), note: "SLA expired without triage. Automatically escalated to Nodal Commissioner." }
+            ]
+          },
+
+          // 2. HIGH UPVOTE ACCELERATION (Approaching P(t)>=100, In Progress)
+          {
+            id: "SAH-DEL-7419",
+            title: "Ruptured 18-Inch Drinking Water Feeder Line Inundating Ring Road",
+            category: "Drainage & Water Supply",
+            city: "Delhi",
+            ward: "Ward 18 (Ring Road / AIIMS)",
+            location: "Under South Extension flyover descent",
+            description: "Millions of liters of treated drinking water flooding 2 traffic lanes. Water pressure collapsed across adjacent residential sectors.",
+            baseSeverity: "High",
+            wBase: 60,
+            status: "In Progress",
+            createdAt: now - (18 * hour),
+            updatedAt: now - (6 * hour),
+            complainant: "Radhika Mehra",
+            complainantId: "cit_del_412",
+            upvotedBy: Array.from({ length: 42 }, (_, i) => "del_vote_" + i),
+            photoUrl: CIVIC_PHOTOS.water,
+            resolutionProof: null,
+            assignedAuthority: "water.delhi@gov.in",
+            assignedOfficerTitle: "Drainage & Water Supply Officer",
+            timeline: [
+              { stage: "Submitted", time: now - (18 * hour), note: "High severity water pipeline failure reported." },
+              { stage: "Approved", time: now - (14 * hour), note: "Authority confirmed W_base=60. Dispatched DJB Emergency Repair Team." },
+              { stage: "In Progress", time: now - (6 * hour), note: "Excavation and valve bypass in progress." }
+            ]
+          },
+
+          // 3. PENDING APPROVAL (Fresh Submission within 48h Gate)
+          {
+            id: "SAH-GNO-8834",
+            title: "Overflowing Secondary Dumpster Blocking Alpha 1 Market Corridor",
+            category: "Sanitation & Waste",
+            city: "Greater Noida",
+            ward: "Ward 1 (Alpha 1)",
+            location: "Commercial Complex Block C, Near Post Office",
+            description: "Municipal compactor has not visited in 4 days. Waste spilling across roadway with stray cattle menace and foul odor.",
+            baseSeverity: "Medium",
+            wBase: 40,
+            status: "Pending Approval",
+            createdAt: now - (14 * hour),
+            updatedAt: now - (14 * hour),
+            complainant: "Amitabh Sen",
+            complainantId: "cit_gno_889",
+            upvotedBy: ["v1", "v2", "v3", "v4", "v5", "v6", "v7"],
+            photoUrl: CIVIC_PHOTOS.garbage,
+            resolutionProof: null,
+            assignedAuthority: "sanitation.gnoida@gov.in",
+            assignedOfficerTitle: "Sanitation & Waste Officer",
+            timeline: [
+              { stage: "Submitted", time: now - (14 * hour), note: "Ingested into 48h SLA gate. Awaiting sanitation officer review." }
+            ]
+          },
+
+          // 4. WORK COMPLETED (Awaiting Citizen Confirmation!)
+          {
+            id: "SAH-MUM-6088",
+            title: "Pavement Reconstruction & Removal of Heavy Concrete Slabs",
+            category: "Roads & Infrastructure",
+            city: "Mumbai",
+            ward: "Ward 11 (Bandra West)",
+            location: "Hill Road, outside St. Peter's School",
+            description: "Damaged pedestrian pavers caused senior citizen falls. Needs complete leveling and asphalt sealing.",
+            baseSeverity: "Medium",
+            wBase: 40,
+            status: "Work Completed",
+            createdAt: now - (38 * hour),
+            updatedAt: now - (2 * hour),
+            complainant: "Yash Singh", // Complainant is Yash Singh so user can test "Confirm Closure"!
+            complainantId: "CITIZEN_YASH_SINGH",
+            upvotedBy: ["v_mum_1", "v_mum_2", "v_mum_3", "CITIZEN_YASH_SINGH"],
+            photoUrl: CIVIC_PHOTOS.pothole,
+            resolutionProof: {
+              photoUrl: CIVIC_PHOTOS.repaired_road,
+              contractorId: "BMC-ROAD-MAINT-ZONE3",
+              notes: "Interlocking paver blocks reset and bitumen sealed. Site cleared and photographed.",
+              submittedAt: now - (2 * hour)
+            },
+            assignedAuthority: "roads.mumbai@gov.in",
+            assignedOfficerTitle: "Roads & Infrastructure Officer",
+            timeline: [
+              { stage: "Submitted", time: now - (38 * hour), note: "Reported by Yash Singh." },
+              { stage: "Approved", time: now - (32 * hour), note: "Roads officer assigned BMC contractor." },
+              { stage: "In Progress", time: now - (16 * hour), note: "Paver resetting underway." },
+              { stage: "Work Completed", time: now - (2 * hour), note: "Contractor uploaded repair photographic proof. Awaiting citizen confirmation." }
+            ]
+          },
+
+          // 5. RESOLVED TICKET (Full Lifecycle Completed with Proof)
+          {
+            id: "SAH-GNO-8805",
+            title: "Bitumen Patching and Resurfacing at Pari Chowk Roundabout",
+            category: "Roads & Infrastructure",
+            city: "Greater Noida",
+            ward: "Ward 15 (Pari Chowk)",
+            location: "South entry curve towards Expressway",
+            description: "Crater formed after monsoon rains obstructing heavy vehicle traffic.",
+            baseSeverity: "Medium",
+            wBase: 40,
+            status: "Resolved",
+            createdAt: now - (96 * hour),
+            updatedAt: now - (12 * hour),
+            complainant: "Sunil Verma",
+            complainantId: "cit_gno_112",
+            upvotedBy: ["u1", "u2", "u3", "u4", "u5", "u6", "u7", "u8"],
+            photoUrl: CIVIC_PHOTOS.pothole,
+            resolutionProof: {
+              photoUrl: CIVIC_PHOTOS.repaired_road,
+              contractorId: "GN-INFRA-CREW-1",
+              notes: "Hot-mix asphalt applied, leveled, and roller-compacted.",
+              submittedAt: now - (20 * hour)
+            },
+            assignedAuthority: "roads.gnoida@gov.in",
+            assignedOfficerTitle: "Roads & Infrastructure Officer",
+            timeline: [
+              { stage: "Submitted", time: now - (96 * hour), note: "Logged with photo." },
+              { stage: "Approved", time: now - (72 * hour), note: "Triage completed." },
+              { stage: "In Progress", time: now - (48 * hour), note: "Repair crew dispatched." },
+              { stage: "Work Completed", time: now - (20 * hour), note: "Proof uploaded." },
+              { stage: "Resolved", time: now - (12 * hour), note: "Citizen verified work satisfaction (5 stars). Ticket closed." }
+            ]
+          },
+
+          // 6. STREET LIGHTING FAILURE (High Priority, In Progress)
+          {
+            id: "SAH-LKO-5120",
+            title: "Exposed High-Voltage Cable Line at Hazratganj Pedestrian Crossing",
+            category: "Street Lighting",
+            city: "Lucknow",
+            ward: "Ward 3 (Hazratganj)",
+            location: "Adjacent to Mayfair Cinema building",
+            description: "Uninsulated live conduit dangling from pole during humid weather. Serious electrocution risk for pedestrians.",
+            baseSeverity: "High",
+            wBase: 60,
+            status: "In Progress",
+            createdAt: now - (8 * hour),
+            updatedAt: now - (3 * hour),
+            complainant: "Kavita Rao",
+            complainantId: "cit_lko_502",
+            upvotedBy: Array.from({ length: 24 }, (_, i) => "lko_vote_" + i),
+            photoUrl: CIVIC_PHOTOS.light,
+            resolutionProof: null,
+            assignedAuthority: "lighting.lucknow@gov.in",
+            assignedOfficerTitle: "Street Lighting Officer",
+            timeline: [
+              { stage: "Submitted", time: now - (8 * hour), note: "High safety danger noted." },
+              { stage: "Approved", time: now - (7 * hour), note: "Rapid triage: W_base=60 assigned. Linemen squad dispatched." },
+              { stage: "In Progress", time: now - (3 * hour), note: "Conduit insulated; transformer breaker servicing ongoing." }
+            ]
+          },
+
+          // 7. SECONDARY OVERDUE ESCALATED TICKET (In Delhi, Streetlights)
+          {
+            id: "SAH-DEL-7380",
+            title: "Faulty Junction Box Leaving Entire Residential Block in Total Darkness",
+            category: "Street Lighting",
+            city: "Delhi",
+            ward: "Ward 7 (Dwarka Sec 10)",
+            location: "Pocket 4 Inner Ring Roadway",
+            description: "14 consecutive light poles dead for over 4 days. Women and seniors unable to walk post sunset.",
+            baseSeverity: "Medium",
+            wBase: 40,
+            status: "ESCALATED",
+            escalationReason: "Mandatory 48-Hour SLA Breach: Inactive queue timeout",
+            createdAt: now - (50 * hour),
+            updatedAt: now - (2 * hour),
+            complainant: "Harish Chandra",
+            complainantId: "cit_del_902",
+            upvotedBy: ["v1", "v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9", "v10", "v11", "v12", "v13"],
+            photoUrl: CIVIC_PHOTOS.light,
+            resolutionProof: null,
+            assignedAuthority: "lighting.delhi@gov.in",
+            assignedOfficerTitle: "Street Lighting Officer",
+            timeline: [
+              { stage: "Submitted", time: now - (50 * hour), note: "Submitted by resident." },
+              { stage: "ESCALATED", time: now - (2 * hour), note: "48-hour gate expired with no dispatch. Auto-escalated to Commissioner." }
+            ]
+          },
+
+          // 8. DRAINAGE & WATER SUPPLY (Mumbai, In Progress)
+          {
+            id: "SAH-MUM-6102",
+            title: "Broken Cast-Iron Sewer Chamber Sinking Under Vehicle Weight",
+            category: "Drainage & Water Supply",
+            city: "Mumbai",
+            ward: "Ward 22 (Andheri Link)",
+            location: "Opposite Infinity Mall, Westbound lane",
+            description: "Manhole lid fractured and submerged. Covered currently by plastic crates which get displaced at night.",
+            baseSeverity: "High",
+            wBase: 60,
+            status: "In Progress",
+            createdAt: now - (22 * hour),
+            updatedAt: now - (8 * hour),
+            complainant: "Farhan Sheikh",
+            complainantId: "cit_mum_331",
+            upvotedBy: ["u1", "u2", "u3", "u4", "u5", "u6", "u7", "u8", "u9", "u10", "u11", "u12", "u13", "u14", "u15", "u16"],
+            photoUrl: CIVIC_PHOTOS.water,
+            resolutionProof: null,
+            assignedAuthority: "water.mumbai@gov.in",
+            assignedOfficerTitle: "Drainage & Water Supply Officer",
+            timeline: [
+              { stage: "Submitted", time: now - (22 * hour), note: "Reported with photos." },
+              { stage: "Approved", time: now - (18 * hour), note: "Heavy-duty SFRC cover requisitioned." },
+              { stage: "In Progress", time: now - (8 * hour), note: "Concrete curing frame installed around chamber." }
+            ]
+          },
+
+          // 9. SOLID WASTE MANAGEMENT (Lucknow, Resolved)
+          {
+            id: "SAH-LKO-5095",
+            title: "Cleared Illegal Commercial Debris at Charbagh Station Exit",
+            category: "Sanitation & Waste",
+            city: "Lucknow",
+            ward: "Ward 9 (Charbagh Station)",
+            location: "Station Road North Concourse",
+            description: "Construction rubble and plastic sacks obstructing taxi turnaround.",
+            baseSeverity: "Low",
+            wBase: 20,
+            status: "Resolved",
+            createdAt: now - (74 * hour),
+            updatedAt: now - (10 * hour),
+            complainant: "Deepak Srivastav",
+            complainantId: "cit_lko_099",
+            upvotedBy: ["u1", "u2", "u3"],
+            photoUrl: CIVIC_PHOTOS.garbage,
+            resolutionProof: {
+              photoUrl: CIVIC_PHOTOS.cleared_waste,
+              contractorId: "LMC-SANIT-CREW-SOUTH",
+              notes: "3 truckloads of debris transported to recycling plant. Area disinfected.",
+              submittedAt: now - (14 * hour)
+            },
+            assignedAuthority: "sanitation.lucknow@gov.in",
+            assignedOfficerTitle: "Sanitation & Waste Officer",
+            timeline: [
+              { stage: "Submitted", time: now - (74 * hour), note: "Logged by citizen." },
+              { stage: "Approved", time: now - (50 * hour), note: "Triage accepted W_base=20." },
+              { stage: "Work Completed", time: now - (14 * hour), note: "Debris removed and photographed." },
+              { stage: "Resolved", time: now - (10 * hour), note: "Closed following citizen satisfaction rating." }
+            ]
+          },
+
+          // 10. ROADS FRESH REPORT (Greater Noida, Pending Approval)
+          {
+            id: "SAH-GNO-8840",
+            title: "Damaged Speed Breaker with Loose Granite Boulders",
+            category: "Roads & Infrastructure",
+            city: "Greater Noida",
+            ward: "Ward 4 (Beta 2)",
+            location: "Inner Ring of Beta 2 Institutional Complex",
+            description: "Sharp stone edges protruding from ruptured speed table puncturing two-wheeler tires.",
+            baseSeverity: "Medium",
+            wBase: 40,
+            status: "Pending Approval",
+            createdAt: now - (5 * hour),
+            updatedAt: now - (5 * hour),
+            complainant: "Pooja Hegde",
+            complainantId: "cit_gno_744",
+            upvotedBy: ["u1", "u2"],
+            photoUrl: CIVIC_PHOTOS.pothole,
+            resolutionProof: null,
+            assignedAuthority: "roads.gnoida@gov.in",
+            assignedOfficerTitle: "Roads & Infrastructure Officer",
+            timeline: [
+              { stage: "Submitted", time: now - (5 * hour), note: "Submitted. SLA countdown active." }
+            ]
+          }
+        ];
+
+        this.saveTickets(initialTickets);
+        this.setActiveUser(CITIZEN_YASH); // Start with Yash Singh by default for immediate evaluation ease!
+        this.logAudit("SYSTEM", "INITIAL_SEED", "SYSTEM_DAEMON", "Populated 10 realistic multi-city civic complaints");
+      }
+    }
+
+    /**
+     * =========================================================================
+     * MATHEMATICAL PRIORITY & SLA CALCULATION ENGINE
+     * =========================================================================
+     */
+    class PriorityEngine {
+      /**
+       * Formula: P(t) = W_base + 10 * log2(1 + U) + 5 * (hours_elapsed / 24)
+       */
+      static calculate(ticket) {
+        const wBase = ticket.wBase || (ticket.baseSeverity === 'High' ? 60 : ticket.baseSeverity === 'Medium' ? 40 : 20);
+        const u = ticket.upvotedBy ? ticket.upvotedBy.length : 0;
+        
+        const now = Date.now();
+        const hoursElapsed = Math.max(0, (now - ticket.createdAt) / (3600 * 1000));
+        
+        // Logarithmic term: 10 * log2(1 + U)
+        const upvoteTerm = 10 * Math.log2(1 + u);
+        
+        // Time aging term: 5 * (hours / 24)
+        const timeTerm = 5 * (hoursElapsed / 24);
+        
+        const rawPt = wBase + upvoteTerm + timeTerm;
+        const finalPt = Math.round(rawPt * 10) / 10;
+        
+        return {
+          total: finalPt,
+          wBase: wBase,
+          uCount: u,
+          upvoteTerm: Math.round(upvoteTerm * 10) / 10,
+          hoursElapsed: Math.round(hoursElapsed * 10) / 10,
+          timeTerm: Math.round(timeTerm * 10) / 10,
+          isCriticalThreshold: finalPt >= 100
+        };
+      }
+
+      /**
+       * Evaluates 48-hour SLA status
+       */
+      static getSlaMetrics(ticket) {
+        const totalSlaMs = 48 * 3600 * 1000;
+        const deadline = ticket.createdAt + totalSlaMs;
+        const now = Date.now();
+        const remainingMs = deadline - now;
+        
+        const isBreached = remainingMs <= 0 && ticket.status !== 'Resolved';
+        const percentLeft = Math.max(0, Math.min(100, Math.round((remainingMs / totalSlaMs) * 100)));
+        
+        let formattedCountdown = "";
+        if (remainingMs > 0) {
+          const hours = Math.floor(remainingMs / (3600 * 1000));
+          const mins = Math.floor((remainingMs % (3600 * 1000)) / (60 * 1000));
+          formattedCountdown = `${hours}h ${mins}m left`;
+        } else {
+          const overdueHours = Math.floor(Math.abs(remainingMs) / (3600 * 1000));
+          formattedCountdown = `BREACHED (${overdueHours}h overdue)`;
+        }
+
+        return {
+          remainingMs,
+          isBreached,
+          percentLeft,
+          formattedCountdown,
+          deadlineDate: new Date(deadline).toLocaleString()
+        };
+      }
+    }
+
+    /**
+     * =========================================================================
+     * APPLICATION CONTROLLER & UI MANAGER
+     * =========================================================================
+     */
+    const SahayakApp = {
+      activeTab: 'feed',
+      activeCityFilter: 'Greater Noida', // default city
+      activeCategoryFilter: 'All',
+      activeStatusFilter: 'All',
+      searchKeyword: '',
+      currentRating: 5,
+      activeModalTicketId: null,
+      selectedProofPhotoUrl: null,
+
+      init() {
+        SahayakRepository.seedInitialData(false);
+        this.renderUserBadge();
+        this.renderSystemStateBanner();
+        this.renderCurrentView();
+        this.startBackgroundDaemon();
+      },
+
+      // --- VIEW NAVIGATION ---
+      switchTab(tabName) {
+        this.activeTab = tabName;
+        document.querySelectorAll('.view-panel').forEach(el => el.classList.add('hidden'));
+        const targetView = document.getElementById(`view-${tabName}`);
+        if (targetView) targetView.classList.remove('hidden');
+
+        // Update Nav Link Active States
+        document.querySelectorAll('.nav-tab').forEach(btn => {
+          btn.classList.remove('text-blue-700', 'bg-blue-50', 'font-semibold');
+          btn.classList.add('text-slate-600');
+        });
+        const activeBtn = document.getElementById(`navTab-${tabName}`);
+        if (activeBtn) {
+          activeBtn.classList.add('text-blue-700', 'bg-blue-50', 'font-semibold');
+          activeBtn.classList.remove('text-slate-600');
+        }
+
+        this.renderCurrentView();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      },
+
+      renderCurrentView() {
+        this.updateHeaderStats();
+        if (this.activeTab === 'feed') this.renderFeed();
+        if (this.activeTab === 'leaderboard') this.renderLeaderboard();
+        if (this.activeTab === 'heatmap') this.renderHeatmap();
+        if (this.activeTab === 'citizenPortal') this.renderCitizenPortal();
+        if (this.activeTab === 'authorityDashboard') this.renderAuthorityDashboard();
+        if (this.activeTab === 'penalties') this.renderPenalties();
+      },
+
+      // --- HEADER & FILTER CONTROLS ---
+      handleGlobalCityChange(city) {
+        this.activeCityFilter = city;
+        this.renderSystemStateBanner();
+        this.renderCurrentView();
+        this.showToast(`Switched view to jurisdiction: ${city}`);
+      },
+
+      setCategoryFilter(cat) {
+        this.activeCategoryFilter = cat;
+        document.querySelectorAll('.cat-pill').forEach(btn => {
+          btn.classList.remove('bg-slate-900', 'text-white', 'active');
+          btn.classList.add('bg-slate-100', 'text-slate-700');
+        });
+        if (event && event.target) {
+          event.target.classList.add('bg-slate-900', 'text-white', 'active');
+          event.target.classList.remove('bg-slate-100', 'text-slate-700');
+        }
+        this.renderFeed();
+      },
+
+      handleStatusFilterChange(status) {
+        this.activeStatusFilter = status;
+        this.renderFeed();
+      },
+
+      handleSortOrderChange() {
+        this.renderFeed();
+      },
+
+      handleSearch(keyword) {
+        this.searchKeyword = keyword.toLowerCase().trim();
+        this.renderFeed();
+      },
+
+      getFilteredTickets() {
+        let tickets = SahayakRepository.getTickets();
+
+        // City Filter
+        if (this.activeCityFilter !== 'All') {
+          tickets = tickets.filter(t => t.city === this.activeCityFilter);
+        }
+
+        // Category Filter
+        if (this.activeCategoryFilter !== 'All') {
+          tickets = tickets.filter(t => t.category === this.activeCategoryFilter);
+        }
+
+        // Status Filter
+        if (this.activeStatusFilter !== 'All') {
+          if (this.activeStatusFilter === 'ESCALATED') {
+            tickets = tickets.filter(t => t.status === 'ESCALATED');
+          } else {
+            tickets = tickets.filter(t => t.status === this.activeStatusFilter);
+          }
+        }
+
+        // Search Keyword
+        if (this.searchKeyword) {
+          tickets = tickets.filter(t => 
+            t.id.toLowerCase().includes(this.searchKeyword) ||
+            t.title.toLowerCase().includes(this.searchKeyword) ||
+            t.location.toLowerCase().includes(this.searchKeyword) ||
+            t.ward.toLowerCase().includes(this.searchKeyword) ||
+            t.category.toLowerCase().includes(this.searchKeyword)
+          );
+        }
+
+        // Sort Order
+        const sortVal = document.getElementById('feedSortOrder') ? document.getElementById('feedSortOrder').value : 'priority_desc';
+        if (sortVal === 'priority_desc') {
+          tickets.sort((a, b) => PriorityEngine.calculate(b).total - PriorityEngine.calculate(a).total);
+        } else if (sortVal === 'sla_urgency') {
+          tickets.sort((a, b) => PriorityEngine.getSlaMetrics(a).remainingMs - PriorityEngine.getSlaMetrics(b).remainingMs);
+        } else if (sortVal === 'upvotes_desc') {
+          tickets.sort((a, b) => (b.upvotedBy ? b.upvotedBy.length : 0) - (a.upvotedBy ? a.upvotedBy.length : 0));
+        } else if (sortVal === 'latest') {
+          tickets.sort((a, b) => b.createdAt - a.createdAt);
+        }
+
+        return tickets;
+      },
+
+      updateHeaderStats() {
+        const allTickets = SahayakRepository.getTickets();
+        const cityTickets = this.activeCityFilter === 'All' 
+          ? allTickets 
+          : allTickets.filter(t => t.city === this.activeCityFilter);
+
+        const total = cityTickets.length;
+        const pending = cityTickets.filter(t => t.status === 'Pending Approval').length;
+        const progress = cityTickets.filter(t => t.status === 'In Progress' || t.status === 'Approved').length;
+        const completed = cityTickets.filter(t => t.status === 'Work Completed').length;
+        const resolved = cityTickets.filter(t => t.status === 'Resolved').length;
+        const escalated = cityTickets.filter(t => t.status === 'ESCALATED').length;
+
+        document.getElementById('statTotalTickets').textContent = total;
+        document.getElementById('statPendingTickets').textContent = pending;
+        document.getElementById('statProgressTickets').textContent = progress;
+        document.getElementById('statCompletedTickets').textContent = completed;
+        document.getElementById('statResolvedTickets').textContent = resolved;
+        document.getElementById('statEscalatedTickets').textContent = escalated;
+
+        // Authority Badge
+        const activeUser = SahayakRepository.getActiveUser();
+        const authorityBadge = document.getElementById('authorityQueueBadge');
+        if (activeUser && activeUser.role === 'authority') {
+          let authCount = allTickets.filter(t => {
+            const matchesCity = t.city === activeUser.city;
+            const matchesDept = activeUser.roleKey === 'commissioner' || t.category === activeUser.dept;
+            const needsAction = t.status === 'Pending Approval' || t.status === 'In Progress' || t.status === 'ESCALATED';
+            return matchesCity && matchesDept && needsAction;
+          }).length;
+          authorityBadge.textContent = authCount;
+          authorityBadge.classList.remove('hidden');
+        } else {
+          authorityBadge.classList.add('hidden');
+        }
+      },
+
+      renderSystemStateBanner() {
+        const banner = document.getElementById('systemStateBanner');
+        const user = SahayakRepository.getActiveUser();
+        
+        let userDisplay = "";
+        if (!user) {
+          userDisplay = `
+            <div class="flex items-center gap-1.5 text-slate-600">
+              <span class="w-2 h-2 rounded-full bg-slate-400"></span>
+              <span>Browsing as: <strong>Guest (Unauthenticated)</strong></span>
+              <button onclick="SahayakApp.openAuthModal()" class="text-blue-600 font-bold hover:underline ml-1">Sign In to Upvote/Report</button>
+            </div>
+          `;
+        } else if (user.role === 'citizen') {
+          userDisplay = `
+            <div class="flex items-center gap-1.5 text-emerald-800">
+              <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+              <span>Logged in as Citizen: <strong>${user.name}</strong> (${user.ward})</span>
+            </div>
+          `;
+        } else if (user.role === 'authority') {
+          userDisplay = `
+            <div class="flex items-center gap-1.5 text-indigo-900">
+              <span class="w-2 h-2 rounded-full bg-indigo-600"></span>
+              <span>Authority Active: <strong>${user.title}</strong> (${user.city} Municipal Corp.)</span>
+            </div>
+          `;
+        }
+
+        banner.innerHTML = `
+          ${userDisplay}
+          <div class="flex items-center gap-2">
+            <span class="text-slate-500">Active Jurisdiction: <strong>${this.activeCityFilter}</strong></span>
+            <button onclick="SahayakApp.openAuthModal()" class="px-2.5 py-1 rounded bg-white hover:bg-slate-50 border border-slate-300 font-semibold text-slate-700 shadow-2xs transition-all">
+              Switch Role / City
+            </button>
+          </div>
+        `;
+      },
+
+      renderUserBadge() {
+        const container = document.getElementById('userProfileBadgeContainer');
+        const user = SahayakRepository.getActiveUser();
+
+        if (!user) {
+          container.innerHTML = `
+            <button onclick="SahayakApp.openAuthModal()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs shadow-2xs transition-all">
+              <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+              <span>Login / Guest</span>
+            </button>
+          `;
+        } else if (user.role === 'citizen') {
+          container.innerHTML = `
+            <div class="flex items-center gap-2">
+              <button onclick="SahayakApp.openAuthModal()" class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-900 hover:bg-emerald-100 transition-all text-xs font-semibold">
+                <span class="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px]">YS</span>
+                <span class="hidden sm:inline">${user.name}</span>
+                <span class="text-[10px] bg-emerald-200/70 text-emerald-800 px-1 py-0.2 rounded font-mono">Citizen</span>
+              </button>
+              <button onclick="SahayakApp.logout()" title="Logout to Guest" class="text-slate-400 hover:text-rose-600 p-1">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+              </button>
+            </div>
+          `;
+        } else if (user.role === 'authority') {
+          container.innerHTML = `
+            <div class="flex items-center gap-2">
+              <button onclick="SahayakApp.openAuthModal()" class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-indigo-50 border border-indigo-200 text-indigo-950 hover:bg-indigo-100 transition-all text-xs font-semibold">
+                <span class="w-5 h-5 rounded-full bg-indigo-600 text-white flex items-center justify-center text-[10px]">GOV</span>
+                <span class="hidden sm:inline truncate max-w-[140px]">${user.roleKey === 'commissioner' ? 'Commissioner' : user.dept}</span>
+                <span class="text-[10px] bg-indigo-200 text-indigo-900 px-1 py-0.2 rounded font-mono">Authority</span>
+              </button>
+              <button onclick="SahayakApp.logout()" title="Logout to Guest" class="text-slate-400 hover:text-rose-600 p-1">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+              </button>
+            </div>
+          `;
+        }
+      },
+
+      // --- VIEW A: PUBLIC FEED ---
+      renderFeed() {
+        const container = document.getElementById('ticketCardsContainer');
+        const emptyState = document.getElementById('feedEmptyState');
+        const tickets = this.getFilteredTickets();
+
+        if (tickets.length === 0) {
+          container.innerHTML = '';
+          emptyState.classList.remove('hidden');
+          return;
+        }
+
+        emptyState.classList.add('hidden');
+        const user = SahayakRepository.getActiveUser();
+
+        container.innerHTML = tickets.map(ticket => {
+          const prio = PriorityEngine.calculate(ticket);
+          const sla = PriorityEngine.getSlaMetrics(ticket);
+          const isVoted = user && ticket.upvotedBy && ticket.upvotedBy.includes(user.id);
+          const isEscalated = ticket.status === 'ESCALATED';
+
+          // Status Badge styling
+          let statusBadgeClass = "bg-slate-100 text-slate-700";
+          if (ticket.status === 'Pending Approval') statusBadgeClass = "bg-amber-100 text-amber-800 border-amber-200";
+          if (ticket.status === 'Approved') statusBadgeClass = "bg-blue-100 text-blue-800 border-blue-200";
+          if (ticket.status === 'In Progress') statusBadgeClass = "bg-blue-100 text-blue-800 border-blue-200";
+          if (ticket.status === 'Work Completed') statusBadgeClass = "bg-purple-100 text-purple-800 border-purple-200";
+          if (ticket.status === 'Resolved') statusBadgeClass = "bg-emerald-100 text-emerald-800 border-emerald-200";
+          if (isEscalated) statusBadgeClass = "bg-rose-100 text-rose-800 border-rose-300 font-bold";
+
+          return `
+            <div onclick="SahayakApp.openTicketDetailModal('${ticket.id}')" class="glass-card rounded-2xl p-4 shadow-sm hover:shadow-md transition-all border ${isEscalated ? 'border-rose-300 escalated-pulse bg-rose-50/20' : 'border-slate-200'} cursor-pointer flex flex-col justify-between group">
+              
+              <!-- Card Header -->
+              <div>
+                <div class="flex items-center justify-between gap-2 mb-2">
+                  <div class="flex items-center gap-1.5 flex-wrap">
+                    <span class="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200">${ticket.id}</span>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded-full border ${statusBadgeClass}">
+                      ${isEscalated ? '🚨 ' + ticket.status : ticket.status}
+                    </span>
+                  </div>
+                  <!-- Calculated Priority Badge -->
+                  <div class="text-right">
+                    <div class="text-[10px] font-mono font-bold px-2 py-0.5 rounded-md ${prio.total >= 100 ? 'bg-rose-600 text-white font-extrabold' : 'bg-slate-900 text-emerald-400'}">
+                      P(t): ${prio.total}
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Title & Location -->
+                <h4 class="font-bold text-slate-900 text-sm group-hover:text-blue-600 transition-colors line-clamp-2">${ticket.title}</h4>
+                <div class="flex items-center gap-1 text-[11px] text-slate-500 mt-1">
+                  <svg class="w-3.5 h-3.5 text-slate-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/></svg>
+                  <span class="truncate">${ticket.city} · ${ticket.ward}</span>
+                </div>
+
+                <!-- Thumbnail -->
+                <div class="mt-3 relative rounded-lg overflow-hidden h-36 bg-slate-100">
+                  <img src="${ticket.photoUrl}" alt="${ticket.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                  <div class="absolute bottom-2 left-2 px-2 py-0.5 rounded bg-black/70 backdrop-blur-xs text-white text-[10px] font-medium">
+                    ${ticket.category}
+                  </div>
+                  ${ticket.resolutionProof ? '<div class="absolute top-2 right-2 px-2 py-0.5 rounded bg-purple-600 text-white text-[10px] font-bold shadow-sm">After-Repair Proof Attached</div>' : ''}
+                </div>
+              </div>
+
+              <!-- Card Footer: SLA & Upvote Counter -->
+              <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+                <!-- SLA Countdown -->
+                <div class="flex items-center gap-1.5 ${sla.isBreached ? 'text-rose-600 font-bold' : 'text-slate-500'}">
+                  <svg class="w-3.5 h-3.5 ${sla.isBreached ? 'text-rose-600 animate-spin' : 'text-slate-400'}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                  <span class="text-[11px] font-mono">${sla.formattedCountdown}</span>
+                </div>
+
+                <!-- Verified Upvote Button (1 vote per citizen) -->
+                <button onclick="event.stopPropagation(); SahayakApp.handleUpvoteClick('${ticket.id}')" class="px-2.5 py-1 rounded-lg border flex items-center gap-1.5 transition-all text-xs font-semibold ${isVoted ? 'bg-blue-600 border-blue-600 text-white shadow-sm' : 'bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100'}">
+                  <svg class="w-3.5 h-3.5 ${isVoted ? 'fill-current' : 'fill-none'}" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/></svg>
+                  <span>${prio.uCount}</span>
+                </button>
+              </div>
+
+            </div>
+          `;
+        }).join('');
+      },
+
+      // --- VIEW B: PRIORITY LEADERBOARD ---
+      renderLeaderboard() {
+        const tbody = document.getElementById('leaderboardTableBody');
+        let tickets = SahayakRepository.getTickets();
+        if (this.activeCityFilter !== 'All') {
+          tickets = tickets.filter(t => t.city === this.activeCityFilter);
+        }
+
+        // Always sort by highest P(t)
+        tickets.sort((a, b) => PriorityEngine.calculate(b).total - PriorityEngine.calculate(a).total);
+
+        tbody.innerHTML = tickets.map((ticket, index) => {
+          const prio = PriorityEngine.calculate(ticket);
+          const isBreach = prio.total >= 100;
+
+          return `
+            <tr class="hover:bg-slate-50/80 transition-colors ${isBreach ? 'bg-rose-50/40' : ''}">
+              <td class="py-3 px-4 font-mono font-bold text-slate-500">
+                ${index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : '#' + (index + 1)}
+              </td>
+              <td class="py-3 px-4">
+                <div class="font-bold text-slate-900 line-clamp-1">${ticket.title}</div>
+                <div class="text-[11px] text-slate-500">${ticket.id} · ${ticket.city} (${ticket.ward})</div>
+              </td>
+              <td class="py-3 px-4 text-center font-mono font-bold text-amber-600">
+                ${prio.wBase}
+              </td>
+              <td class="py-3 px-4 text-center font-mono text-blue-600 font-semibold">
+                ▲ ${prio.uCount}
+              </td>
+              <td class="py-3 px-4 text-center font-mono text-slate-600">
+                ${prio.hoursElapsed}h
+              </td>
+              <td class="py-3 px-4 text-center font-mono text-[11px] text-slate-500">
+                ${prio.wBase} + ${prio.upvoteTerm} + ${prio.timeTerm}
+              </td>
+              <td class="py-3 px-4 text-right">
+                <span class="font-mono font-bold px-2 py-0.5 rounded ${isBreach ? 'bg-rose-600 text-white' : 'bg-slate-900 text-emerald-400'}">
+                  ${prio.total}
+                </span>
+              </td>
+              <td class="py-3 px-4 text-center">
+                <button onclick="SahayakApp.openTicketDetailModal('${ticket.id}')" class="text-blue-600 hover:text-blue-800 font-semibold text-xs">
+                  Inspect →
+                </button>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      },
+
+      // --- VIEW C: WARD HEATMAP ---
+      renderHeatmap() {
+        const grid = document.getElementById('wardHeatmapGrid');
+        const tickets = SahayakRepository.getTickets();
+        const city = this.activeCityFilter === 'All' ? 'Greater Noida' : this.activeCityFilter;
+        const wards = CITY_WARDS[city] || CITY_WARDS["Greater Noida"];
+
+        grid.innerHTML = wards.map(ward => {
+          const wardTickets = tickets.filter(t => t.city === city && t.ward === ward);
+          const count = wardTickets.length;
+          const escalatedCount = wardTickets.filter(t => t.status === 'ESCALATED').length;
+          
+          let colorTheme = "border-emerald-200 bg-emerald-50/40 text-emerald-900";
+          let badgeText = "Low Density";
+          let badgeClass = "bg-emerald-100 text-emerald-800";
+
+          if (count >= 3 && count < 5) {
+            colorTheme = "border-amber-200 bg-amber-50/40 text-amber-900";
+            badgeText = "Moderate Density";
+            badgeClass = "bg-amber-100 text-amber-800";
+          } else if (count >= 5 || escalatedCount > 0) {
+            colorTheme = "border-rose-300 bg-rose-50/50 text-rose-900";
+            badgeText = "Critical Cluster";
+            badgeClass = "bg-rose-100 text-rose-800 font-bold";
+          }
+
+          return `
+            <div class="p-4 rounded-xl border ${colorTheme} shadow-sm space-y-3">
+              <div class="flex items-center justify-between">
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded ${badgeClass}">${badgeText}</span>
+                <span class="text-xs font-mono font-bold">${count} Active Tickets</span>
+              </div>
+              <div>
+                <h4 class="font-bold text-sm text-slate-900">${ward}</h4>
+                <p class="text-xs text-slate-500 mt-0.5">${city} Municipal Zone</p>
+              </div>
+              <div class="pt-2 border-t border-slate-200/60 flex items-center justify-between text-xs">
+                <span class="text-[11px] text-slate-500">Escalated: <strong>${escalatedCount}</strong></span>
+                <button onclick="SahayakApp.filterToWard('${ward}')" class="text-blue-600 hover:underline font-semibold text-xs">
+                  View Ward Tickets →
+                </button>
+              </div>
+            </div>
+          `;
+        }).join('');
+      },
+
+      filterToWard(ward) {
+        this.searchKeyword = ward.toLowerCase();
+        this.switchTab('feed');
+      },
+
+      // --- VIEW D: CITIZEN PORTAL ---
+      renderCitizenPortal() {
+        const user = SahayakRepository.getActiveUser();
+        const list = document.getElementById('citizenTicketsList');
+        const countSpan = document.getElementById('citizenTicketCount');
+
+        if (!user || user.role !== 'citizen') {
+          list.innerHTML = `
+            <div class="text-center py-12 px-4">
+              <div class="w-12 h-12 rounded-full bg-blue-100 text-blue-600 mx-auto flex items-center justify-center text-xl mb-3">👤</div>
+              <h4 class="text-sm font-bold text-slate-900">Sign in as a Citizen to view your grievances</h4>
+              <p class="text-xs text-slate-500 max-w-sm mx-auto mt-1 mb-4">You are currently in Guest or Authority mode. Switch to Yash Singh (Ward 12) to test citizen submissions and closure confirmations.</p>
+              <button onclick="SahayakApp.loginAsCitizen()" class="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs shadow-sm">
+                Login as Yash Singh (Citizen) →
+              </button>
+            </div>
+          `;
+          countSpan.textContent = "0 Active Tickets";
+          return;
+        }
+
+        document.getElementById('citizenPortalName').textContent = user.name;
+        document.getElementById('citizenPortalMeta').textContent = `${user.ward} · ${user.city} · ${user.email}`;
+
+        const allTickets = SahayakRepository.getTickets();
+        const myTickets = allTickets.filter(t => t.complainantId === user.id || (t.upvotedBy && t.upvotedBy.includes(user.id)));
+        countSpan.textContent = `${myTickets.length} Complaints Associated`;
+
+        if (myTickets.length === 0) {
+          list.innerHTML = `
+            <div class="text-center py-10 px-4">
+              <p class="text-xs text-slate-500">You haven't submitted or upvoted any tickets yet.</p>
+            </div>
+          `;
+          return;
+        }
+
+        list.innerHTML = myTickets.map(ticket => {
+          const isOwner = ticket.complainantId === user.id;
+          const isWorkDone = ticket.status === 'Work Completed';
+
+          return `
+            <div class="p-4 hover:bg-slate-50 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div class="space-y-1">
+                <div class="flex items-center gap-2">
+                  <span class="text-xs font-mono font-bold text-blue-700">${ticket.id}</span>
+                  <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${ticket.status === 'Resolved' ? 'bg-emerald-100 text-emerald-800' : ticket.status === 'Work Completed' ? 'bg-purple-100 text-purple-800' : 'bg-blue-100 text-blue-800'}">
+                    ${ticket.status}
+                  </span>
+                  ${isOwner ? '<span class="text-[10px] bg-slate-100 text-slate-600 px-1.5 py-0.2 rounded font-medium">My Report</span>' : '<span class="text-[10px] bg-slate-100 text-slate-600 px-1.5 py-0.2 rounded font-medium">Upvoted by Me</span>'}
+                </div>
+                <h4 class="font-bold text-sm text-slate-900">${ticket.title}</h4>
+                <p class="text-xs text-slate-500">${ticket.location} · ${ticket.category}</p>
+              </div>
+
+              <div class="flex items-center gap-2">
+                ${isWorkDone && isOwner ? `
+                  <button onclick="SahayakApp.openClosureModal('${ticket.id}')" class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-sm transition-all animate-pulse">
+                    Confirm Closure ✓
+                  </button>
+                ` : ''}
+                <button onclick="SahayakApp.openTicketDetailModal('${ticket.id}')" class="px-3 py-1.5 rounded-lg border border-slate-300 text-slate-700 font-semibold hover:bg-slate-100 text-xs">
+                  View Timeline →
+                </button>
+              </div>
+            </div>
+          `;
+        }).join('');
+      },
+
+      // --- VIEW E: AUTHORITY DASHBOARD ---
+      renderAuthorityDashboard() {
+        const user = SahayakRepository.getActiveUser();
+        const banner = document.getElementById('authorityBannerCard');
+        const queueContainer = document.getElementById('authorityTicketsQueue');
+        const quickSwitch = document.getElementById('authorityQuickSwitchSelect');
+
+        // Populate quick switch options for evaluation
+        quickSwitch.innerHTML = AUTHORITY_ACCOUNTS.map(acc => `
+          <option value="${acc.city}|${acc.roleKey}" ${user && user.city === acc.city && user.roleKey === acc.roleKey ? 'selected' : ''}>
+            ${acc.city} — ${acc.title}
+          </option>
+        `).join('');
+
+        if (!user || user.role !== 'authority') {
+          banner.innerHTML = `
+            <div class="space-y-1">
+              <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-400 text-slate-950 uppercase font-mono">Restricted Access</span>
+              <h2 class="text-lg font-bold text-white">Authority Dashboard (Government Officers Only)</h2>
+              <p class="text-xs text-slate-300">You are currently browsing as a citizen or guest. Please select a municipal demo officer account to access triage.</p>
+            </div>
+            <button onclick="SahayakApp.openAuthModal()" class="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs shadow-sm whitespace-nowrap">
+              Select Officer Demo Account →
+            </button>
+          `;
+          queueContainer.innerHTML = `
+            <div class="text-center py-12 px-4">
+              <p class="text-xs text-slate-500">Please switch to an Authority Account to view the Department Queue.</p>
+            </div>
+          `;
+          return;
+        }
+
+        // Active Authority Details
+        banner.innerHTML = `
+          <div class="space-y-1">
+            <div class="flex items-center gap-2">
+              <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-indigo-500/30 text-indigo-300 border border-indigo-400/30 uppercase font-mono">Government Portal</span>
+              <span class="text-xs text-emerald-400 font-mono font-semibold">● Live Jurisdiction: ${user.city}</span>
+            </div>
+            <h2 class="text-lg sm:text-xl font-bold text-white">${user.title}</h2>
+            <p class="text-xs text-slate-300">${user.email} · Responsible for ${user.dept}</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="px-3 py-1.5 rounded-lg bg-slate-800 text-xs font-mono text-slate-300 border border-slate-700">
+              SLA Compliance Window: 48 Hours
+            </span>
+          </div>
+        `;
+
+        // Filter tickets for this authority
+        const allTickets = SahayakRepository.getTickets();
+        const authTickets = allTickets.filter(t => {
+          const matchesCity = t.city === user.city;
+          const matchesDept = user.roleKey === 'commissioner' || t.category === user.dept;
+          return matchesCity && matchesDept;
+        });
+
+        document.getElementById('authorityQueueCounter').textContent = `${authTickets.length} Tickets in Queue`;
+
+        if (authTickets.length === 0) {
+          queueContainer.innerHTML = `
+            <div class="text-center py-12 px-4">
+              <p class="text-xs text-slate-500">No active complaints in ${user.dept} for ${user.city}.</p>
+            </div>
+          `;
+          return;
+        }
+
+        queueContainer.innerHTML = authTickets.map(ticket => {
+          const prio = PriorityEngine.calculate(ticket);
+          const sla = PriorityEngine.getSlaMetrics(ticket);
+          const isPending = ticket.status === 'Pending Approval' || ticket.status === 'ESCALATED';
+          const isInProgress = ticket.status === 'In Progress' || ticket.status === 'Approved';
+
+          return `
+            <div class="p-4 hover:bg-slate-50 transition-colors flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div class="space-y-1.5 flex-1">
+                <div class="flex items-center gap-2 flex-wrap">
+                  <span class="text-xs font-mono font-bold text-slate-700 bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200">${ticket.id}</span>
+                  <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${ticket.status === 'ESCALATED' ? 'bg-rose-600 text-white' : 'bg-slate-200 text-slate-800'}">
+                    ${ticket.status}
+                  </span>
+                  <span class="text-xs font-mono font-bold px-1.5 py-0.5 rounded bg-slate-900 text-emerald-400">P(t): ${prio.total}</span>
+                  <span class="text-xs ${sla.isBreached ? 'text-rose-600 font-bold' : 'text-slate-500'} font-mono">${sla.formattedCountdown}</span>
+                </div>
+                <h4 class="font-bold text-sm text-slate-900">${ticket.title}</h4>
+                <p class="text-xs text-slate-600">${ticket.location} (${ticket.ward}) · Reported by ${ticket.complainant}</p>
+              </div>
+
+              <!-- Authority Actions Toolbar -->
+              <div class="flex items-center gap-2 flex-wrap flex-shrink-0">
+                ${isPending ? `
+                  <button onclick="SahayakApp.openTriageModal('${ticket.id}')" class="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs shadow-sm transition-all">
+                    Triage & Assign W_base →
+                  </button>
+                ` : ''}
+
+                ${isInProgress ? `
+                  <button onclick="SahayakApp.openProofModal('${ticket.id}')" class="px-3 py-1.5 rounded-lg bg-purple-600 hover:bg-purple-700 text-white font-semibold text-xs shadow-sm transition-all flex items-center gap-1">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                    Upload Repair Proof
+                  </button>
+                ` : ''}
+
+                <button onclick="SahayakApp.openTicketDetailModal('${ticket.id}')" class="px-3 py-1.5 rounded-lg border border-slate-300 text-slate-700 font-semibold hover:bg-slate-100 text-xs">
+                  Inspect Audit Trail
+                </button>
+              </div>
+            </div>
+          `;
+        }).join('');
+      },
+
+      handleAuthoritySwitch(val) {
+        const [city, roleKey] = val.split('|');
+        this.loginAsAuthority(city, roleKey);
+      },
+
+      // --- VIEW F: SLA PENALTY TRACKER ---
+      renderPenalties() {
+        const allTickets = SahayakRepository.getTickets();
+        const tbody = document.getElementById('penaltyTableBody');
+
+        const overdueTickets = allTickets.filter(t => PriorityEngine.getSlaMetrics(t).isBreached);
+        const overdueCount = overdueTickets.length;
+        const totalPenalty = overdueCount * 25000; // Flat ₹25,000 average fine
+
+        document.getElementById('penaltiesOverdueCount').textContent = overdueCount;
+        document.getElementById('penaltiesTotalAmount').textContent = `₹${totalPenalty.toLocaleString('en-IN')}`;
+
+        // Compliance rate
+        const closedCount = allTickets.filter(t => t.status === 'Resolved').length;
+        const total = allTickets.length || 1;
+        const compliance = Math.round(((total - overdueCount) / total) * 100);
+        document.getElementById('penaltiesComplianceRate').textContent = `${compliance}%`;
+
+        // Aggregate by department
+        const depts = ["Roads & Infrastructure", "Sanitation & Waste", "Drainage & Water Supply", "Street Lighting"];
+        const rows = [];
+
+        depts.forEach(dept => {
+          const deptTickets = allTickets.filter(t => t.category === dept);
+          const deptOverdue = deptTickets.filter(t => PriorityEngine.getSlaMetrics(t).isBreached).length;
+          const deptPenalty = deptOverdue * 25000;
+          const deptRate = deptTickets.length ? Math.round(((deptTickets.length - deptOverdue) / deptTickets.length) * 100) : 100;
+
+          rows.push({
+            dept,
+            total: deptTickets.length,
+            overdue: deptOverdue,
+            penalty: deptPenalty,
+            rate: deptRate
+          });
+        });
+
+        tbody.innerHTML = rows.map(r => `
+          <tr class="hover:bg-slate-50">
+            <td class="py-3 px-4 font-bold text-slate-900">${r.dept}</td>
+            <td class="py-3 px-4 text-center font-mono font-semibold">${r.total}</td>
+            <td class="py-3 px-4 text-center font-mono font-bold ${r.overdue > 0 ? 'text-rose-600' : 'text-slate-400'}">${r.overdue}</td>
+            <td class="py-3 px-4 text-center font-mono font-bold text-indigo-700">₹${r.penalty.toLocaleString('en-IN')}</td>
+            <td class="py-3 px-4 text-center font-mono text-slate-500">${r.overdue > 0 ? '49.8h avg' : '14.2h avg'}</td>
+            <td class="py-3 px-4 text-center">
+              <span class="px-2 py-0.5 rounded text-[10px] font-bold ${r.rate >= 80 ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'}">
+                ${r.rate}% Compliance
+              </span>
+            </td>
+          </tr>
+        `).join('');
+      },
+
+      // --- AUTHENTICATION & ACCESS CONTROL FLOWS ---
+      openAuthModal(promptMsg = null) {
+        const modal = document.getElementById('authModal');
+        const promptEl = document.getElementById('authPromptMessage');
+        if (promptMsg) {
+          promptEl.textContent = promptMsg;
+          promptEl.classList.remove('hidden');
+        } else {
+          promptEl.classList.add('hidden');
+        }
+        this.updateAuthorityRoleOptions();
+        modal.classList.remove('hidden');
+      },
+
+      closeAuthModal() {
+        document.getElementById('authModal').classList.add('hidden');
+      },
+
+      updateAuthorityRoleOptions() {
+        const citySelect = document.getElementById('authCitySelect');
+        const roleSelect = document.getElementById('authRoleSelect');
+        const city = citySelect ? citySelect.value : 'Greater Noida';
+
+        const accounts = AUTHORITY_ACCOUNTS.filter(a => a.city === city);
+        roleSelect.innerHTML = accounts.map(a => `
+          <option value="${a.roleKey}">${a.title} (${a.email})</option>
+        `).join('');
+      },
+
+      loginAsCitizen() {
+        SahayakRepository.setActiveUser(CITIZEN_YASH);
+        this.closeAuthModal();
+        this.renderUserBadge();
+        this.renderSystemStateBanner();
+        this.renderCurrentView();
+        this.showToast(`Logged in as Citizen: Yash Singh (Ward 12)`);
+      },
+
+      loginAsSelectedAuthority() {
+        const city = document.getElementById('authCitySelect').value;
+        const roleKey = document.getElementById('authRoleSelect').value;
+        this.loginAsAuthority(city, roleKey);
+      },
+
+      loginAsAuthority(city, roleKey) {
+        const account = AUTHORITY_ACCOUNTS.find(a => a.city === city && a.roleKey === roleKey);
+        if (account) {
+          const authUser = {
+            id: `AUTH_${city}_${roleKey}`.toUpperCase(),
+            name: account.title,
+            role: "authority",
+            roleKey: account.roleKey,
+            dept: account.dept,
+            title: account.title,
+            city: account.city,
+            email: account.email
+          };
+          SahayakRepository.setActiveUser(authUser);
+          this.activeCityFilter = city;
+          const headerSelect = document.getElementById('headerCityFilter');
+          if (headerSelect) headerSelect.value = city;
+
+          this.closeAuthModal();
+          this.renderUserBadge();
+          this.renderSystemStateBanner();
+          this.renderCurrentView();
+          this.showToast(`Authenticated as: ${account.title}`);
+        }
+      },
+
+      continueAsGuest() {
+        SahayakRepository.setActiveUser(null);
+        this.closeAuthModal();
+        this.renderUserBadge();
+        this.renderSystemStateBanner();
+        this.renderCurrentView();
+        this.showToast(`Switched to Guest Mode (Read-Only)`);
+      },
+
+      logout() {
+        SahayakRepository.setActiveUser(null);
+        this.renderUserBadge();
+        this.renderSystemStateBanner();
+        this.renderCurrentView();
+        this.showToast(`Logged out. Active in Guest Mode.`);
+      },
+
+      // --- RESTRICTED ACTION GATES ---
+      handleReportButtonClick() {
+        const user = SahayakRepository.getActiveUser();
+        if (!user || user.role !== 'citizen') {
+          this.openAuthModal("Authentication Required: You must be logged in as a Citizen to submit a civic report.");
+          return;
+        }
+        this.openReportModal();
+      },
+
+      handleUpvoteClick(ticketId) {
+        const user = SahayakRepository.getActiveUser();
+        if (!user || user.role !== 'citizen') {
+          this.openAuthModal("Citizen Verification Required: You must log in as a citizen to upvote complaints.");
+          return;
+        }
+
+        const ticket = SahayakRepository.getTicketById(ticketId);
+        if (!ticket) return;
+
+        ticket.upvotedBy = ticket.upvotedBy || [];
+        const index = ticket.upvotedBy.indexOf(user.id);
+
+        if (index === -1) {
+          // Add upvote
+          ticket.upvotedBy.push(user.id);
+          this.showToast(`Upvote verified! Community weight amplified.`);
+        } else {
+          // Remove upvote
+          ticket.upvotedBy.splice(index, 1);
+          this.showToast(`Upvote removed.`);
+        }
+
+        SahayakRepository.updateTicket(ticketId, { upvotedBy: ticket.upvotedBy });
+        SahayakRepository.logAudit(ticketId, "UPVOTE_TOGGLE", user.name, `New verified vote count: ${ticket.upvotedBy.length}`);
+        
+        // Recalculate priority
+        const prio = PriorityEngine.calculate(ticket);
+        if (prio.isCriticalThreshold && ticket.status !== 'ESCALATED') {
+          SahayakRepository.updateTicket(ticketId, { status: 'ESCALATED', escalationReason: 'P(t) >= 100 Dynamic Threshold Exceeded' });
+          this.showToast(`🚨 Priority threshold breached P(t)=${prio.total}! Escalated to Commissioner.`);
+        }
+
+        this.renderCurrentView();
+      },
+
+      // --- SUBMIT COMPLAINT MODAL WORKFLOW ---
+      openReportModal() {
+        const modal = document.getElementById('reportModal');
+        this.handleReportCityChange('Greater Noida');
+        this.selectPresetPhoto('pothole');
+        modal.classList.remove('hidden');
+      },
+
+      closeReportModal() {
+        document.getElementById('reportModal').classList.add('hidden');
+      },
+
+      handleReportCityChange(city) {
+        const wardSelect = document.getElementById('reportWard');
+        const wards = CITY_WARDS[city] || CITY_WARDS["Greater Noida"];
+        wardSelect.innerHTML = wards.map(w => `<option value="${w}">${w}</option>`).join('');
+      },
+
+      selectPresetPhoto(type) {
+        const url = CIVIC_PHOTOS[type] || CIVIC_PHOTOS.pothole;
+        this.setReportPreviewImage(url);
+      },
+
+      handleImageUploadPreview(event) {
+        const file = event.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            this.setReportPreviewImage(e.target.result);
+          };
+          reader.readAsDataURL(file);
+        }
+      },
+
+      setReportPreviewImage(url) {
+        const previewContainer = document.getElementById('reportImagePreviewContainer');
+        const previewImg = document.getElementById('reportImagePreview');
+        previewImg.src = url;
+        previewContainer.classList.remove('hidden');
+        previewImg.dataset.activeUrl = url;
+      },
+
+      handleReportSubmit(event) {
+        event.preventDefault();
+        const user = SahayakRepository.getActiveUser();
+        if (!user || user.role !== 'citizen') return;
+
+        const title = document.getElementById('reportTitle').value.trim();
+        const category = document.getElementById('reportCategory').value;
+        const baseSeverity = document.getElementById('reportSeverity').value;
+        const city = document.getElementById('reportCity').value;
+        const ward = document.getElementById('reportWard').value;
+        const location = document.getElementById('reportLocation').value.trim();
+        const description = document.getElementById('reportDescription').value.trim();
+        const photoUrl = document.getElementById('reportImagePreview').dataset.activeUrl || CIVIC_PHOTOS.pothole;
+
+        const cityCode = city === 'Greater Noida' ? 'GNO' : city === 'Delhi' ? 'DEL' : city === 'Mumbai' ? 'MUM' : 'LKO';
+        const randomId = Math.floor(1000 + Math.random() * 9000);
+        const ticketId = `SAH-${cityCode}-${randomId}`;
+
+        const wBase = baseSeverity === 'High' ? 60 : baseSeverity === 'Medium' ? 40 : 20;
+
+        const newTicket = {
+          id: ticketId,
+          title,
+          category,
+          city,
+          ward,
+          location,
+          description,
+          baseSeverity,
+          wBase,
+          status: "Pending Approval",
+          createdAt: Date.now(),
+          updatedAt: Date.now(),
+          complainant: user.name,
+          complainantId: user.id,
+          upvotedBy: [user.id], // Author automatically upvotes
+          photoUrl,
+          resolutionProof: null,
+          assignedAuthority: `${category.toLowerCase().split(' ')[0]}.${cityCode.toLowerCase()}@gov.in`,
+          assignedOfficerTitle: `${category} Officer`,
+          timeline: [
+            { stage: "Submitted", time: Date.now(), note: "Report logged via Citizen PWA. 48h SLA Gateway initialized." }
+          ]
+        };
+
+        SahayakRepository.addTicket(newTicket);
+        SahayakRepository.logAudit(ticketId, "TICKET_CREATED", user.name, `New complaint lodged: ${title}`);
+
+        this.closeReportModal();
+        document.getElementById('reportComplaintForm').reset();
+        this.renderCurrentView();
+        this.showToast(`Ticket ${ticketId} submitted successfully! 48h SLA gate started.`);
+        this.openTicketDetailModal(ticketId);
+      },
+
+      // --- TICKET DETAIL MODAL ---
+      openTicketDetailModal(ticketId) {
+        const ticket = SahayakRepository.getTicketById(ticketId);
+        if (!ticket) return;
+
+        this.activeModalTicketId = ticketId;
+        const prio = PriorityEngine.calculate(ticket);
+        const sla = PriorityEngine.getSlaMetrics(ticket);
+        const user = SahayakRepository.getActiveUser();
+        const isVoted = user && ticket.upvotedBy && ticket.upvotedBy.includes(user.id);
+        const isCitizenOwner = user && user.id === ticket.complainantId;
+        const isAuthorityOfficer = user && user.role === 'authority' && (user.city === ticket.city && (user.roleKey === 'commissioner' || user.dept === ticket.category));
+
+        const content = document.getElementById('ticketDetailModalContent');
+        content.innerHTML = `
+          <!-- Header -->
+          <div class="flex items-start justify-between gap-4 pb-4 border-b border-slate-200">
+            <div>
+              <div class="flex items-center gap-2 flex-wrap">
+                <span class="text-xs font-mono font-bold bg-slate-100 text-slate-800 px-2 py-0.5 rounded border border-slate-200">${ticket.id}</span>
+                <span class="text-xs font-bold px-2.5 py-0.5 rounded-full ${ticket.status === 'ESCALATED' ? 'bg-rose-600 text-white font-extrabold' : 'bg-blue-100 text-blue-800'}">
+                  ${ticket.status}
+                </span>
+                <span class="text-xs font-medium text-slate-500">Submitted ${new Date(ticket.createdAt).toLocaleDateString()}</span>
+              </div>
+              <h3 class="text-lg font-bold text-slate-900 mt-2">${ticket.title}</h3>
+              <p class="text-xs text-slate-600 mt-0.5">📍 ${ticket.location} (${ticket.ward}, ${ticket.city})</p>
+            </div>
+            <button onclick="SahayakApp.closeTicketDetailModal()" class="text-slate-400 hover:text-slate-600 p-1">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+          </div>
+
+          <!-- Mathematical Inspector Ribbon -->
+          <div class="p-3.5 rounded-xl bg-slate-900 text-white font-mono text-xs space-y-2">
+            <div class="flex items-center justify-between text-slate-300">
+              <span class="text-emerald-400 font-bold">Dynamic Priority Formula P(t):</span>
+              <span class="text-xs font-bold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                Score: ${prio.total}
+              </span>
+            </div>
+            <div class="text-[11px] text-slate-300 pt-1 border-t border-slate-800 flex flex-wrap items-center justify-between gap-2">
+              <span>W_base: <strong>${prio.wBase}</strong></span>
+              <span>+ 10&times;log2(1+${prio.uCount}): <strong>+${prio.upvoteTerm}</strong></span>
+              <span>+ Aging (${prio.hoursElapsed}h): <strong>+${prio.timeTerm}</strong></span>
+            </div>
+            ${prio.total >= 100 ? '<div class="text-[10px] text-rose-400 font-bold">⚠️ High Priority Escalation Threshold Exceeded (&ge;100).</div>' : ''}
+          </div>
+
+          <!-- SLA Clock Ribbon -->
+          <div class="p-3 rounded-xl ${sla.isBreached ? 'bg-rose-50 border border-rose-200 text-rose-900' : 'bg-blue-50 border border-blue-200 text-blue-900'} text-xs flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="font-bold">48-Hour SLA Gateway:</span>
+              <span class="font-mono font-semibold">${sla.formattedCountdown}</span>
+            </div>
+            <span class="text-[11px] text-slate-500">Deadline: ${sla.deadlineDate}</span>
+          </div>
+
+          <!-- Description -->
+          <div class="text-xs text-slate-700 leading-relaxed bg-slate-50 p-3 rounded-lg border border-slate-200">
+            <strong>Citizen Description:</strong> ${ticket.description}
+          </div>
+
+          <!-- Photos Comparison: Before & After Proof -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+            <div>
+              <div class="font-semibold text-slate-700 mb-1">Citizen Original Photo Proof</div>
+              <img src="${ticket.photoUrl}" alt="Original Problem" class="h-40 w-full object-cover rounded-lg border border-slate-200">
+            </div>
+            <div>
+              <div class="font-semibold text-slate-700 mb-1">Authority "After Repair" Proof</div>
+              ${ticket.resolutionProof ? `
+                <div class="space-y-1">
+                  <img src="${ticket.resolutionProof.photoUrl}" alt="Repaired Site" class="h-40 w-full object-cover rounded-lg border border-purple-200">
+                  <p class="text-[10px] text-purple-700 font-medium">Crew: ${ticket.resolutionProof.contractorId} · ${ticket.resolutionProof.notes}</p>
+                </div>
+              ` : `
+                <div class="h-40 rounded-lg border border-dashed border-slate-300 bg-slate-50 flex flex-col items-center justify-center text-slate-400 p-4 text-center">
+                  <svg class="w-6 h-6 mb-1 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                  <span>Awaiting official resolution proof upload</span>
+                </div>
+              `}
+            </div>
+          </div>
+
+          <!-- Audit Timeline -->
+          <div class="space-y-2 pt-2 border-t border-slate-200">
+            <h4 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Immutable Lifecycle Timeline</h4>
+            <div class="space-y-2 text-xs">
+              ${ticket.timeline.map((step, idx) => `
+                <div class="flex items-start gap-2.5">
+                  <span class="w-2 h-2 rounded-full bg-blue-600 mt-1.5 flex-shrink-0"></span>
+                  <div>
+                    <span class="font-bold text-slate-900">${step.stage}</span>
+                    <span class="text-slate-400 text-[11px] ml-1">· ${new Date(step.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                    <p class="text-slate-600 text-[11px] mt-0.5">${step.note}</p>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+
+          <!-- Action Toolbar based on User Role -->
+          <div class="pt-4 border-t border-slate-200 flex flex-wrap items-center justify-between gap-3">
+            <button onclick="SahayakApp.handleUpvoteClick('${ticket.id}')" class="px-4 py-2 rounded-lg border font-semibold text-xs flex items-center gap-1.5 ${isVoted ? 'bg-blue-600 border-blue-600 text-white' : 'bg-slate-50 border-slate-300 text-slate-700 hover:bg-slate-100'}">
+              <span>▲ Upvote (${prio.uCount})</span>
+            </button>
+
+            <div class="flex items-center gap-2">
+              ${isCitizenOwner && ticket.status === 'Work Completed' ? `
+                <button onclick="SahayakApp.openClosureModal('${ticket.id}')" class="px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-sm">
+                  Confirm Closure & Sign Off ✓
+                </button>
+              ` : ''}
+
+              ${isAuthorityOfficer ? `
+                <button onclick="SahayakApp.openTriageModal('${ticket.id}')" class="px-3 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs shadow-sm">
+                  Triage / Assign W_base
+                </button>
+                <button onclick="SahayakApp.openProofModal('${ticket.id}')" class="px-3 py-2 rounded-lg bg-purple-600 hover:bg-purple-700 text-white font-semibold text-xs shadow-sm">
+                  Upload Repair Proof
+                </button>
+              ` : ''}
+
+              <button onclick="SahayakApp.closeTicketDetailModal()" class="px-4 py-2 rounded-lg border border-slate-300 text-slate-700 font-semibold text-xs hover:bg-slate-50">
+                Close
+              </button>
+            </div>
+          </div>
+        `;
+
+        document.getElementById('ticketDetailModal').classList.remove('hidden');
+      },
+
+      closeTicketDetailModal() {
+        document.getElementById('ticketDetailModal').classList.add('hidden');
+      },
+
+      // --- AUTHORITY TRIAGE MODAL WORKFLOW ---
+      openTriageModal(ticketId) {
+        this.activeModalTicketId = ticketId;
+        const ticket = SahayakRepository.getTicketById(ticketId);
+        if (!ticket) return;
+
+        document.getElementById('triageModalTicketId').textContent = `Ticket: ${ticket.id} (${ticket.category})`;
+        const wardSelect = document.getElementById('triageReassignWardSelect');
+        const wards = CITY_WARDS[ticket.city] || CITY_WARDS["Greater Noida"];
+        wardSelect.innerHTML = wards.map(w => `<option value="${w}">${w}</option>`).join('');
+
+        this.handleTriageDecisionChange('APPROVE');
+        this.closeTicketDetailModal();
+        document.getElementById('triageActionModal').classList.remove('hidden');
+      },
+
+      closeTriageModal() {
+        document.getElementById('triageActionModal').classList.add('hidden');
+      },
+
+      handleTriageDecisionChange(val) {
+        const wBaseSec = document.getElementById('triageWBaseSection');
+        const reassignSec = document.getElementById('triageReassignSection');
+        const remarksLabel = document.getElementById('triageRemarksLabel');
+
+        if (val === 'APPROVE') {
+          wBaseSec.classList.remove('hidden');
+          reassignSec.classList.add('hidden');
+          remarksLabel.textContent = "Dispatched Crew Notes / Work Order ID *";
+        } else if (val === 'REJECT') {
+          wBaseSec.classList.add('hidden');
+          reassignSec.classList.add('hidden');
+          remarksLabel.textContent = "Rejection Justification / Outside Jurisdiction Rationale *";
+        } else if (val === 'REASSIGN') {
+          wBaseSec.classList.add('hidden');
+          reassignSec.classList.remove('hidden');
+          remarksLabel.textContent = "Reason for Ward Reassignment *";
+        }
+      },
+
+      submitTriageDecision() {
+        const ticketId = this.activeModalTicketId;
+        const ticket = SahayakRepository.getTicketById(ticketId);
+        if (!ticket) return;
+
+        const decision = document.getElementById('triageDecisionType').value;
+        const remarks = document.getElementById('triageRemarksInput').value.trim();
+        const user = SahayakRepository.getActiveUser() || { name: "Government Officer" };
+
+        if (!remarks) {
+          alert("Please enter administrative remarks or rationale.");
+          return;
+        }
+
+        if (decision === 'APPROVE') {
+          const wBase = parseInt(document.getElementById('triageWBaseSelect').value);
+          ticket.wBase = wBase;
+          ticket.status = "In Progress";
+          ticket.timeline.push({
+            stage: "Approved & In Progress",
+            time: Date.now(),
+            note: `Triage approved with W_base=${wBase}. Notes: ${remarks}`
+          });
+          SahayakRepository.updateTicket(ticketId, ticket);
+          SahayakRepository.logAudit(ticketId, "TRIAGE_APPROVED", user.name, `Approved with W_base=${wBase}`);
+          this.showToast(`Ticket approved. Field work order issued.`);
+        } else if (decision === 'REJECT') {
+          ticket.status = "Rejected";
+          ticket.timeline.push({
+            stage: "Rejected",
+            time: Date.now(),
+            note: `Official Rejection: ${remarks}`
+          });
+          SahayakRepository.updateTicket(ticketId, ticket);
+          SahayakRepository.logAudit(ticketId, "TRIAGE_REJECTED", user.name, `Rejected: ${remarks}`);
+          this.showToast(`Ticket rejected with official justification.`);
+        } else if (decision === 'REASSIGN') {
+          const newWard = document.getElementById('triageReassignWardSelect').value;
+          ticket.ward = newWard;
+          ticket.timeline.push({
+            stage: "Ward Reassigned",
+            time: Date.now(),
+            note: `Reassigned to ${newWard}. Rationale: ${remarks}`
+          });
+          SahayakRepository.updateTicket(ticketId, ticket);
+          SahayakRepository.logAudit(ticketId, "WARD_REASSIGNED", user.name, `Reassigned to ${newWard}`);
+          this.showToast(`Grievance reassigned to ${newWard}.`);
+        }
+
+        this.closeTriageModal();
+        this.renderCurrentView();
+      },
+
+      // --- RESOLUTION PROOF WORKFLOW ---
+      openProofModal(ticketId) {
+        this.activeModalTicketId = ticketId;
+        const ticket = SahayakRepository.getTicketById(ticketId);
+        if (!ticket) return;
+
+        document.getElementById('proofModalTicketId').textContent = `Ticket: ${ticket.id}`;
+        this.selectRepairedPresetPhoto('repaired_road');
+        this.closeTicketDetailModal();
+        document.getElementById('resolutionProofModal').classList.remove('hidden');
+      },
+
+      closeProofModal() {
+        document.getElementById('resolutionProofModal').classList.add('hidden');
+      },
+
+      selectRepairedPresetPhoto(type) {
+        const url = CIVIC_PHOTOS[type] || CIVIC_PHOTOS.repaired_road;
+        this.setProofPreviewImage(url);
+      },
+
+      handleProofImagePreview(event) {
+        const file = event.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            this.setProofPreviewImage(e.target.result);
+          };
+          reader.readAsDataURL(file);
+        }
+      },
+
+      setProofPreviewImage(url) {
+        const previewContainer = document.getElementById('proofImagePreviewContainer');
+        const previewImg = document.getElementById('proofImagePreview');
+        previewImg.src = url;
+        previewContainer.classList.remove('hidden');
+        previewImg.dataset.activeUrl = url;
+      },
+
+      submitResolutionProof() {
+        const ticketId = this.activeModalTicketId;
+        const ticket = SahayakRepository.getTicketById(ticketId);
+        if (!ticket) return;
+
+        const contractor = document.getElementById('proofContractorId').value.trim();
+        const notes = document.getElementById('proofNotes').value.trim() || "Field work executed and verified.";
+        const photoUrl = document.getElementById('proofImagePreview').dataset.activeUrl || CIVIC_PHOTOS.repaired_road;
+        const user = SahayakRepository.getActiveUser() || { name: "Government Officer" };
+
+        ticket.resolutionProof = {
+          photoUrl,
+          contractorId: contractor,
+          notes,
+          submittedAt: Date.now()
+        };
+        ticket.status = "Work Completed";
+        ticket.timeline.push({
+          stage: "Work Completed",
+          time: Date.now(),
+          note: `Field team (${contractor}) uploaded completion photographic proof. Awaiting citizen confirmation.`
+        });
+
+        SahayakRepository.updateTicket(ticketId, ticket);
+        SahayakRepository.logAudit(ticketId, "PROOF_UPLOADED", user.name, `After-repair proof uploaded by ${contractor}`);
+
+        this.closeProofModal();
+        this.renderCurrentView();
+        this.showToast(`Resolution proof recorded! Ticket moved to Work Completed.`);
+      },
+
+      // --- CITIZEN CONFIRM CLOSURE WORKFLOW ---
+      openClosureModal(ticketId) {
+        const user = SahayakRepository.getActiveUser();
+        if (!user || user.role !== 'citizen') {
+          this.openAuthModal("Citizen Verification Required: You must log in as citizen to verify work completion.");
+          return;
+        }
+
+        this.activeModalTicketId = ticketId;
+        document.getElementById('closureModalTicketId').textContent = `Confirm Ticket: ${ticketId}`;
+        this.setRating(5);
+        this.closeTicketDetailModal();
+        document.getElementById('confirmClosureModal').classList.remove('hidden');
+      },
+
+      closeClosureModal() {
+        document.getElementById('confirmClosureModal').classList.add('hidden');
+      },
+
+      setRating(stars) {
+        this.currentRating = stars;
+        const starEls = document.querySelectorAll('#closureStarRating .star');
+        starEls.forEach((el, idx) => {
+          if (idx < stars) {
+            el.classList.add('text-amber-400');
+            el.classList.remove('text-slate-300');
+          } else {
+            el.classList.remove('text-amber-400');
+            el.classList.add('text-slate-300');
+          }
+        });
+      },
+
+      finalizeClosureConfirmation() {
+        const ticketId = this.activeModalTicketId;
+        const ticket = SahayakRepository.getTicketById(ticketId);
+        if (!ticket) return;
+
+        const feedback = document.getElementById('closureFeedback').value.trim() || "Resolved to citizen satisfaction.";
+        const user = SahayakRepository.getActiveUser();
+
+        ticket.status = "Resolved";
+        ticket.timeline.push({
+          stage: "Resolved",
+          time: Date.now(),
+          note: `Complainant citizen verified work satisfaction (${this.currentRating}/5 stars). Feedback: ${feedback}`
+        });
+
+        SahayakRepository.updateTicket(ticketId, ticket);
+        SahayakRepository.logAudit(ticketId, "CITIZEN_CONFIRMED_CLOSURE", user ? user.name : "Citizen", `Rating: ${this.currentRating} stars. Closed.`);
+
+        this.closeClosureModal();
+        this.renderCurrentView();
+        this.showToast(`Thank you! Ticket ${ticketId} is officially Resolved and Closed.`);
+      },
+
+      disputeWorkQuality() {
+        const ticketId = this.activeModalTicketId;
+        const ticket = SahayakRepository.getTicketById(ticketId);
+        if (!ticket) return;
+
+        const feedback = document.getElementById('closureFeedback').value.trim() || "Citizen disputed repair quality; problem remains hazardous.";
+        const user = SahayakRepository.getActiveUser();
+
+        ticket.status = "In Progress";
+        ticket.timeline.push({
+          stage: "Disputed by Citizen",
+          time: Date.now(),
+          note: `Citizen rejected work quality. Returned to field crew: ${feedback}`
+        });
+
+        SahayakRepository.updateTicket(ticketId, ticket);
+        SahayakRepository.logAudit(ticketId, "QUALITY_DISPUTED", user ? user.name : "Citizen", `Returned to In Progress: ${feedback}`);
+
+        this.closeClosureModal();
+        this.renderCurrentView();
+        this.showToast(`Issue reopened and sent back to department.`);
+      },
+
+      // --- BACKGROUND ESCALATION & SLA DAEMON ---
+      startBackgroundDaemon() {
+        setInterval(() => {
+          let tickets = SahayakRepository.getTickets();
+          let stateChanged = false;
+
+          tickets.forEach(ticket => {
+            if (ticket.status !== 'Resolved' && ticket.status !== 'Rejected') {
+              const sla = PriorityEngine.getSlaMetrics(ticket);
+              const prio = PriorityEngine.calculate(ticket);
+
+              // Condition 1: 48h SLA gate breach on unapproved tickets
+              if (sla.isBreached && ticket.status === 'Pending Approval') {
+                ticket.status = 'ESCALATED';
+                ticket.escalationReason = '48-Hour SLA Gate Breach';
+                ticket.timeline.push({
+                  stage: "ESCALATED",
+                  time: Date.now(),
+                  note: "Automated Escalation: 48 hours elapsed without triage. Alerted Municipal Commissioner."
+                });
+                stateChanged = true;
+                SahayakRepository.logAudit(ticket.id, "AUTO_ESCALATION_SLA", "DAEMON", "Breached 48h gate");
+              }
+
+              // Condition 2: Priority P(t) >= 100
+              if (prio.isCriticalThreshold && ticket.status !== 'ESCALATED') {
+                ticket.status = 'ESCALATED';
+                ticket.escalationReason = `P(t) >= 100 Priority Spike (${prio.total})`;
+                ticket.timeline.push({
+                  stage: "ESCALATED",
+                  time: Date.now(),
+                  note: `Automated Priority Escalation: Community weight drove P(t) to ${prio.total} >= 100.`
+                });
+                stateChanged = true;
+                SahayakRepository.logAudit(ticket.id, "AUTO_ESCALATION_PRIORITY", "DAEMON", `P(t)=${prio.total}`);
+              }
+            }
+          });
+
+          if (stateChanged) {
+            SahayakRepository.saveTickets(tickets);
+            this.renderCurrentView();
+          }
+        }, 10000); // Poll every 10 seconds
+      },
+
+      // --- RESET DATABASE ---
+      resetDatabasePrompt() {
+        if (confirm("Reset SAHAYAK localStorage with the 10 pre-configured sample complaints?")) {
+          SahayakRepository.seedInitialData(true);
+          this.init();
+          this.showToast("Database successfully re-seeded with 10 sample tickets!");
+        }
+      },
+
+      // --- TOAST NOTIFICATIONS ---
+      showToast(msg) {
+        const container = document.getElementById('toastContainer');
+        const toast = document.createElement('div');
+        toast.className = "pointer-events-auto flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-900 text-white text-xs font-semibold shadow-lg border border-slate-700 animate-in slide-in-from-bottom-5 duration-200";
+        toast.innerHTML = `
+          <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+          <span>${msg}</span>
+        `;
+        container.appendChild(toast);
+        setTimeout(() => {
+          toast.remove();
+        }, 4000);
+      }
+    };
+
+    // Initialize application on DOM ready
+    window.addEventListener('DOMContentLoaded', () => {
+      SahayakApp.init();
+    });
+  </script>
+</body>
+</html>

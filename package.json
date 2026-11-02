@@ -1,0 +1,17 @@
+{
+  "name": "sahayak-fullstack",
+  "version": "2.5.0",
+  "type": "module",
+  "description": "SAHAYAK — Civic Resolution Gateway (React + Node.js Express REST API)",
+  "scripts": {
+    "start": "node server/index.js",
+    "server": "node server/index.js",
+    "client": "cd client && npm run dev",
+    "build": "cd client && npm install && npm run build",
+    "vercel-build": "cd client && npm install && npm run build"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2"
+  }
+}
