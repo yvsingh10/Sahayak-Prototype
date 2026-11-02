@@ -85,7 +85,7 @@ export default function ResolutionProofModal({ isOpen, onClose, ticket, onProofU
         onClick={(e) => e.stopPropagation()}
         className="bg-white dark:bg-slate-900 rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-slate-200 dark:border-slate-800 space-y-4 max-h-[92vh] overflow-y-auto"
       >
-        
+
         <div className="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
           <div>
             <h3 className="text-base font-bold text-slate-900 dark:text-white">Upload Stage 4 Resolution Proof</h3>
@@ -102,7 +102,7 @@ export default function ResolutionProofModal({ isOpen, onClose, ticket, onProofU
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4 text-xs">
-          
+
           <div className="p-3 rounded-xl bg-purple-50 dark:bg-purple-950/40 border border-purple-200 dark:border-purple-800 space-y-1">
             <div className="font-bold text-purple-900 dark:text-purple-200">{ticket.id}: {ticket.title}</div>
             <div className="text-slate-500">📍 {ticket.location} ({ticket.ward}, {ticket.city})</div>
@@ -124,7 +124,7 @@ export default function ResolutionProofModal({ isOpen, onClose, ticket, onProofU
 
           <div>
             <label className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Contractor / Field Crew ID *</label>
-            <input 
+            <input
               type="text"
               required
               value={contractorId}
@@ -137,7 +137,7 @@ export default function ResolutionProofModal({ isOpen, onClose, ticket, onProofU
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <label className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Total Repair Cost *</label>
-              <input 
+              <input
                 type="text"
                 required
                 value={costExpense}
@@ -148,7 +148,7 @@ export default function ResolutionProofModal({ isOpen, onClose, ticket, onProofU
             </div>
             <div>
               <label className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Materials / Quantities *</label>
-              <input 
+              <input
                 type="text"
                 required
                 value={materialsUsed}
@@ -161,7 +161,7 @@ export default function ResolutionProofModal({ isOpen, onClose, ticket, onProofU
 
           <div>
             <label className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Execution Summary Notes *</label>
-            <textarea 
+            <textarea
               rows={2}
               required
               value={notes}
@@ -173,8 +173,8 @@ export default function ResolutionProofModal({ isOpen, onClose, ticket, onProofU
           {/* Photo Evidence */}
           <div className="space-y-2">
             <label className="block font-semibold text-slate-700 dark:text-slate-300">Mandatory "After Repair" Photographic Proof *</label>
-            <input 
-              type="file" 
+            <input
+              type="file"
               accept="image/*"
               onChange={handleFileChange}
               className="w-full text-xs text-slate-500 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-[11px] file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100 cursor-pointer"
@@ -194,15 +194,15 @@ export default function ResolutionProofModal({ isOpen, onClose, ticket, onProofU
           </div>
 
           <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-200 dark:border-slate-800">
-            <button 
-              type="button" 
+            <button
+              type="button"
               onClick={onClose}
               className="px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-semibold hover:bg-slate-50"
             >
               Cancel
             </button>
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               disabled={submitting}
               className="px-5 py-2 rounded-lg bg-purple-600 hover:bg-purple-700 text-white font-semibold shadow-xs disabled:opacity-50"
             >

@@ -79,8 +79,16 @@ export const TRANSLATIONS = {
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(() => {
-    const saved = localStorage.getItem('SAHAYAK_REACT_USER');
-    return saved ? JSON.parse(saved) : DEFAULT_CITIZEN;
+    try {
+      const saved = localStorage.getItem('SAHAYAK_REACT_USER');
+      if (saved && saved !== 'undefined' && saved !== 'null') {
+        const parsed = JSON.parse(saved);
+        if (parsed && typeof parsed === 'object') return parsed;
+      }
+    } catch (e) {
+      console.warn("Failed to parse user from localStorage:", e);
+    }
+    return DEFAULT_CITIZEN;
   });
 
   const [accountsData, setAccountsData] = useState({
