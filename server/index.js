@@ -79,8 +79,8 @@ if (!process.env.VERCEL) {
   startSlaDaemon(12000);
 }
 
-// Start HTTP Server (skip in Vercel serverless)
-if (process.env.NODE_ENV !== 'test' && !process.env.VERCEL) {
+// Start HTTP Server (Listens on process.env.PORT for Vercel Services & local environments)
+if (process.env.NODE_ENV !== 'test') {
   app.listen(PORT, '0.0.0.0', () => {
     console.log(`====================================================`);
     console.log(`🚀 SAHAYAK Full-Stack Application Running!`);
