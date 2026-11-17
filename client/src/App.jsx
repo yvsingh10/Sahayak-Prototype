@@ -13,6 +13,7 @@ import AuthorityDashboard from './components/AuthorityDashboard';
 import PenaltyTracker from './components/PenaltyTracker';
 import AnalyticsHealth from './components/AnalyticsHealth';
 import ArchitectureSpec from './components/ArchitectureSpec';
+import AboutSection from './components/AboutSection';
 
 // Modals
 import AuthModal from './components/AuthModal';
@@ -32,14 +33,15 @@ import {
   Layers, 
   Map, 
   User, 
-  Building2 
+  Building2,
+  Info
 } from 'lucide-react';
 
 export default function App() {
   const { user, requireAuth, setAuthModalOpen, darkMode } = useAuth();
 
   // Navigation & Filters
-  const [activeTab, setActiveTab] = useState('feed'); // 'feed' | 'mapHub' | 'leaderboard' | 'citizenPortal' | 'authorityDashboard' | 'penalties' | 'analytics'
+  const [activeTab, setActiveTab] = useState('feed'); // 'feed' | 'mapHub' | 'leaderboard' | 'citizenPortal' | 'authorityDashboard' | 'penalties' | 'analytics' | 'about'
   const [activeCity, setActiveCity] = useState('Greater Noida');
   const [categoryFilter, setCategoryFilter] = useState('All');
   const [statusFilter, setStatusFilter] = useState('All');
@@ -108,6 +110,13 @@ export default function App() {
     const interval = setInterval(loadData, 10000);
     return () => clearInterval(interval);
   }, [activeCity, categoryFilter, statusFilter, searchKeyword, sortOrder]);
+
+  // Listen for About Section quick-nav events
+  useEffect(() => {
+    const handler = (e) => setActiveTab(e.detail);
+    window.addEventListener('sahayak:navigate', handler);
+    return () => window.removeEventListener('sahayak:navigate', handler);
+  }, []);
 
   // Handle Upvote
   const handleUpvote = async (ticketId) => {
@@ -295,6 +304,10 @@ export default function App() {
           <ArchitectureSpec />
         )}
 
+        {activeTab === 'about' && (
+          <AboutSection />
+        )}
+
       </main>
 
       {/* Sticky Floating Action Button (FAB) */}
@@ -339,11 +352,11 @@ export default function App() {
           <span>Citizen</span>
         </button>
         <button 
-          onClick={() => setActiveTab('authorityDashboard')}
-          className={`flex flex-col items-center gap-0.5 ${activeTab === 'authorityDashboard' ? 'text-blue-600 font-bold' : 'text-slate-500'}`}
+          onClick={() => setActiveTab('about')}
+          className={`flex flex-col items-center gap-0.5 ${activeTab === 'about' ? 'text-sky-600 font-bold' : 'text-slate-500'}`}
         >
-          <Building2 className="w-4 h-4" />
-          <span>Authority</span>
+          <Info className="w-4 h-4" />
+          <span>About</span>
         </button>
       </div>
 

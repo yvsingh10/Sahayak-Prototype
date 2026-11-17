@@ -1,6 +1,6 @@
 import React from 'react';
 import { useAuth } from '../context/AuthContext';
-import { 
+import {
   Building2, 
   MapPin, 
   Search, 
@@ -21,7 +21,8 @@ import {
   Cpu,
   Sparkles,
   UserCheck,
-  UserPlus
+  UserPlus,
+  Info
 } from 'lucide-react';
 
 export default function Navbar({ 
@@ -263,7 +264,8 @@ export default function Navbar({
             { id: 'citizenPortal', label: 'Citizen Desk', icon: <User className="w-3.5 h-3.5" strokeWidth={1.75} /> },
             { id: 'authorityDashboard', label: 'Authority Deck', icon: <Building2 className="w-3.5 h-3.5" strokeWidth={1.75} /> },
             { id: 'penalties', label: 'SLA Tracker', icon: <AlertOctagon className="w-3.5 h-3.5" strokeWidth={1.75} /> },
-            { id: 'analytics', label: 'System Telemetry', icon: <Activity className="w-3.5 h-3.5" strokeWidth={1.75} /> }
+            { id: 'analytics', label: 'System Telemetry', icon: <Activity className="w-3.5 h-3.5" strokeWidth={1.75} /> },
+            { id: 'about', label: 'About Project', icon: <Info className="w-3.5 h-3.5 text-sky-500" strokeWidth={1.75} /> },
           ].map(tab => {
             const isActive = activeTab === tab.id;
             return (
