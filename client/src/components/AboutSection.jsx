@@ -38,14 +38,101 @@ const TEAM_MEMBERS = [
 ];
 
 const TECH_STACK = [
-  { name: 'React 19', category: 'Frontend', icon: '⚛️', desc: 'SPA with Vite fast bundler' },
-  { name: 'Tailwind CSS', category: 'Styling', icon: '🎨', desc: 'Utility-first responsive design' },
-  { name: 'Leaflet.js', category: 'Maps', icon: '🗺️', desc: 'OpenStreetMap vector cartography' },
-  { name: 'Node.js', category: 'Backend', icon: '🟢', desc: 'Async event-driven server runtime' },
-  { name: 'Express.js', category: 'API', icon: '🚂', desc: 'RESTful API gateway framework' },
-  { name: 'JSON Stores', category: 'Database', icon: '🗄️', desc: 'File-backed atomic persistence' },
-  { name: 'Haversine Formula', category: 'Algorithm', icon: '📐', desc: 'Spherical distance for duplicate detection' },
-  { name: 'Lucide Icons', category: 'UI', icon: '✨', desc: 'Consistent clean icon library' },
+  {
+    name: 'React 19',
+    category: 'Frontend',
+    icon: (
+      <svg className="w-6 h-6" viewBox="-11.5 -10.23174 23 20.46348" fill="none">
+        <circle cx="0" cy="0" r="2.05" fill="#61DAFB"/>
+        <g stroke="#61DAFB" strokeWidth="1" fill="none">
+          <ellipse rx="11" ry="4.2"/>
+          <ellipse rx="11" ry="4.2" transform="rotate(60)"/>
+          <ellipse rx="11" ry="4.2" transform="rotate(120)"/>
+        </g>
+      </svg>
+    ),
+    desc: 'SPA with fast responsive render loop'
+  },
+  {
+    name: 'Tailwind CSS',
+    category: 'Styling',
+    icon: (
+      <svg className="w-6 h-6" viewBox="0 0 24 24" fill="#06B6D4">
+        <path d="M12.001 4.8c-3.2 0-5.2 1.6-6 4.8 1.2-1.6 2.6-2.2 4.2-1.8.913.228 1.565.89 2.288 1.624C13.666 10.618 15.027 12 18.001 12c3.2 0 5.2-1.6 6-4.8-1.2 1.6-2.6 2.2-4.2 1.8-.913-.228-1.565-.89-2.288-1.624C16.336 6.182 14.975 4.8 12.001 4.8zm-6 7.2c-3.2 0-5.2 1.6-6 4.8 1.2-1.6 2.6-2.2 4.2-1.8.913.228 1.565.89 2.288 1.624 1.177 1.194 2.538 2.576 5.512 2.576 3.2 0 5.2-1.6 6-4.8-1.2 1.6-2.6 2.2-4.2 1.8-.913-.228-1.565-.89-2.288-1.624C10.336 13.382 8.975 12 6.001 12z" />
+      </svg>
+    ),
+    desc: 'Utility-first modern design system'
+  },
+  {
+    name: 'Leaflet.js',
+    category: 'Maps',
+    icon: (
+      <svg className="w-6 h-6" viewBox="0 0 32 32" fill="none">
+        <path d="M16 2C9.5 2 4 10.5 4 19c0 7 5 11 12 11s12-4 12-11c0-8.5-5.5-17-12-17z" fill="#78C257" fillOpacity="0.25"/>
+        <path d="M16 2C9.5 2 4 10.5 4 19c0 7 5 11 12 11s12-4 12-11c0-8.5-5.5-17-12-17z" stroke="#5F9E38" strokeWidth="2" strokeLinejoin="round"/>
+        <path d="M16 6v21M16 14c3.5-2.5 7.5-1.5 9 .5M16 19c-3.5-2-7.5-1-9 1M16 10c3-1.8 6.5-.8 8 1" stroke="#48782B" strokeWidth="1.5" strokeLinecap="round"/>
+      </svg>
+    ),
+    desc: 'OpenStreetMap vector cartography'
+  },
+  {
+    name: 'Node.js',
+    category: 'Backend',
+    icon: (
+      <svg className="w-6 h-6" viewBox="0 0 32 32" fill="none">
+        <path d="M16 2l12 7v14l-12 7-12-7V9l12-7z" fill="#339933" fillOpacity="0.2" stroke="#339933" strokeWidth="2"/>
+        <path d="M16 5.5l9 5.2v10.6l-9 5.2-9-5.2V10.7l9-5.2z" fill="#339933"/>
+        <path d="M13 13.5v5l3 1.8 3-1.8v-5l-3-1.8-3 1.8z" fill="#ffffff"/>
+      </svg>
+    ),
+    desc: 'Async event-driven server runtime'
+  },
+  {
+    name: 'Express.js',
+    category: 'API',
+    icon: (
+      <svg className="w-6 h-6" viewBox="0 0 32 32" fill="none">
+        <rect width="32" height="32" rx="8" fill="#1e293b"/>
+        <text x="50%" y="56%" dominantBaseline="middle" textAnchor="middle" fill="#f8fafc" fontFamily="system-ui, sans-serif" fontWeight="800" fontSize="13" letterSpacing="-0.5">ex</text>
+      </svg>
+    ),
+    desc: 'RESTful API gateway framework'
+  },
+  {
+    name: 'JSON Store',
+    category: 'Database',
+    icon: (
+      <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <ellipse cx="12" cy="5" rx="9" ry="3"/>
+        <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+        <path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"/>
+      </svg>
+    ),
+    desc: 'File-backed atomic persistence'
+  },
+  {
+    name: 'Haversine',
+    category: 'Algorithm',
+    icon: (
+      <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="#8B5CF6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="12" r="10"/>
+        <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/>
+        <path d="M2 12h20"/>
+      </svg>
+    ),
+    desc: 'Spherical duplicate detection'
+  },
+  {
+    name: 'Vite',
+    category: 'Tooling',
+    icon: (
+      <svg className="w-6 h-6" viewBox="0 0 32 32" fill="none">
+        <path d="M29.5 5.5L16.5 29a.8.8 0 0 1-1.4 0L2.5 5.5a.8.8 0 0 1 .9-1.2h25.2a.8.8 0 0 1 .9 1.2z" fill="#41D1FF" fillOpacity="0.2" stroke="#41D1FF" strokeWidth="1.5"/>
+        <path d="M19.5 3L11 17h6l-3 11 11-15h-6.5l1-10z" fill="#FFD62E" stroke="#BD34FE" strokeWidth="1"/>
+      </svg>
+    ),
+    desc: 'Lightning fast HMR & module bundler'
+  },
 ];
 
 const FEATURES = [
@@ -131,7 +218,7 @@ export default function AboutSection() {
         <div className="relative z-10 max-w-3xl">
           <div className="flex items-center gap-2 mb-4">
             <span className="px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 text-[11px] font-bold uppercase tracking-widest border border-blue-400/30 font-mono">
-              B.Tech CSE · Civic Technology Project
+              Civic Technology Platform
             </span>
           </div>
           <h1 className="text-4xl md:text-5xl font-black tracking-tight mb-3">
@@ -288,8 +375,10 @@ export default function AboutSection() {
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           {TECH_STACK.map(t => (
-            <div key={t.name} className="p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-700/60 text-center hover:shadow-sm transition-shadow">
-              <div className="text-2xl mb-1">{t.icon}</div>
+            <div key={t.name} className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-700/60 text-center hover:shadow-sm transition-all group flex flex-col items-center">
+              <div className="w-12 h-12 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-700/80 flex items-center justify-center mb-2.5 shadow-2xs group-hover:scale-105 transition-transform">
+                {t.icon}
+              </div>
               <div className="font-bold text-slate-900 dark:text-white text-xs">{t.name}</div>
               <div className="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5 font-mono uppercase">{t.category}</div>
               <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-1 leading-relaxed hidden sm:block">{t.desc}</div>

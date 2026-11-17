@@ -63,10 +63,7 @@ export default function Navbar({
         <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
           
           <div className="flex items-center gap-2">
-            <span className="px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-300 font-medium border border-blue-400/20 text-[10px] tracking-wide font-mono">
-              B.Tech CSE Project
-            </span>
-            <span className="text-slate-300 dark:text-zinc-300 hidden md:inline">
+            <span className="text-slate-300 dark:text-zinc-300">
               SAHAYAK — Public Problem Reporting &amp; Resolution System · 48H SLA &amp; Geospatial Tracking
             </span>
           </div>
