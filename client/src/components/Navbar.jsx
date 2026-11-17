@@ -265,7 +265,7 @@ export default function Navbar({
             { id: 'authorityDashboard', label: 'Authority Deck', icon: <Building2 className="w-3.5 h-3.5" strokeWidth={1.75} /> },
             { id: 'penalties', label: 'SLA Tracker', icon: <AlertOctagon className="w-3.5 h-3.5" strokeWidth={1.75} /> },
             { id: 'analytics', label: 'System Telemetry', icon: <Activity className="w-3.5 h-3.5" strokeWidth={1.75} /> },
-            { id: 'about', label: 'About Project', icon: <Info className="w-3.5 h-3.5 text-sky-500" strokeWidth={1.75} /> },
+            { id: 'about', label: 'About', icon: <Info className="w-3.5 h-3.5 text-sky-500" strokeWidth={1.75} /> },
           ].map(tab => {
             const isActive = activeTab === tab.id;
             return (
