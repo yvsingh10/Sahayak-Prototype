@@ -14,11 +14,6 @@ import PenaltyTracker from './components/PenaltyTracker';
 import AnalyticsHealth from './components/AnalyticsHealth';
 import ArchitectureSpec from './components/ArchitectureSpec';
 
-// Phase-3 New Components
-import IoTDashboard from './components/IoTDashboard';
-import AiDamageScanner from './components/AiDamageScanner';
-import JanKhataModal from './components/JanKhataModal';
-
 // Modals
 import AuthModal from './components/AuthModal';
 import SubmitModal from './components/SubmitModal';
@@ -36,8 +31,6 @@ import {
   Plus, 
   Layers, 
   Map, 
-  Cpu, 
-  Sparkles, 
   User, 
   Building2 
 } from 'lucide-react';
@@ -46,7 +39,7 @@ export default function App() {
   const { user, requireAuth, setAuthModalOpen, darkMode } = useAuth();
 
   // Navigation & Filters
-  const [activeTab, setActiveTab] = useState('feed'); // 'feed' | 'mapHub' | 'iotHub' | 'aiScanner' | 'leaderboard' | 'citizenPortal' | 'authorityDashboard' | 'penalties' | 'analytics' | 'specs'
+  const [activeTab, setActiveTab] = useState('feed'); // 'feed' | 'mapHub' | 'leaderboard' | 'citizenPortal' | 'authorityDashboard' | 'penalties' | 'analytics'
   const [activeCity, setActiveCity] = useState('Greater Noida');
   const [categoryFilter, setCategoryFilter] = useState('All');
   const [statusFilter, setStatusFilter] = useState('All');
@@ -64,7 +57,6 @@ export default function App() {
 
   // Modals State
   const [isSubmitOpen, setIsSubmitOpen] = useState(false);
-  const [isJanKhataOpen, setIsJanKhataOpen] = useState(false);
   const [selectedTicket, setSelectedTicket] = useState(null);
   const [triageTicket, setTriageTicket] = useState(null);
   const [proofTicket, setProofTicket] = useState(null);
@@ -259,27 +251,6 @@ export default function App() {
           />
         )}
 
-        {/* Feature 181–190: Smart City IoT Tab */}
-        {activeTab === 'iotHub' && (
-          <IoTDashboard 
-            activeCity={activeCity}
-            onTicketCreated={(newTicket) => {
-              showToast(`IoT Auto-Alarm created ticket #${newTicket.id}!`);
-              loadData();
-              setSelectedTicket(newTicket);
-            }}
-          />
-        )}
-
-        {/* Feature 121–130: AI Damage Scanner Tab */}
-        {activeTab === 'aiScanner' && (
-          <AiDamageScanner 
-            onScanComplete={(res) => {
-              showToast("Neural scan complete! YOLOv8 pothole & waste density calculated.");
-            }}
-          />
-        )}
-
         {activeTab === 'leaderboard' && (
           <Leaderboard 
             tickets={tickets}
@@ -326,19 +297,19 @@ export default function App() {
 
       </main>
 
-      {/* Feature 160: Sticky Floating Action Button (FAB) */}
+      {/* Sticky Floating Action Button (FAB) */}
       <div className="fixed bottom-6 right-6 z-40 hidden sm:block">
         <button
           onClick={handleReportClick}
           className="p-4 rounded-3xl bg-gradient-to-r from-blue-600 via-indigo-600 to-emerald-600 hover:scale-105 active:scale-95 text-white shadow-xl shadow-blue-500/30 flex items-center gap-2.5 font-bold text-sm transition-transform"
-          title="Lodge Municipal Grievance with Hardware GPS"
+          title="Lodge Municipal Grievance with Geo-Location"
         >
           <Plus className="w-5 h-5" />
-          <span>Report Issue (F-160)</span>
+          <span>+ Report Grievance</span>
         </button>
       </div>
 
-      {/* Feature 157: Mobile-Optimized Sticky Bottom Navigation Bar */}
+      {/* Mobile-Optimized Sticky Bottom Navigation Bar */}
       <div className="fixed bottom-0 left-0 right-0 z-40 sm:hidden bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 p-2 flex items-center justify-around text-[10px] font-semibold">
         <button 
           onClick={() => setActiveTab('feed')}
@@ -361,18 +332,18 @@ export default function App() {
           <Plus className="w-6 h-6" />
         </button>
         <button 
-          onClick={() => setActiveTab('iotHub')}
-          className={`flex flex-col items-center gap-0.5 ${activeTab === 'iotHub' ? 'text-blue-600 font-bold' : 'text-slate-500'}`}
+          onClick={() => setActiveTab('citizenPortal')}
+          className={`flex flex-col items-center gap-0.5 ${activeTab === 'citizenPortal' ? 'text-blue-600 font-bold' : 'text-slate-500'}`}
         >
-          <Cpu className="w-4 h-4 text-emerald-500" />
-          <span>IoT</span>
+          <User className="w-4 h-4" />
+          <span>Citizen</span>
         </button>
         <button 
-          onClick={() => setIsJanKhataOpen(true)}
-          className="flex flex-col items-center gap-0.5 text-slate-500"
+          onClick={() => setActiveTab('authorityDashboard')}
+          className={`flex flex-col items-center gap-0.5 ${activeTab === 'authorityDashboard' ? 'text-blue-600 font-bold' : 'text-slate-500'}`}
         >
-          <User className="w-4 h-4 text-teal-600" />
-          <span>Account</span>
+          <Building2 className="w-4 h-4" />
+          <span>Authority</span>
         </button>
       </div>
 
@@ -382,10 +353,10 @@ export default function App() {
           <div className="flex items-center gap-2">
             <div className="w-6 h-6 rounded-md bg-blue-600 text-white flex items-center justify-center font-bold text-xs">S</div>
             <span className="font-bold text-slate-700 dark:text-slate-300">SAHAYAK Platform</span>
-            <span>· Phase-3 GovTech Enterprise (Features 101–200)</span>
+            <span>· Project-Based Learning (PBL) Prototype</span>
           </div>
           <div className="flex items-center gap-4 text-slate-400">
-            <span>Clean UI Directive Active</span>
+            <span>Clean UI Directive</span>
             <span>·</span>
             <span>Strict 5-Stage Life-Cycle Pipeline</span>
             <span>·</span>
@@ -398,16 +369,6 @@ export default function App() {
 
       {/* Modals Container */}
       <AuthModal />
-
-      {/* Phase-3: Jan Khata Modal */}
-      <JanKhataModal 
-        isOpen={isJanKhataOpen}
-        onClose={() => setIsJanKhataOpen(false)}
-        onUserRegistered={(newUser) => {
-          showToast(`Jan Khata C-UID created: ${newUser.cuid}`);
-          loadData();
-        }}
-      />
 
       <SubmitModal 
         isOpen={isSubmitOpen}

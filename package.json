@@ -7,8 +7,8 @@
     "start": "node server/index.js",
     "server": "node server/index.js",
     "client": "cd client && npm run dev",
-    "build": "cd client && npm install && npm run build",
-    "vercel-build": "cd client && npm install && npm run build"
+    "build": "node ./client/node_modules/vite/bin/vite.js build ./client",
+    "vercel-build": "node ./client/node_modules/vite/bin/vite.js build ./client"
   },
   "dependencies": {
     "cors": "^2.8.5",

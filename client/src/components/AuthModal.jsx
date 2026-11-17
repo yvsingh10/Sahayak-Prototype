@@ -23,10 +23,17 @@ export default function AuthModal() {
     loginAsCitizen, 
     loginAsRoleAccount,
     registerNewCitizen,
-    continueAsGuest 
+    continueAsGuest,
+    authInitialTab 
   } = useAuth();
 
   const [authTab, setAuthTab] = useState('demo'); // 'demo' | 'register'
+
+  React.useEffect(() => {
+    if (authInitialTab) {
+      setAuthTab(authInitialTab);
+    }
+  }, [authInitialTab, authModalOpen]);
   const [selectedRoleCategory, setSelectedRoleCategory] = useState('citizen'); // 'citizen' | 'desk_officer' | 'field_crew' | 'ward_engineer' | 'commissioner'
   
   // Registration Form State

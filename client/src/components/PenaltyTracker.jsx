@@ -39,13 +39,13 @@ export default function PenaltyTracker() {
         <div className="space-y-1 max-w-2xl">
           <div className="flex items-center gap-2">
             <span className="px-2.5 py-0.5 rounded text-[10px] font-bold bg-rose-500/30 text-rose-300 border border-rose-400/30 uppercase font-mono">
-              Enforceable Municipal Accountability
+              Municipal SLA Tracking
             </span>
-            <span className="text-xs text-rose-400 font-semibold">Section 48-B Local Self-Govt Act</span>
+            <span className="text-xs text-rose-400 font-semibold">48-Hour Resolution Guarantee</span>
           </div>
-          <h2 className="text-xl font-bold">48-Hour SLA Gateway &amp; Officer Penalty Ledger</h2>
+          <h2 className="text-xl font-bold">48-Hour SLA Tracking &amp; Escalation Ledger</h2>
           <p className="text-xs text-slate-300 leading-relaxed">
-            Unassigned complaints past the 48-hour gate automatically trigger Tier-1 escalation to Ward Engineers. After 96 hours, tickets escalate to the Municipal Commissioner, with delayed hours debited against departmental administrative registers.
+            Unassigned complaints past the 48-hour gate automatically trigger Tier-1 escalation to Ward Engineers. After 96 hours, tickets escalate to the Municipal Commissioner with delayed hours logged for administrative accountability.
           </p>
         </div>
 

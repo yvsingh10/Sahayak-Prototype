@@ -108,7 +108,14 @@ export function AuthProvider({ children }) {
 
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [authPromptMessage, setAuthPromptMessage] = useState('');
+  const [authInitialTab, setAuthInitialTab] = useState('demo');
   const [proximityAlert, setProximityAlert] = useState(null);
+
+  const openAuthModal = (tab = 'demo', promptMsg = '') => {
+    setAuthInitialTab(tab);
+    setAuthPromptMessage(promptMsg);
+    setAuthModalOpen(true);
+  };
 
   // Sync dark mode class
   useEffect(() => {
@@ -198,6 +205,8 @@ export function AuthProvider({ children }) {
       authModalOpen,
       setAuthModalOpen,
       authPromptMessage,
+      authInitialTab,
+      openAuthModal,
       loginAsCitizen,
       loginAsRoleAccount,
       registerNewCitizen,

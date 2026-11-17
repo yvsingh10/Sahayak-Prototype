@@ -204,7 +204,7 @@ export default function SubmitModal({ isOpen, onClose, onTicketCreated }) {
         setErrors(prev => ({ ...prev, location: null }));
       },
       (err) => {
-        fallbackSimulateGps(`GPS lock note: ${err.message}. High-accuracy municipal cellular tower antenna lock applied.`);
+        fallbackSimulateGps(`GPS lock note: ${err.message}. Default ward coordinates applied.`);
       },
       { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
     );

@@ -1,5 +1,89 @@
 [
   {
+    "id": "AUD-27225",
+    "ticketId": "SAH-TEST-9999",
+    "action": "TEST_INTEGRATION_VERIFY",
+    "previousStage": "STAGE_1",
+    "newStage": "STAGE_2",
+    "actorId": "C-UID-2026-IND-08241",
+    "actorRole": "Citizen",
+    "reason": "Automated regression verification.",
+    "details": {},
+    "timestamp": 1794907081072
+  },
+  {
+    "id": "AUD-94046",
+    "ticketId": "SAH-TEST-9999",
+    "action": "TEST_INTEGRATION_VERIFY",
+    "previousStage": "STAGE_1",
+    "newStage": "STAGE_2",
+    "actorId": "C-UID-2026-IND-08241",
+    "actorRole": "Citizen",
+    "reason": "Automated regression verification.",
+    "details": {},
+    "timestamp": 1794906989232
+  },
+  {
+    "id": "AUD-44128",
+    "ticketId": "SAH-GNO-8840",
+    "action": "AUTO_ESCALATION_TRIGGER",
+    "previousStage": "Stage 1 (PENDING_TRIAGE)",
+    "newStage": "Stage 1 (ESCALATED)",
+    "actorId": "SLA_DAEMON_WORKER",
+    "actorRole": "Automated 48-Hour SLA Daemon",
+    "reason": "Tier-2 Super-Escalation: Unresolved past 96-hour absolute deadline. Escalated directly to Municipal Commissioner & District Magistrate.",
+    "details": {
+      "hoursElapsed": 411.7,
+      "score": 141.6,
+      "escalationTier": 2
+    },
+    "timestamp": 1794906916499
+  },
+  {
+    "id": "AUD-26664",
+    "ticketId": "SAH-GNO-8834",
+    "action": "AUTO_ESCALATION_TRIGGER",
+    "previousStage": "Stage 1 (PENDING_TRIAGE)",
+    "newStage": "Stage 1 (ESCALATED)",
+    "actorId": "SLA_DAEMON_WORKER",
+    "actorRole": "Automated 48-Hour SLA Daemon",
+    "reason": "Tier-2 Super-Escalation: Unresolved past 96-hour absolute deadline. Escalated directly to Municipal Commissioner & District Magistrate.",
+    "details": {
+      "hoursElapsed": 420.7,
+      "score": 157.6,
+      "escalationTier": 2
+    },
+    "timestamp": 1794906916493
+  },
+  {
+    "id": "AUD-77794",
+    "ticketId": "SAH-IOT-2194",
+    "action": "AUTO_ESCALATION_TRIGGER",
+    "previousStage": "Stage 1 (PENDING_TRIAGE)",
+    "newStage": "Stage 1 (ESCALATED)",
+    "actorId": "SLA_DAEMON_WORKER",
+    "actorRole": "Automated 48-Hour SLA Daemon",
+    "reason": "Tier-2 Super-Escalation: Unresolved past 96-hour absolute deadline. Escalated directly to Municipal Commissioner & District Magistrate.",
+    "details": {
+      "hoursElapsed": 374.6,
+      "score": 153.9,
+      "escalationTier": 2
+    },
+    "timestamp": 1794906916484
+  },
+  {
+    "id": "AUD-36141",
+    "ticketId": "SAH-TEST-9999",
+    "action": "TEST_INTEGRATION_VERIFY",
+    "previousStage": "STAGE_1",
+    "newStage": "STAGE_2",
+    "actorId": "C-UID-2026-IND-08241",
+    "actorRole": "Citizen",
+    "reason": "Automated regression verification.",
+    "details": {},
+    "timestamp": 1794906216084
+  },
+  {
     "id": "AUD-50435",
     "ticketId": "SAH-TEST-9999",
     "action": "TEST_INTEGRATION_VERIFY",

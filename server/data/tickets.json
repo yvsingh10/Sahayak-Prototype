@@ -13,7 +13,7 @@
     "isEmergencySos": false,
     "stage": 1,
     "stageKey": "PENDING_TRIAGE",
-    "status": "PENDING_TRIAGE",
+    "status": "ESCALATED",
     "complainant": "Municipal Smart City IoT Telemetry Gateway",
     "complainantCuid": "C-UID-IOT-GATEWAY-2026",
     "complainantPhone": "+91-120-2340000",
@@ -24,7 +24,18 @@
     ],
     "photoUrl": "https://images.unsplash.com/photo-1584438784894-089d6a62b8fa?auto=format&fit=crop&w=700&q=80",
     "iotSensorOrigin": "IOT-LIGHT-112",
-    "gpsAccuracyMeters": 6.2
+    "gpsAccuracyMeters": 6.2,
+    "escalationTier": 2,
+    "assignedAuthorityRole": "Municipal Commissioner",
+    "escalationReason": "Tier-2 Super-Escalation: Unresolved past 96-hour absolute deadline. Escalated directly to Municipal Commissioner & District Magistrate.",
+    "updatedAt": 1794906916465,
+    "timeline": [
+      {
+        "stage": "🚨 ESCALATED (Tier-2)",
+        "time": 1794906916465,
+        "note": "Tier-2 Super-Escalation: Unresolved past 96-hour absolute deadline. Escalated directly to Municipal Commissioner & District Magistrate."
+      }
+    ]
   },
   {
     "id": "SAH-GNO-3701",
@@ -219,7 +230,9 @@
     "lng": 77.504018,
     "gpsAccuracyMeters": 6.2,
     "stage": 1,
-    "stageKey": "PENDING_TRIAGE"
+    "stageKey": "PENDING_TRIAGE",
+    "escalationTier": 2,
+    "assignedAuthorityRole": "Municipal Commissioner"
   },
   {
     "id": "SAH-DEL-7419",
@@ -311,7 +324,9 @@
     "lng": 77.221529,
     "gpsAccuracyMeters": 6.2,
     "stage": 1,
-    "stageKey": "PENDING_TRIAGE"
+    "stageKey": "PENDING_TRIAGE",
+    "escalationTier": 2,
+    "assignedAuthorityRole": "Municipal Commissioner"
   },
   {
     "id": "SAH-GNO-8834",
@@ -323,9 +338,9 @@
     "description": "Municipal compactor has not visited in 4 days. Waste spilling across roadway with stray cattle menace and foul odor.",
     "baseSeverity": "Medium",
     "wBase": 40,
-    "status": "Pending Approval",
+    "status": "ESCALATED",
     "createdAt": 1793392365994,
-    "updatedAt": 1793392365994,
+    "updatedAt": 1794906916465,
     "complainant": "Amitabh Sen",
     "complainantId": "cit_gno_889",
     "upvotedBy": [
@@ -346,13 +361,21 @@
         "stage": "Submitted",
         "time": 1793392365994,
         "note": "Ingested into 48h SLA gate. Awaiting sanitation officer review."
+      },
+      {
+        "stage": "🚨 ESCALATED (Tier-2)",
+        "time": 1794906916465,
+        "note": "Tier-2 Super-Escalation: Unresolved past 96-hour absolute deadline. Escalated directly to Municipal Commissioner & District Magistrate."
       }
     ],
     "lat": 28.487521,
     "lng": 77.511842,
     "gpsAccuracyMeters": 6.2,
     "stage": 1,
-    "stageKey": "PENDING_TRIAGE"
+    "stageKey": "PENDING_TRIAGE",
+    "escalationTier": 2,
+    "assignedAuthorityRole": "Municipal Commissioner",
+    "escalationReason": "Tier-2 Super-Escalation: Unresolved past 96-hour absolute deadline. Escalated directly to Municipal Commissioner & District Magistrate."
   },
   {
     "id": "SAH-MUM-6088",
@@ -551,7 +574,9 @@
     "lng": 80.942115,
     "gpsAccuracyMeters": 6.2,
     "stage": 1,
-    "stageKey": "PENDING_TRIAGE"
+    "stageKey": "PENDING_TRIAGE",
+    "escalationTier": 2,
+    "assignedAuthorityRole": "Municipal Commissioner"
   },
   {
     "id": "SAH-DEL-7380",
@@ -604,7 +629,9 @@
     "lng": 77.062145,
     "gpsAccuracyMeters": 6.2,
     "stage": 1,
-    "stageKey": "PENDING_TRIAGE"
+    "stageKey": "PENDING_TRIAGE",
+    "escalationTier": 2,
+    "assignedAuthorityRole": "Municipal Commissioner"
   },
   {
     "id": "SAH-MUM-6102",
@@ -670,7 +697,9 @@
     "lng": 72.831245,
     "gpsAccuracyMeters": 6.2,
     "stage": 1,
-    "stageKey": "PENDING_TRIAGE"
+    "stageKey": "PENDING_TRIAGE",
+    "escalationTier": 2,
+    "assignedAuthorityRole": "Municipal Commissioner"
   },
   {
     "id": "SAH-LKO-5095",
@@ -739,9 +768,9 @@
     "description": "Sharp stone edges protruding from ruptured speed table puncturing two-wheeler tires.",
     "baseSeverity": "Medium",
     "wBase": 40,
-    "status": "Pending Approval",
+    "status": "ESCALATED",
     "createdAt": 1793424765994,
-    "updatedAt": 1793424765994,
+    "updatedAt": 1794906916465,
     "complainant": "Pooja Hegde",
     "complainantId": "cit_gno_744",
     "upvotedBy": [
@@ -757,12 +786,20 @@
         "stage": "Submitted",
         "time": 1793424765994,
         "note": "Submitted. SLA countdown active."
+      },
+      {
+        "stage": "🚨 ESCALATED (Tier-2)",
+        "time": 1794906916465,
+        "note": "Tier-2 Super-Escalation: Unresolved past 96-hour absolute deadline. Escalated directly to Municipal Commissioner & District Magistrate."
       }
     ],
     "lat": 28.489215,
     "lng": 77.514032,
     "gpsAccuracyMeters": 6.2,
     "stage": 1,
-    "stageKey": "PENDING_TRIAGE"
+    "stageKey": "PENDING_TRIAGE",
+    "escalationTier": 2,
+    "assignedAuthorityRole": "Municipal Commissioner",
+    "escalationReason": "Tier-2 Super-Escalation: Unresolved past 96-hour absolute deadline. Escalated directly to Municipal Commissioner & District Magistrate."
   }
 ]

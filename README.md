@@ -1,140 +1,170 @@
-# SAHAYAK (सहायक) — Enterprise Civic Complaint Redressal & Geospatial Resolution Platform
+# SAHAYAK (सहायक) — Public Problem Reporting & Geospatial Resolution Platform
 
-> **Next-Generation Civic Infrastructure Grievance Gateway**  
-> Full-Stack Architecture (React 19 + Node.js Express REST API + PostGIS-Ready Spatial Engine)
+> **Project-Based Learning (PBL) — Evaluation 2 Prototype**  
+> **Course:** CSCR2600 (Project Design & Implementation) | **Target:** 2nd Year B.Tech CSE  
+> **Stack:** React 19 (Vite) + Node.js (Express REST API) + Leaflet Geospatial Maps
 
 ---
 
-## 🏛 Executive Architectural Summary
+## 📌 1. Project Overview & Problem Statement
 
-**SAHAYAK** is an enterprise-grade civic grievance reporting and municipal resolution platform connecting citizens directly with competent government departments. It enforces strict identity assurance through Citizen Unique IDs (`C-UID`), hardware sensor GPS locks with sub-15m accuracy validation, an immutable 5-stage finite state machine lifecycle, non-pausable 48-Hour SLA auto-escalations, and a 100% Clean UI Directive.
+In most urban and semi-urban localities, everyday civic issues (such as potholes, overflowing garbage dumps, sewage leaks, broken streetlights, and contaminated water pipelines) remain unresolved for weeks. 
+
+### Core Issues Identified:
+1. **Zero Transparency:** Citizens submit complaints into a bureaucratic black box with no visibility into which department or officer is assigned.
+2. **No Priority Mechanism:** Urgent, hazardous problems (e.g., an open manhole on a busy road) are treated with the same priority as minor routine repairs.
+3. **Delayed Approvals & Lack of SLAs:** Complaints languish for days without acknowledgment because there is no enforced deadline.
+4. **Status Unawareness & Fake Closures:** Citizens have no way to verify whether the work was actually completed on the ground before a ticket is closed.
+
+**SAHAYAK** solves this by establishing a transparent, time-bound, 5-stage civic grievance redressal gateway with a **mandatory 48-hour SLA approval guarantee**, community-driven urgency prioritization, interactive geospatial mapping, and two-factor closure verification.
+
+---
+
+## 🏛 2. System Architecture
+
+SAHAYAK follows an industry-standard **3-Tier Client-Server Architecture**:
 
 ```
-SAHAYAK Platform Architecture:
 ┌────────────────────────────────────────────────────────────────────────┐
-│                        CLIENT PRESENTATION LAYER                       │
-│  React 19 SPA · Tailwind CSS · Vector Maps (Leaflet / Google Maps)     │
-│  5 Segregated Role Dashboards · Bilingual (EN/HI) · Dark Mode (WCAG)   │
-└─────────────────────────────────┬──────────────────────────────────────┘
-                                  │ REST API / WebSocket
-┌─────────────────────────────────▼──────────────────────────────────────┐
-│                        NODE.JS EXPRESS API GATEWAY                     │
-│  /api/tickets · /api/auth · /api/stats · 5-Stage Life-Cycle Pipeline   │
-├────────────────────────────────────────────────────────────────────────┤
-│  ⚡ Dynamic Priority Engine   │ ⏱ 48h SLA & Auto-Escalation Daemon    │
-│  🔒 Anti-Spoofing Geo-Lock    │ 📜 Immutable Append-Only Audit Trail   │
-│  🚫 50m Duplicate Blocker     │ 💰 Department Penalty Ledger           │
-├────────────────────────────────────────────────────────────────────────┤
-│                    PERSISTENT SPATIAL & DATA STORES                    │
-│  tickets.json · audit.json · citizens.json · announcements.json        │
+│                   PRESENTATION TIER (React 19 SPA)                     │
+│  · Vite Fast Build Engine · Tailwind CSS Utility Styling               │
+│  · Interactive Leaflet Cartography Hub (OpenStreetMap / Custom Pins)   │
+│  · Role-Segregated Dashboards (Citizen, Desk Officer, Field Crew, etc.)│
+│  · Bilingual Localization (English / Hindi) & Responsive Dark Mode    │
+└───────────────────────────────────┬────────────────────────────────────┘
+                                    │ HTTP / JSON REST API
+┌───────────────────────────────────▼────────────────────────────────────┐
+│                    APPLICATION TIER (Node.js & Express)                │
+│  · RESTful API Gateway (/api/tickets, /api/auth, /api/stats)           │
+│  · 5-Stage Lifecycle State Machine (PENDING → IN_PROGRESS → RESOLVED)  │
+│  · Dynamic Priority Engine: P = Base + 10·log2(1 + Upvotes) + Escalation│
+│  · 48-Hour SLA Tracking Daemon with 2-Tier Auto-Escalation Engine     │
+│  · Haversine Spatial Duplicate Detection (< 50 meters)                 │
+└───────────────────────────────────┬────────────────────────────────────┘
+                                    │ File I/O Persistence
+┌───────────────────────────────────▼────────────────────────────────────┐
+│                      DATA TIER (Structured JSON Stores)                │
+│  · tickets.json · citizens.json · announcements.json · audit.json      │
 └────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## ⚡ Core Architectural Constraints & Implementation
+## 🚀 3. Key Core Modules & Features
 
-### 1. Strict Identity & RBAC (5 Distinct Personas)
-* **Permanent C-UID**: Generated cryptographically upon sign-up (e.g., `C-UID-2026-IND-08241`, `C-UID-2026-UP-39469`).
-* **DigiLocker / Aadhaar KYC**: Verified community reporter trust badge.
-* **5 Dedicated Dashboards**:
-  1. **Citizen Portal**: My complaints, endorsements, Stage 5 OTP sign-off, dispute quality button, 1–5 star ratings.
-  2. **Departmental Desk Officer**: Dedicated queue for assigned department, jurisdiction review, Ward Engineer assignment, 1-click inter-department forwarding.
-  3. **Field Verification Crew**: Mobile-optimized work orders, 20m geofence check-in, "After Repair" photographic proof upload, expense & material tracking.
-  4. **Ward Executive Engineer**: Zonal boundary jurisdiction, contractor work order assignment, delay warnings (>24h).
-  5. **Nodal Municipal Commissioner**: Master umbrella oversight, Tier-1 & Tier-2 escalation queues, department penalty ledger, Ward Hall of Fame & Shame, 1-click PDF report card generator.
+### Module 1: Citizen Grievance Submission & Telemetry
+* **Browser Geolocation API (`navigator.geolocation`):** Captures high-precision latitude and longitude coordinates directly from the client device.
+* **Automated Reverse Geocoding:** Translates raw coordinates into human-readable Street, Ward, City, and Pincode via OpenStreetMap Nominatim.
+* **Haversine Duplicate Detection:** Calculates the spherical distance between a newly reported issue and active complaints within a 50-meter radius to eliminate duplicate reports.
+* **Photo Evidence Upload:** Citizens can upload or take live camera photos with client-side WebP compression.
 
-### 2. Direct Hardware Geo-Lock & Telemetry
-* **Sensor-Direct Coordinates**: Extracts Latitude & Longitude down to 6-decimal precision using `navigator.geolocation`.
-* **<15m Accuracy Validation**: Horizontal error strictly checked before submission is permitted.
-* **Tamper & Anti-Spoofing Guard**: Rejects simulated/mock coordinates through timestamp checking and antenna corroboration.
-* **Automated Reverse Geocoding**: Translates (lat, lng) into official Street, Ward, District, State, and Pincode.
-* **50-Meter Duplicate Complaint Blocker**: Haversine distance spatial check alerting citizen if identical failure is already logged within 50 meters.
+### Module 2: Strict 5-Stage Life-Cycle Pipeline (Finite State Machine)
+Every civic ticket transitions through an immutable 5-stage lifecycle:
+1. **Stage 1 [PENDING_TRIAGE]:** Problem lodged by citizen; 48-Hour SLA countdown begins.
+2. **Stage 2 [IN_REVIEW]:** Desk Officer verifies jurisdiction, tags competent department, and assigns the Ward Engineer.
+3. **Stage 3 [IN_PROGRESS]:** Ward Engineer dispatches Field Crew and logs Contractor Work Order ID.
+4. **Stage 4 [WORK_COMPLETED]:** Field Crew finishes repairs and uploads mandatory "After Repair" photographic proof with cost and material receipts.
+5. **Stage 5 [RESOLVED_CLOSED]:** Original citizen inspects the repair proof, rates quality (1–5 stars), and verifies completion with a 6-digit OTP sign-off.
+   * *Stage Reversion on Dispute:* If the citizen disputes the repair quality, the ticket automatically reverts to Stage 3 with an elevated priority badge.
 
-### 3. Clean UI Directive
-* **Zero Formula Clutter**: Strictly removes raw mathematical equations ($P(t) = W_{\text{base}} + 10 \cdot \log_2(1+U)$) from public view.
-* **Human-Readable Indicators**:
-  * **Priority Badges**: "Critical Hazard", "High Urgency", "Elevated Priority", "Normal Maintenance".
-  * **Urgency Progress Meter**: Visual progress bar (0–100%) with color gradations (Emerald $\rightarrow$ Amber $\rightarrow$ Rose).
-  * **SLA Countdown Chips**: "18 Hours Remaining for Review", "Tier-1 Auto-Escalated (4h Overdue)".
+### Module 3: 48-Hour SLA & 2-Tier Auto-Escalation Engine
+* **Non-Pausable 48h Countdown:** Every ticket must be acknowledged and triaged within 48 hours.
+* **Tier-1 Escalation (48h Breach):** If untreated past 48 hours, the ticket escalates to the Ward Executive Engineer.
+* **Tier-2 Super-Escalation (96h Breach):** Unresolved tickets past 96 hours escalate directly to the Municipal Commissioner's radar, generating an overdue audit record.
+* **SLA Breach Ledger:** Tracks overdue hours and generates downloadable CSV audit logs for administrative accountability.
 
-### 4. Google Maps, Navigation & Government Office Directory
-* **Interactive Cartography Hub**: Vector map with high-contrast custom pins color-coded by the 5 departments.
-* **Nearest Office Query**: Dynamic lookup for nearest PWD Circle, Jal Vibhag, Sanitation Depot, or Electricity Substation.
-* **Turn-by-Turn Navigation**: Fastest driving and walking route polyline with ETA, distance, and direction instructions.
-* **Live Traffic Congestion Simulation**: Visualized green/amber/red road segments along dispatch route.
-* **Street View 360 Integration**: Direct 360 panoramic view launch on issue coordinates.
-* **Nearby Essential Facilities**: Secondary pins displaying nearest Fire Station, Public Hospital, and Water Tank Station.
+### Module 4: Dynamic Priority Calculation Engine
+Instead of arbitrary manual sorting, urgency is computed dynamically:
+$$\text{Priority Score} = W_{\text{base}}(\text{Severity}) + 10 \cdot \log_2(1 + \text{Community Upvotes}) + \text{SLA Penalty}$$
+* **Hazard Categories:** Roads (Potholes), Water/Sewage leaks, Electrical hazards, Solid waste dumping, Public safety.
+* **Community Endorsements (Upvotes):** Local residents can upvote an issue to push pressing neighborhood hazards higher up the municipal priority queue.
+* **Clean UI Directive:** The system hides raw mathematical formulas from citizens and displays intuitive badges: *Critical Hazard*, *High Urgency*, *Elevated Priority*, and *Normal Maintenance*.
 
-### 5. Strict 5-Stage Life-Cycle Pipeline (FSM)
-1. **Stage 1: [Report Submitted / PENDING_TRIAGE]**: GPS hardware locked, 48-Hour SLA gate initiated.
-2. **Stage 2: [Jurisdiction Assigned & Desk Verified / IN_REVIEW]**: Desk Officer identifies competent department and assigns Ward Engineer.
-3. **Stage 3: [Work Order Issued & Field Dispatched / IN_PROGRESS]**: Field crew mobilized, Contractor ID logged.
-4. **Stage 4: [Resolution Proof Uploaded / WORK_COMPLETED]**: Field crew uploads mandatory "After Repair" photo within 20m geofence.
-5. **Stage 5: [Citizen Satisfied & Biometric/OTP Sign-off / RESOLVED & CLOSED]**: Original complainant verifies quality, rates 1–5 stars, and signs off with 6-digit OTP.
-* **Stage Reversion & Dispute**: Complainant rejection returns ticket to Stage 3 with escalated priority.
+### Module 5: Interactive Geospatial Cartography (Leaflet.js)
+* **Visual Map Hub:** Interactive map plotting all active complaints with color-coded department markers.
+* **Nearest Municipal Office Locator:** Dynamically queries and pins the nearest PWD Circle Office, Jal Sansthan, or Sanitation Depot.
+* **Routing & Directions:** Displays driving distance, estimated transit time, and turn-by-turn route steps from the issue site to the handling authority.
 
-### 6. Departmental Segregation
-Strict isolation across 5 municipal bodies:
-1. `Water Supply & Sewage`
-2. `Electricity & Power`
-3. `Roads & Infrastructure`
-4. `Solid Waste & Cleanliness`
-5. `Public Health & Safety`
+### Module 6: Role-Based Access Control (RBAC)
+Includes 5 pre-configured demo personas to showcase end-to-end multi-role workflows:
+1. **Citizen (Yash Singh):** File complaints, track active tickets, endorse neighborhood issues, sign off on repairs with OTP.
+2. **Desk Officer (Arvind Narula):** Triage complaints, assign competent municipal department, or forward across departments.
+3. **Field Crew (Ramesh Kumar):** View mobile work orders, upload completion photos and material costs.
+4. **Ward Engineer (Er. Vikram Malhotra):** Monitor zonal complaints, assign contractors, review SLA warnings.
+5. **Municipal Commissioner (Dr. Neha Saxena):** Master oversight, city-wide compliance metrics, escalated grievances, and SLA audit reports.
 
 ---
 
-## 📋 Complete Breakdown of the 100 Enterprise Features
+## 🛠 4. Technology Stack & Implementation Details
 
-| Module | Features Included |
-|---|---|
-| **Module 1: Authentication, C-UID & Profile** | 1. Self-Registration · 2. Cryptographic C-UID (`C-UID-2026-IND-XXXX`) · 3. MFA 6-digit OTP · 4. JWT & Biometric WebAuthn · 5. Single-Click Logout · 6. DigiLocker KYC · 7. Profile Management · 8. Home Ward Auto-Binding · 9. 5-Role RBAC · 10. DPDP Phone Masking |
-| **Module 2: Hardware Geo-Location & Telemetry** | 11. Sensor GPS Extraction · 12. Accuracy `<15m` Check · 13. Anti-Spoofing Guard · 14. Server Reverse Geocode · 15. Offline LocalStorage Cache · 16. Sub-Meter Micro Drag · 17. Polygon Boundary Match · 18. EXIF Metadata Scrubber · 19. Haversine Distance Calc · 20. Proximity Hazard Alerts |
-| **Module 3: Maps, Routing & Office Directory** | 21. Vector Map Hub · 22. Nearest Government Office Locator · 23. Turn-by-Turn Navigation · 24. Live Traffic Congestion · 25. Ward Density Clusters · 26. Office Contact Card · 27. Street View 360 Launch · 28. 'Take Me There' Deep-Link · 29. GeoJSON Jurisdiction Overlays · 30. Nearby Facilities (Hospital, Fire, Tanker) |
-| **Module 4: Grievance Submission & Evidence** | 31. Hardware Camera In-App Capture · 32. Dual-Photo Evidence (Wide & Close-up) · 33. Short Video Clips · 34. 30s Speech-to-Text Voice Notes · 35. Client WebP Compression · 36. SHA-256 Asset Checksum · 37. 50m Duplicate Blocker · 38. 5-Dept Dropdown · 39. Public vs. Confidential Toggle · 40. Draft Auto-Save |
-| **Module 5: Clean UI & Citizen Experience** | 41. No-Formula Display Policy · 42. Visual Urgency Meter · 43. English / Hindi Bilingual Toggle · 44. Dark & High-Contrast Mode · 45. Tailwind Card Feed · 46. Instant Search & Filters · 47. SLA Countdown Chips · 48. Reactive Transitions · 49. Visual 5-Stage Stepper · 50. WhatsApp & Twitter Quick-Share Cards |
-| **Module 6: Five-Stage Tracking Life-Cycle** | 51. Stage 1 PENDING_TRIAGE · 52. Stage 2 IN_REVIEW · 53. Stage 3 IN_PROGRESS · 54. Stage 4 WORK_COMPLETED · 55. Stage 5 RESOLVED_CLOSED · 56. Citizen Dispute Reversion · 57. Immutable Transition Audit · 58. Real-time Toast Notifications · 59. >24h Stage Delay Warning · 60. Interactive Lifecycle Stepper |
-| **Module 7: Segregation & Authority Portals** | 61. Water & Sewage Portal · 62. Electricity & Power Portal · 63. Roads & Highways Portal · 64. Solid Waste Portal · 65. Public Safety Portal · 66. 1-Click Inter-Dept Forwarding · 67. Department Workload Matrix · 68. Contractor Assignment · 69. Authority Private Notes · 70. Commissioner Master Oversight |
-| **Module 8: Amplification & Transparency** | 71. 1-Vote Community Endorsement · 72. Anti-Brigading Limiter · 73. Public 5-Stage Kanban Board · 74. Neighborhood Comment Thread · 75. Priority Amplification Daemon · 76. Ward Hall of Fame & Shame · 77. 1–5 Star Quality Grading · 78. Impacted Residents Counter · 79. Before/After Split Comparison Slider · 80. Community Bulletin Broadcast |
-| **Module 9: 48-Hour SLA & Auto-Escalation** | 81. Mandatory 48h Countdown Clock · 82. Tier-1 Auto-Escalation (Ward Engineer) · 83. Tier-2 Super-Escalation (Commissioner) · 84. Urgency Score Spike Trigger · 85. Red Pulsing Breach Alerts · 86. Department Penalty Ledger · 87. Automated Breach Dispatcher · 88. SLA Pause Guard · 89. Escalation Reversal Lock · 90. Overdue Grievance CSV Export |
-| **Module 10: Analytics, Auditing & Control** | 91. Append-Only Audit Ledger · 92. KPI Analytics (Avg Turnaround & Compliance) · 93. GeoJSON Spatial Export · 94. Before/After Photo Pair Verification · 95. 20m Field Geofence Check-In · 96. Municipal Expense Tracking · 97. Emergency SOS Disaster Flag · 98. PDF Report Card Generator (PO1–PO11) · 99. Point-in-Time Data Recovery · 100. Live System Health Ping Monitor |
+| Layer | Technology | Role & Justification |
+|---|---|---|
+| **Frontend Framework** | React 19 (SPA) with Vite | Fast component re-renders, reactive state management, high performance |
+| **Styling** | Tailwind CSS | Clean, responsive, mobile-first design with built-in Dark Mode |
+| **Geospatial Mapping** | Leaflet.js & OpenStreetMap | Lightweight vector cartography with zero third-party paid API dependencies |
+| **Backend Framework** | Node.js with Express.js | Asynchronous, event-driven REST API handling ticket CRUD and SLA tracking |
+| **Data Persistence** | In-Memory + JSON Stores | Fast filesystem-backed atomic persistence (`tickets.json`, `audit.json`) |
+| **Mathematical Engine** | Haversine Formula & Log Scoring | Spatial distance calculation and community-weighted priority scoring |
+| **Icons & Localization** | Lucide-React & Custom i18n | Clean UI icons, English and Hindi bilingual interface |
 
 ---
 
-## 🚀 Quickstart & Verification
+## 📊 5. Evaluation Rubric & Program Outcome (PO) Mapping
 
-### 1. Running the Integrated Full-Stack Server
-```bash
-# Start Node.js Express server & serves compiled React application
-npm start
-# Access at: http://localhost:7000
-```
+This project is directly mapped to the standard **Engineering Program Outcomes (PO1–PO11)** for CSCR2600 Evaluation:
 
-### 2. Running Automated Test Suite
-```bash
-# Runs in-memory regression suite verifying all 10 modules
-node test_direct.js
-```
-
-### 3. Key Interactive Flows to Evaluate
-1. **Public Board & Kanban**: Open [http://localhost:7000](http://localhost:7000) $\rightarrow$ explore the feed, switch to **5-Stage Kanban** to see complaints partitioned across columns.
-2. **Interactive Map Hub**: Switch to **Interactive Map & Hub** $\rightarrow$ click any civic pin to view turn-by-turn dispatch route to the nearest government office, live traffic overlay, and 360&deg; Street View launcher.
-3. **Hardware Geo-Lock Grievance Submission**: Click "+ Report Problem" $\rightarrow$ verify native GPS latitude & longitude down to 6 decimals, $<15$m accuracy lock, automated reverse geocoding, and duplicate complaint blocker.
-4. **Authority Desk Verification & Proof Upload**: Switch role to **Desk Officer (Arvind Narula)** $\rightarrow$ approve triage and assign Ward Engineer $\rightarrow$ switch to **Field Crew** $\rightarrow$ upload "After Repair" photograph with 20m geofence validation and repair costs.
-5. **Citizen Closure & Dispute**: Switch to **Yash Singh (Citizen)** $\rightarrow$ inspect ticket `SAH-MUM-6088` (Work Completed) $\rightarrow$ interact with the **Before/After Photo Comparison Slider** $\rightarrow$ click **Confirm Closure ✓** to rate 5 stars and sign off with OTP.
+* **PO1 (Engineering Knowledge):** Applied client-server REST architecture, Haversine spatial trigonometry, and logarithmic scaling.
+* **PO2 (Problem Analysis):** Identified lack of civic transparency and designed a 48-Hour SLA gate to resolve administrative bottlenecks.
+* **PO3 (Design / Development of Solutions):** Built a 5-Stage Finite State Machine ensuring no complaint is closed without citizen OTP confirmation.
+* **PO5 (Modern Tool Usage):** Integrated modern web development tools: React 19, Vite, Tailwind CSS, Leaflet.js, and Node Express.
+* **PO6 (The Engineer & Society):** Direct community impact: empowers citizens to mobilize action on hazardous civic infrastructure.
+* **PO8 (Ethics & Integrity):** Two-factor closure gate prevents authorities from falsely marking unfinished work as completed.
+* **PO10 (Communication):** Clean UI with bilingual support (English/Hindi) and structured presentation script for technical viva.
 
 ---
 
-## 🏆 Program Outcomes (PO1–PO11) Mapping
+## 💻 6. Quickstart: How to Run Locally
 
-* **PO1 (Engineering Knowledge)**: Full-stack separation (React 19 + Node.js Express REST API) with cryptographic C-UID generation and SHA-256 asset hashing.
-* **PO2 (Problem Analysis)**: Automated reverse geocoding and sub-15m GPS telemetry verification.
-* **PO3 (Design/Development)**: Strict 5-Stage Life-Cycle Finite State Machine with 48h SLA auto-escalation daemon.
-* **PO4 (Investigations of Complex Problems)**: Dynamic logarithmic priority server calculation rendered into clean formula-free visual indicators.
-* **PO5 (Modern Tool Usage)**: Leaflet vector cartography, Google Maps Directions routing, and Web Speech API voice notes.
-* **PO6 (Engineer & Society)**: 1-vote community endorsement and public transparency Kanban view.
-* **PO7 (Environment & Sustainability)**: Municipal expense and material quantity tracking for civic infrastructure durability.
-* **PO8 (Ethics & Integrity)**: Two-factor closure gate requiring field proof within 20m and citizen OTP sign-off.
-* **PO9 (Team Work & RBAC)**: Strict separation across Citizens, Desk Officers, Field Crews, Ward Engineers, and Commissioners.
-* **PO10 (Communication)**: Bilingual interface (English & Hindi) with WhatsApp/Twitter mobilization cards.
-* **PO11 (Project Management & Finance)**: Municipal penalty ledger enforcing statutory fines for SLA delays.
+### Prerequisites:
+* **Node.js:** v18.0.0 or higher
+* **npm:** v9.0.0 or higher
+
+### Steps:
+
+1. **Install Dependencies:**
+   ```bash
+   # In the root project directory:
+   npm install
+   ```
+
+2. **Build the React Frontend:**
+   ```bash
+   npm run build
+   ```
+
+3. **Start the Integrated Server:**
+   ```bash
+   npm start
+   ```
+
+4. **Access the Application:**
+   Open your browser and navigate to:
+   ```
+   http://localhost:7000
+   ```
+
+5. **Run Automated Test Suite (Optional):**
+   ```bash
+   node test_direct.js
+   ```
+
+---
+
+## 🎯 7. Suggested Viva Demonstration Flow (For Evaluation)
+
+1. **Step 1 — Public Grievance Feed:** Open [http://localhost:7000](http://localhost:7000) $\rightarrow$ demonstrate the public card feed, instant search, city filter, and the 5-Stage Kanban view.
+2. **Step 2 — Submit a Grievance:** Click **+ Report Grievance** $\rightarrow$ show automatic latitude/longitude capture via browser GPS $\rightarrow$ show reverse geocoding to ward/street $\rightarrow$ submit ticket.
+3. **Step 3 — Desk Officer Triage:** Click **Select Role** $\rightarrow$ switch to **Desk Officer (Arvind Narula)** $\rightarrow$ open the newly submitted complaint $\rightarrow$ approve triage and assign Ward Engineer.
+4. **Step 4 — Field Crew Proof Upload:** Switch role to **Field Crew (Ramesh Kumar)** $\rightarrow$ upload "After Repair" photograph and log material costs $\rightarrow$ ticket moves to Stage 4 (Work Completed).
+5. **Step 5 — Citizen Verification & OTP Closure:** Switch back to **Citizen (Yash Singh)** $\rightarrow$ open the complaint $\rightarrow$ inspect Before/After photo comparison slider $\rightarrow$ verify with 6-digit OTP to officially close the ticket (Stage 5).
+6. **Step 6 — Geospatial Hub & SLA Tracker:** Show the **Geospatial Map** tab (Leaflet markers and route directions) and the **SLA Tracker** tab (48-hour compliance and overdue complaints).

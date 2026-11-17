@@ -33,12 +33,12 @@ export default function Navbar({
   setSearchKeyword, 
   onReportClick,
   onResetPrompt,
-  onOpenJanKhata,
   onTrackTicket
 }) {
   const { 
     user, 
-    setAuthModalOpen, 
+    setAuthModalOpen,
+    openAuthModal, 
     logout, 
     language, 
     changeLanguage, 
@@ -62,11 +62,11 @@ export default function Navbar({
         <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
           
           <div className="flex items-center gap-2">
-            <span className="px-2 py-0.5 rounded-full bg-amber-400/10 text-amber-300 font-medium border border-amber-400/20 text-[10px] tracking-wide font-mono">
-              Enterprise GovTech
+            <span className="px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-300 font-medium border border-blue-400/20 text-[10px] tracking-wide font-mono">
+              B.Tech CSE Project
             </span>
-            <span className="text-slate-400 dark:text-zinc-400 hidden md:inline">
-              Features 101–200 Active: Open C-UID, YOLOv8 Vision, IoT Telemetry &amp; 48H SLA Hard-Lock.
+            <span className="text-slate-300 dark:text-zinc-300 hidden md:inline">
+              SAHAYAK — Public Problem Reporting &amp; Resolution System · 48H SLA &amp; Geospatial Tracking
             </span>
           </div>
 
@@ -129,11 +129,11 @@ export default function Navbar({
                   {t('appName')}
                 </span>
                 <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-700 dark:text-blue-300 border border-blue-500/20 font-mono">
-                  Phase-3
+                  Prototype
                 </span>
               </div>
               <p className="text-[11px] text-slate-400 dark:text-zinc-500 font-normal hidden sm:block">
-                Civic Grievance &amp; Geospatial Infrastructure
+                Civic Grievance &amp; Geospatial Resolution
               </p>
             </div>
           </div>
@@ -180,17 +180,17 @@ export default function Navbar({
 
           </div>
 
-          {/* Action Buttons: Create Account, Report & Auth Persona */}
+          {/* Action Buttons: Register Citizen, Report & Auth Persona */}
           <div className="flex items-center gap-2">
             
-            {/* Create Account Button */}
+            {/* Register Citizen Button */}
             <button
-              onClick={onOpenJanKhata}
+              onClick={() => openAuthModal('register')}
               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 active:scale-[0.98] text-white font-medium text-xs shadow-xs shadow-emerald-600/20 transition-all duration-150"
             >
               <UserPlus className="w-3.5 h-3.5" strokeWidth={1.75} />
-              <span className="hidden sm:inline">Create Account</span>
-              <span className="sm:hidden">Account</span>
+              <span className="hidden sm:inline">Citizen Register</span>
+              <span className="sm:hidden">Register</span>
             </button>
 
             {/* Report Problem Button */}
@@ -214,7 +214,7 @@ export default function Navbar({
             ) : user.role === 'citizen' ? (
               <div className="flex items-center gap-1.5">
                 <button 
-                  onClick={onOpenJanKhata}
+                  onClick={() => setActiveTab('citizenPortal')}
                   className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-800 dark:text-emerald-300 text-xs font-medium"
                 >
                   <span className="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] font-bold">
@@ -258,14 +258,12 @@ export default function Navbar({
           
           {[
             { id: 'feed', label: 'Public Board', icon: <Layers className="w-3.5 h-3.5" strokeWidth={1.75} /> },
-            { id: 'mapHub', label: 'Geospatial Hub', icon: <Map className="w-3.5 h-3.5" strokeWidth={1.75} /> },
-            { id: 'iotHub', label: 'IoT Sensor Grid', icon: <Cpu className="w-3.5 h-3.5 text-emerald-500" strokeWidth={1.75} /> },
-            { id: 'aiScanner', label: 'AI Damage Scanner', icon: <Sparkles className="w-3.5 h-3.5 text-purple-500" strokeWidth={1.75} /> },
+            { id: 'mapHub', label: 'Geospatial Map', icon: <Map className="w-3.5 h-3.5" strokeWidth={1.75} /> },
             { id: 'leaderboard', label: 'Urgency Index', icon: <TrendingUp className="w-3.5 h-3.5" strokeWidth={1.75} /> },
             { id: 'citizenPortal', label: 'Citizen Desk', icon: <User className="w-3.5 h-3.5" strokeWidth={1.75} /> },
             { id: 'authorityDashboard', label: 'Authority Deck', icon: <Building2 className="w-3.5 h-3.5" strokeWidth={1.75} /> },
-            { id: 'penalties', label: 'Penalty Ledger', icon: <AlertOctagon className="w-3.5 h-3.5" strokeWidth={1.75} /> },
-            { id: 'analytics', label: 'Telemetry', icon: <Activity className="w-3.5 h-3.5" strokeWidth={1.75} /> }
+            { id: 'penalties', label: 'SLA Tracker', icon: <AlertOctagon className="w-3.5 h-3.5" strokeWidth={1.75} /> },
+            { id: 'analytics', label: 'System Telemetry', icon: <Activity className="w-3.5 h-3.5" strokeWidth={1.75} /> }
           ].map(tab => {
             const isActive = activeTab === tab.id;
             return (
