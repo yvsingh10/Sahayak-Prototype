@@ -11,6 +11,8 @@ __pycache__/
 # Large Archives & Temporary files
 *.zip
 *.log
+*.pdf
+scratch_guide.html
 .DS_Store
 Thumbs.db
 
