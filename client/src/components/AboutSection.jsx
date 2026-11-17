@@ -22,11 +22,18 @@ import {
 
 const TEAM_MEMBERS = [
   {
-    name: 'Manish Pandey',
-    role: 'Full-Stack Developer & Architect',
-    contribution: 'React frontend, Node.js REST API, 5-stage FSM, SLA Daemon, Geospatial Map Hub',
-    avatar: 'MP',
+    name: 'Yash Vardhan Singh',
+    role: 'Lead Developer & System Architect',
+    contribution: 'React frontend, Node.js REST API, 5-stage FSM lifecycle, SLA auto-escalation engine, Geospatial Map Hub',
+    avatar: 'YS',
     color: 'bg-blue-600',
+  },
+  {
+    name: 'Vikrant Singh',
+    role: 'Backend Developer & Testing Lead',
+    contribution: 'Express REST endpoints, priority scoring engine, Haversine duplicate detection, automated test suite',
+    avatar: 'VS',
+    color: 'bg-indigo-600',
   },
 ];
 
@@ -124,7 +131,7 @@ export default function AboutSection() {
         <div className="relative z-10 max-w-3xl">
           <div className="flex items-center gap-2 mb-4">
             <span className="px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 text-[11px] font-bold uppercase tracking-widest border border-blue-400/30 font-mono">
-              PBL Project · B.Tech CSE · 2nd Year
+              B.Tech CSE · Civic Technology Project
             </span>
           </div>
           <h1 className="text-4xl md:text-5xl font-black tracking-tight mb-3">
@@ -295,7 +302,7 @@ export default function AboutSection() {
       <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm p-6 md:p-8">
         <div className="flex items-center gap-2 mb-6">
           <BookOpen className="w-5 h-5 text-amber-500" />
-          <h2 className="text-xl font-bold text-slate-900 dark:text-white">Program Outcomes (PO) Mapping — CSCR2600</h2>
+          <h2 className="text-xl font-bold text-slate-900 dark:text-white">Program Outcomes (PO) Mapping</h2>
         </div>
         <div className="space-y-2">
           {PO_MAP.map(po => (
@@ -332,22 +339,7 @@ export default function AboutSection() {
             </div>
           ))}
         </div>
-        <div className="mt-5 p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
-          <div className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Project Details</div>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
-            {[
-              { label: 'Course', value: 'CSCR2600 — PBL' },
-              { label: 'Year', value: '2nd Year, Sem 4' },
-              { label: 'Branch', value: 'B.Tech CSE' },
-              { label: 'Year', value: '2026' },
-            ].map(d => (
-              <div key={d.label}>
-                <div className="text-slate-400 dark:text-slate-500 font-medium">{d.label}</div>
-                <div className="font-bold text-slate-800 dark:text-slate-200 mt-0.5">{d.value}</div>
-              </div>
-            ))}
-          </div>
-        </div>
+
       </div>
 
       {/* ── Quick Links ──────────────────────────────────────────────── */}
